@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "game.hpp"
 
 Game::Game()
@@ -43,13 +45,37 @@ void Game::run()
 
 void Game::update()
 {
+	assert(state > 0 && state < STATE_COUNT);
+	game_states[this->state].update();
 }
 
 void Game::render()
 {
+	assert(state > 0 && state < STATE_COUNT);
+	game_states[this->state].render();
 
+	// draw world
 	const SDL_Rect world_out = SDL_Rect{0, 0, 1000, 1000};
 	SDL_RenderCopy(renderer, world_texture, &world_out, &world_out);
+}
+
+void Game::increment_state()
+{
+	// clear previous state
+	game_states[this->state].clear();
+	this->state++;
+	// initialize new state
+	game_states[this->state].init();
+}
+
+void Game::set_state(int state)
+{
+	assert(state > 0 && state < STATE_COUNT);
+	// clear previous state
+	game_states[this->state].clear();
+	this->state = state;
+	// initialize new state
+	game_states[this->state].init();
 }
 
 void Game::handle_event(SDL_Event event)
@@ -58,6 +84,7 @@ void Game::handle_event(SDL_Event event)
 	{
 		case SDL_QUIT:
 		{
+			// user closes window
 			closed = true;
 		} break;
 	}

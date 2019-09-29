@@ -1,3 +1,6 @@
+#ifndef RENDERABLE_HPP
+#define RENDERABLE_HPP
+
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL.h>
 
@@ -13,3 +16,4 @@ class Renderable
 	private:
 	SDL_Texture* const world_texture;
 };
+#endif
