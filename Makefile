@@ -2,7 +2,7 @@ PROGRAM_NAME=Deranged-farmer
 SRC_DIR=src
 O_DIR=obj
 CXX=g++
-cpp_dirs=math game-state
+cpp_dirs=math game-state ui
 external_files=
 SRC=src
 
