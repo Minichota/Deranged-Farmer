@@ -53,7 +53,6 @@ void Game::update()
 {
 	assert(state >= 0 && state < STATE_COUNT);
 	game_states[this->state]->update();
-	std::cout << "made it once" << std::endl;
 }
 
 void Game::render()

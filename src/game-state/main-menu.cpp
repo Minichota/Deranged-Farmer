@@ -1,5 +1,8 @@
+#include <iostream>
+
 #include "main-menu.hpp"
 #include "ui-base.hpp"
+#include "ui-text.hpp"
 
 MainMenu::MainMenu(SDL_Renderer* renderer):
 GameState(renderer)
@@ -29,6 +32,9 @@ void MainMenu::render()
 
 void MainMenu::init()
 {
+	UI_Text* text_element = new UI_Text(renderer, Ivec(0,0), Ivec(500, 50), Fvec(1.0f,1.0f),
+			"Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255});
+	elements.push_back(text_element);
 }
 
 void MainMenu::clear()

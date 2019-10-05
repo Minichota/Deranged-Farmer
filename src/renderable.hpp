@@ -13,7 +13,7 @@ class Renderable
 	virtual void update() = 0;
 	virtual void render() = 0;
 
-	private:
+	protected:
 	SDL_Renderer* const renderer;
 };
 #endif
