@@ -5,7 +5,7 @@
 
 class GameState : public Renderable {
 	public:
-	GameState(SDL_Texture* world_texture);
+	GameState(SDL_Renderer* renderer);
 	virtual ~GameState();
 
 	virtual void update() = 0;

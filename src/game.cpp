@@ -13,7 +13,6 @@ Game::Game()
 		   					   1000,
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
-	world_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 1000, 1000);
 }
 
 Game::~Game()
@@ -23,7 +22,7 @@ Game::~Game()
 void Game::run()
 {
 	// create state
-	MainMenu menu(world_texture);
+	MainMenu menu(renderer);
 	game_states.push_back(&menu);
 	set_state(0);
 
@@ -48,7 +47,6 @@ void Game::run()
 	}
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
-	SDL_DestroyTexture(world_texture);
 }
 
 void Game::update()
@@ -62,10 +60,6 @@ void Game::render()
 {
 	assert(state >= 0 && state < STATE_COUNT);
 	game_states[this->state]->render();
-
-	// draw world
-	const SDL_Rect world_out = SDL_Rect{0, 0, 1000, 1000};
-	SDL_RenderCopy(renderer, world_texture, &world_out, &world_out);
 }
 
 void Game::increment_state()

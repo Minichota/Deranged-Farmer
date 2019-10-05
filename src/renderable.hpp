@@ -7,13 +7,13 @@
 class Renderable
 {
 	public:
-	Renderable(SDL_Texture* world_texture);
+	Renderable(SDL_Renderer* renderer);
 	virtual ~Renderable();
 
 	virtual void update() = 0;
 	virtual void render() = 0;
 
 	private:
-	SDL_Texture* const world_texture;
+	SDL_Renderer* const renderer;
 };
 #endif

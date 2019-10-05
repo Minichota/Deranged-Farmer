@@ -1,8 +1,8 @@
 #include "main-menu.hpp"
 #include "ui-base.hpp"
 
-MainMenu::MainMenu(SDL_Texture* world_texture):
-GameState(world_texture)
+MainMenu::MainMenu(SDL_Renderer* renderer):
+GameState(renderer)
 {
 }
 
