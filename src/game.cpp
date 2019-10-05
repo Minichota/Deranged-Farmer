@@ -1,6 +1,8 @@
 #include <cassert>
+#include <iostream>
 
 #include "game.hpp"
+#include "main-menu.hpp"
 
 Game::Game()
 {
@@ -11,6 +13,7 @@ Game::Game()
 		   					   1000,
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
+	world_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 1000, 1000);
 }
 
 Game::~Game()
@@ -19,6 +22,11 @@ Game::~Game()
 
 void Game::run()
 {
+	// create state
+	MainMenu menu(world_texture);
+	game_states.push_back(&menu);
+	set_state(0);
+
 	closed = false;
 	while(!closed)
 	{
@@ -45,14 +53,15 @@ void Game::run()
 
 void Game::update()
 {
-	assert(state > 0 && state < STATE_COUNT);
-	game_states[this->state].update();
+	assert(state >= 0 && state < STATE_COUNT);
+	game_states[this->state]->update();
+	std::cout << "made it once" << std::endl;
 }
 
 void Game::render()
 {
-	assert(state > 0 && state < STATE_COUNT);
-	game_states[this->state].render();
+	assert(state >= 0 && state < STATE_COUNT);
+	game_states[this->state]->render();
 
 	// draw world
 	const SDL_Rect world_out = SDL_Rect{0, 0, 1000, 1000};
@@ -62,20 +71,24 @@ void Game::render()
 void Game::increment_state()
 {
 	// clear previous state
-	game_states[this->state].clear();
+	game_states[this->state]->clear();
 	this->state++;
+	assert(state < STATE_COUNT);
 	// initialize new state
-	game_states[this->state].init();
+	game_states[this->state]->init();
 }
 
 void Game::set_state(int state)
 {
-	assert(state > 0 && state < STATE_COUNT);
+	assert(state >= 0 && state < STATE_COUNT);
 	// clear previous state
-	game_states[this->state].clear();
+	if(game_states.size() > 1)
+	{
+		game_states[this->state]->clear();
+	}
 	this->state = state;
 	// initialize new state
-	game_states[this->state].init();
+	game_states[this->state]->init();
 }
 
 void Game::handle_event(SDL_Event event)
@@ -86,6 +99,10 @@ void Game::handle_event(SDL_Event event)
 		{
 			// user closes window
 			closed = true;
+		} break;
+		default:
+		{
+			game_states[this->state]->handle_event(event);
 		} break;
 	}
 }

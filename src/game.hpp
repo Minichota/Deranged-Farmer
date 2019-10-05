@@ -33,6 +33,6 @@ class Game {
 
 	bool closed;
 
-	std::vector<GameState> game_states;
+	std::vector<GameState*> game_states;
 	int state;
 };
