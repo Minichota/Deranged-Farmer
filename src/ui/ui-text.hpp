@@ -5,12 +5,19 @@
 class UI_Text : public UI_Base
 {
 	public:
-	UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text = "");
+	UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color);
 	~UI_Text();
 
 	void update();
 	void render();
 
 	private:
+	std::string prev_text;
 	std::string text;
+
+	std::string font_path;
+	TTF_Font* font;
+	SDL_Color font_color;
+
+	SDL_Texture* output;
 };
