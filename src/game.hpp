@@ -29,7 +29,6 @@ class Game {
 	private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	SDL_Texture* world_texture;
 
 	bool closed;
 

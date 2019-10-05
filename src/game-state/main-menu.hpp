@@ -6,7 +6,7 @@ class UI_Base;
 class MainMenu : public GameState
 {
 	public:
-	MainMenu(SDL_Texture* world_texture);
+	MainMenu(SDL_Renderer* renderer);
 	~MainMenu();
 
 	void update();

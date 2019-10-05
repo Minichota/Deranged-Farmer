@@ -1,7 +1,7 @@
 #include "ui-text.hpp"
 
-UI_Text::UI_Text(SDL_Texture* world_texture, Ivec pos, Ivec size, Fvec scale, std::string text):
-UI_Base(world_texture, pos, size, scale)
+UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text):
+UI_Base(renderer, pos, size, scale)
 {
 	this->text = text;
 }
