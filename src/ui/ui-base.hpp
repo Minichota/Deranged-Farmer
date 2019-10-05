@@ -1,3 +1,6 @@
+#ifndef UI_BASE_HPP
+#define UI_BASE_HPP
+
 #include "vectors.hpp"
 #include "renderable.hpp"
 
@@ -15,3 +18,4 @@ class UI_Base : public Renderable
 	Ivec size;
 	Fvec scale;
 };
+#endif
