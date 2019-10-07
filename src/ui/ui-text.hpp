@@ -12,6 +12,9 @@ class UI_Text : public UI_Base
 	void render();
 
 	private:
+	Ivec actual_size;
+	Fvec scale;
+
 	std::string prev_text;
 	std::string text;
 
