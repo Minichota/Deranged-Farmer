@@ -28,6 +28,12 @@ class Vector
 		return os;
 	}
 
+	template <class other_type>
+	Vector<T> operator*(const Vector<other_type>& other)
+	{
+		return Vector<T>(this->x * other.x, this->y * other.y);
+	}
+
 	T x;
 	T y;
 };

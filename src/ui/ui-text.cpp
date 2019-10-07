@@ -6,6 +6,8 @@
 UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color):
 UI_Base(renderer, pos, size, scale)
 {
+	this->scale = scale;
+
 	this->text = text;
 	this->prev_text = "";
 	this->font_path = font_path;
@@ -28,6 +30,7 @@ UI_Text::~UI_Text()
 // TODO implement ui-text scaling
 void UI_Text::update()
 {
+	this->actual_size = this->size * this->scale;
 }
 
 void UI_Text::render()
@@ -38,6 +41,6 @@ void UI_Text::render()
 		output = SDL_CreateTextureFromSurface(renderer, new_surface);
 		this->prev_text = this->text;
 	}
-	SDL_Rect position = {pos.x, pos.y, size.x, size.y};
+	SDL_Rect position = {pos.x, pos.y, actual_size.x, actual_size.y};
 	SDL_RenderCopy(renderer, output, NULL, &position);
 }

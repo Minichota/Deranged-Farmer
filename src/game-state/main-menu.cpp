@@ -32,7 +32,7 @@ void MainMenu::render()
 
 void MainMenu::init()
 {
-	UI_Text* text_element = new UI_Text(renderer, Ivec(0,0), Ivec(500, 50), Fvec(1.0f,1.0f),
+	UI_Text* text_element = new UI_Text(renderer, Ivec(0,0), Ivec(500, 50), Fvec(2.0f,0.5f),
 			"Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255});
 	elements.push_back(text_element);
 }
