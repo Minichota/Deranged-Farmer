@@ -1,4 +1,3 @@
 .git/
 docs/
-build/
-bin/
+obj/
