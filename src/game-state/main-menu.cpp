@@ -5,6 +5,7 @@
 #include "ui-text.hpp"
 #include "ui-button.hpp"
 #include "ui-slider.hpp"
+#include "ui-switch.hpp"
 
 MainMenu::MainMenu(SDL_Renderer* renderer):
 GameState(renderer)
@@ -22,7 +23,6 @@ void MainMenu::update()
 	{
 		elements[i]->update();
 	}
-	std::cout << (dynamic_cast<UI_Slider*>(elements[2]))->get_value() << std::endl;
 }
 
 void MainMenu::render()
@@ -44,9 +44,11 @@ void MainMenu::init()
 			"Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255});
 	UI_Button* button = new UI_Button(renderer, Ivec(0,200), Ivec(20,20), Fvec(10.0f,10.0f), &test);
 	UI_Slider* slider = new UI_Slider(renderer, Ivec(0,500), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 2);
+	UI_Switch* toggle = new UI_Switch(renderer, Ivec(0,700), Ivec(10,10), Fvec(1.0f,1.0f));
 	elements.push_back(text_element);
 	elements.push_back(button);
 	elements.push_back(slider);
+	elements.push_back(toggle);
 }
 
 void MainMenu::clear()

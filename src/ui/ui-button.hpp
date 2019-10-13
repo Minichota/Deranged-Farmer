@@ -18,9 +18,6 @@ class UI_Button : public UI_Base, public Event_Handler
 	void handle_event(SDL_Event event);
 
 	private:
-	bool in_bounds(Ivec input_pos);
-
-	private:
 	std::function<void()> callback;
 };
 

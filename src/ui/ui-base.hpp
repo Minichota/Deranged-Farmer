@@ -17,5 +17,7 @@ class UI_Base : public Renderable
 	Ivec pos;
 	Ivec size;
 	Fvec scale;
+
+	bool in_bounds(Ivec input_pos);
 };
 #endif
