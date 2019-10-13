@@ -2,8 +2,10 @@
 #define GAME_STATE_HPP
 
 #include "renderable.hpp"
+#include "event-handler.hpp"
 
-class GameState : public Renderable {
+class GameState : public Renderable, public Event_Handler
+{
 	public:
 	GameState(SDL_Renderer* renderer);
 	virtual ~GameState();

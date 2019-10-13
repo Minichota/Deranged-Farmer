@@ -1,3 +1,6 @@
+#ifndef UI_TEXT_HPP
+#define UI_TEXT_HPP
+
 #include <SDL2/SDL_ttf.h>
 
 #include "ui-base.hpp"
@@ -7,6 +10,9 @@ class UI_Text : public UI_Base
 	public:
 	UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color);
 	~UI_Text();
+
+	void set_text(std::string text);
+	void append_text(std::string text);
 
 	void update();
 	void render();
@@ -24,3 +30,4 @@ class UI_Text : public UI_Base
 
 	SDL_Texture* output;
 };
+#endif

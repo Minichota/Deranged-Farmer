@@ -33,6 +33,7 @@ void UI_Text::update()
 	this->actual_size = this->size * this->scale;
 }
 
+// TODO fix text filling entire size box
 void UI_Text::render()
 {
 	if(this->text != this->prev_text)
@@ -43,4 +44,14 @@ void UI_Text::render()
 	}
 	SDL_Rect position = {pos.x, pos.y, actual_size.x, actual_size.y};
 	SDL_RenderCopy(renderer, output, NULL, &position);
+}
+
+void UI_Text::set_text(std::string text)
+{
+	this->text = text;
+}
+
+void UI_Text::append_text(std::string text)
+{
+	this->text.append(text);
 }
