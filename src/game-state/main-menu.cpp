@@ -41,7 +41,7 @@ void test()
 
 void MainMenu::init()
 {
-	UI_Text* text_element = new UI_Text(renderer, Ivec(0,0), Ivec(500, 50), Fvec(2.0f,0.5f),
+	UI_Text* text_element = new UI_Text(renderer, Ivec(0,0), Ivec(500, 50), Fvec(2.0f,1.5f),
 			"Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255});
 	UI_Button* button = new UI_Button(renderer, Ivec(0,200), Ivec(20,20), Fvec(10.0f,10.0f), &test);
 	UI_Slider* slider = new UI_Slider(renderer, Ivec(0,500), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 2);
