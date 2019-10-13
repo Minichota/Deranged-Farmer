@@ -15,10 +15,12 @@ class UI_Slider : public UI_Base, public Event_Handler
 
 	void handle_event(SDL_Event event);
 
+	int get_closest_tick(Ivec pos);
+
 	int get_value();
 
 	int get_state();
-	void set_state(bool state);
+	void set_state(int state);
 
 	private:
 	int state;
@@ -26,5 +28,8 @@ class UI_Slider : public UI_Base, public Event_Handler
 	const int min_value;
 	const int difference;
 	const int pos_fraction;
+	const int pos_count;
+
+	bool mouse_down;
 };
 #endif

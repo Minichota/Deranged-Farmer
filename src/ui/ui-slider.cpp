@@ -7,9 +7,11 @@ UI_Base(renderer, pos, size, scale),
 max_value(max_value),
 min_value(min_value),
 difference(max_value - min_value),
-pos_fraction(difference / pos_count)
+pos_fraction(difference / pos_count),
+pos_count(pos_count)
 {
 	this->state = 0;
+	this->mouse_down = false;
 }
 
 UI_Slider::~UI_Slider()
@@ -20,7 +22,6 @@ void UI_Slider::update()
 {
 }
 
-// TODO use pos_count instead of every value in between
 void UI_Slider::render()
 {
 	static const int bar_height = 30 * scale.y;
@@ -34,26 +35,46 @@ void UI_Slider::render()
 	SDL_RenderFillRect(renderer, &pos_bar);
 }
 
-// TODO implement mouse controlling of slider
 void UI_Slider::handle_event(SDL_Event event)
 {
 	switch(event.type)
 	{
-		case SDL_KEYDOWN:
+		case SDL_MOUSEBUTTONDOWN:
 		{
-			switch(event.key.keysym.sym)
+			if(in_bounds(Ivec(event.button.x, event.button.y)))
 			{
-				// temporary, for testing
-				case SDLK_UP:
-				{
-					state++;
-				} break;
-				case SDLK_DOWN:
-				{
-					state--;
-				} break;
+				mouse_down = true;
+				set_state(get_closest_tick(Ivec(event.button.x, event.button.y)));
 			}
 		} break;
+		case SDL_MOUSEBUTTONUP:
+		{
+			mouse_down = false;
+		} break;
+		case SDL_MOUSEMOTION:
+		{
+			if(mouse_down)
+			{
+				set_state(get_closest_tick(Ivec(event.motion.x, event.motion.y)));
+			}
+		} break;
+	}
+}
+
+int UI_Slider::get_closest_tick(Ivec click_pos)
+{
+	int dx = click_pos.x - this->pos.x;
+	if(dx > max_value)
+	{
+		return this->pos_count;
+	}
+	else if(dx < min_value)
+	{
+		return 0;
+	}
+	else
+	{
+		return std::round(dx / (double)this->pos_fraction);
 	}
 }
 
@@ -67,7 +88,7 @@ int UI_Slider::get_state()
 	return this->state;
 }
 
-void UI_Slider::set_state(bool state)
+void UI_Slider::set_state(int state)
 {
 	this->state = state;
 }
