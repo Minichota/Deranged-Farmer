@@ -7,7 +7,7 @@ UI_Base(renderer, pos, size, scale),
 max_value(max_value),
 min_value(min_value),
 difference(max_value - min_value),
-pos_count(pos_count)
+pos_fraction(difference / pos_count)
 {
 	this->state = 0;
 }
@@ -26,7 +26,7 @@ void UI_Slider::render()
 	static const int bar_height = 30 * scale.y;
 	static const int bar_width  = (size.x * scale.x / 10);
 	SDL_Rect full_bar = {pos.x, pos.y, (int)(size.x * scale.x), (int)(size.y * scale.y)};
-	SDL_Rect pos_bar  = {(int)(pos.x + (size.x - bar_width) * (state / (double)difference)),
+	SDL_Rect pos_bar  = {(int)(pos.x + (size.x - bar_width) * (state * pos_fraction / (double)difference)),
 						(int)(pos.y - (bar_height - size.y) / 2),
 						bar_width,
 						bar_height};
@@ -59,7 +59,7 @@ void UI_Slider::handle_event(SDL_Event event)
 
 int UI_Slider::get_value()
 {
-	return this->difference * (this->state / (double)this->difference);
+	return this->difference * (this->state * this->pos_fraction / (double)this->difference);
 }
 
 int UI_Slider::get_state()
