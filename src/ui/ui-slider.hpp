@@ -25,6 +25,6 @@ class UI_Slider : public UI_Base, public Event_Handler
 	const int max_value;
 	const int min_value;
 	const int difference;
-	const int pos_count;
+	const int pos_fraction;
 };
 #endif
