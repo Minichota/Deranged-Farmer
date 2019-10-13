@@ -7,6 +7,7 @@ UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::s
 UI_Base(renderer, pos, size, scale)
 {
 	this->scale = scale;
+	this->tex_size = Ivec(0,0);
 
 	this->text = text;
 	this->prev_text = "";
@@ -25,25 +26,27 @@ UI_Text::~UI_Text()
 {
 	this->text.clear();
 	this->prev_text.clear();
+	TTF_CloseFont(this->font);
 }
 
-// TODO implement ui-text scaling
 void UI_Text::update()
 {
-	this->actual_size = this->size * this->scale;
+	this->actual_size = this->size;
 }
 
-// TODO fix text filling entire size box
 void UI_Text::render()
 {
 	if(this->text != this->prev_text)
 	{
 		SDL_Surface* new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
 		output = SDL_CreateTextureFromSurface(renderer, new_surface);
+		SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
 		this->prev_text = this->text;
 	}
-	SDL_Rect position = {pos.x, pos.y, actual_size.x, actual_size.y};
+	SDL_RenderSetScale(renderer, scale.x, scale.y);
+	SDL_Rect position = {pos.x, pos.y, tex_size.x, tex_size.y};
 	SDL_RenderCopy(renderer, output, NULL, &position);
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 }
 
 void UI_Text::set_text(std::string text)

@@ -18,6 +18,7 @@ class UI_Text : public UI_Base
 	void render();
 
 	private:
+	Ivec tex_size;
 	Ivec actual_size;
 	Fvec scale;
 
