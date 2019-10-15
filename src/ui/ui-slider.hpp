@@ -31,5 +31,7 @@ class UI_Slider : public UI_Base, public Event_Handler
 	const int pos_count;
 
 	bool mouse_down;
+
+	bool in_bounds(Ivec point);
 };
 #endif

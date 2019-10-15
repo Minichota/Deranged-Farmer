@@ -24,10 +24,10 @@ void UI_Slider::update()
 
 void UI_Slider::render()
 {
-	static const int bar_height = 30 * scale.y;
-	static const int bar_width  = 10 * scale.x;
+	const int bar_height = 30 * scale.y;
+	const int bar_width  = 10 * scale.x;
 	SDL_Rect full_bar = {pos.x, pos.y, (int)(size.x * scale.x), (int)(size.y * scale.y)};
-	SDL_Rect pos_bar  = {(int)(pos.x + (size.x - bar_width) * state * difference / pos_count / difference),
+	SDL_Rect pos_bar  = {(int)(pos.x + (size.x - bar_width) * state / pos_count),
 						(int)(pos.y - (bar_height - size.y) / 2),
 						bar_width,
 						bar_height};
@@ -78,9 +78,24 @@ int UI_Slider::get_closest_tick(Ivec click_pos)
 	}
 }
 
+bool UI_Slider::in_bounds(Ivec point)
+{
+	const int bar_height = 30 * scale.y;
+	const int bar_width  = 10 * scale.x;
+	Ivec slider_pos			= Ivec(pos.x + (size.x - bar_width) * state / pos_count,
+								   pos.y - (bar_height - size.y) / 2);
+	Ivec slider_bottom_left = Ivec(slider_pos.x + 10 * scale.x,
+								   slider_pos.y + 30 * scale.y);
+	return UI_Base::in_bounds(point) ||
+		(slider_pos.x <= point.x &&
+		point.x <= slider_bottom_left.x &&
+		slider_pos.y <= point.y &&
+		point.y <= slider_bottom_left.y);
+}
+
 int UI_Slider::get_value()
 {
-	return this->difference * (this->state * (this->difference / (double)this->pos_count) / this->difference);
+	return this->state * (this->difference / (double)this->pos_count);
 }
 
 int UI_Slider::get_state()
