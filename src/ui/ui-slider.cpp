@@ -31,8 +31,10 @@ void UI_Slider::render()
 						(int)(pos.y - (bar_height - size.y) / 2),
 						bar_width,
 						bar_height};
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 	SDL_RenderFillRect(renderer, &full_bar);
 	SDL_RenderFillRect(renderer, &pos_bar);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
 void UI_Slider::handle_event(SDL_Event event)

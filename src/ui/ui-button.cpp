@@ -23,9 +23,10 @@ void UI_Button::render()
 					this->size.x,
 					this->size.y};
 	SDL_RenderSetScale(renderer, this->scale.x, this->scale.y);
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 	SDL_RenderDrawRect(renderer, &box);
 	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
 void UI_Button::handle_event(SDL_Event event)
