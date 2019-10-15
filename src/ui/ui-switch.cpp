@@ -30,8 +30,10 @@ void UI_Switch::render()
 		fill = {0,0,0,0};
 	}
 
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 	SDL_RenderDrawRect(renderer, &border);
 	SDL_RenderFillRect(renderer, &fill);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
 void UI_Switch::handle_event(SDL_Event event)
