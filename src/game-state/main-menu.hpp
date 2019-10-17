@@ -25,5 +25,4 @@ class MainMenu : public GameState
 	private:
 	std::vector<UI_Base*> elements;
 	Timer_Animation<Ivec> position_animation;
-	Timer_Animation<uint8_t> alpha_animation;
 };

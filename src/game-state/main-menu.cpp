@@ -10,8 +10,7 @@
 
 MainMenu::MainMenu(SDL_Renderer* renderer):
 GameState(renderer),
-position_animation(Ivec(0,700),Ivec(500,700),1000,5000),
-alpha_animation(0,255,1000,5000)
+position_animation(Ivec(0,700),Ivec(500,700),1000,1000)
 {
 }
 
@@ -26,10 +25,7 @@ void MainMenu::update()
 	{
 		elements[i]->update();
 	}
-	Ivec position = position_animation.get_value();
-	uint8_t alpha = alpha_animation.get_value();
-	elements[3]->set_position(position);
-	elements[3]->set_color(SDL_Color{0,0,255,alpha});
+	position_animation.update();
 }
 
 void MainMenu::render()
@@ -51,8 +47,9 @@ void MainMenu::init()
 			"Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255});
 	UI_Button* button = new UI_Button(renderer, Ivec(0,200), Ivec(20,20), Fvec(10.0f,10.0f), &test, SDL_Color{255,0,0,255});
 	UI_Slider* slider = new UI_Slider(renderer, Ivec(0,500), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{0,255,0,255});
-	UI_Switch* toggle = new UI_Switch(renderer, Ivec(0,700), Ivec(10,10), Fvec(1.0f,1.0f), SDL_Color{0,0,255,255});
-	UI_Text_Input* text_input = new UI_Text_Input(renderer, Ivec(0,900), Ivec(1000,200), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,0,255});
+	UI_Switch* toggle = new UI_Switch(renderer, Ivec(0,700), Ivec(50,50), Fvec(1.0f,1.0f), SDL_Color{0,0,255,255});
+	UI_Text_Input* text_input = new UI_Text_Input(renderer, Ivec(0,900), Ivec(1000,200), Fvec(2.0f,2.0f), "res/graphics/font.ttf", SDL_Color{255,255,0,255});
+	position_animation.push_oscillator(&toggle->get_pos(), Ivec(0,700), Ivec(200,700));
 	elements.push_back(text_element);
 	elements.push_back(button);
 	elements.push_back(slider);
