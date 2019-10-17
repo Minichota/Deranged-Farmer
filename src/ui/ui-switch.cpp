@@ -22,8 +22,8 @@ void UI_Switch::render()
 	{
 		fill = {pos.x + (int)(2 * scale.x),
 				pos.y + (int)(2 * scale.y),
-				size.x - (int)(4 * scale.x),
-				size.y - (int)(4 * scale.y)};
+				(int)((size.x * scale.x) - (4 * scale.x)),
+				(int)((size.y * scale.y) - (4 * scale.y))};
 	}
 	else
 	{
