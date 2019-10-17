@@ -31,9 +31,30 @@ void UI_Base::set_color(SDL_Color color)
 	this->color = color;
 }
 
-void UI_Base::set_position(Ivec pos)
+SDL_Color& UI_Base::get_color()
+{
+	return this->color;
+}
+
+void UI_Base::set_pos(Ivec pos)
 {
 	this->pos = pos;
+}
+
+Ivec& UI_Base::get_pos()
+{
+	return this->pos;
+}
+
+void UI_Base::set_scale(Fvec scale)
+{
+	this->scale = scale;
+}
+
+Fvec& UI_Base::get_scale()
+{
+	return this->scale;
+
 }
 
 bool UI_Base::in_bounds(Ivec input_pos)
