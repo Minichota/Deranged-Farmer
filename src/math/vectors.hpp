@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <ostream>
+#include <iostream>
 
 template <class T>
 class Vector
@@ -32,6 +33,36 @@ class Vector
 	Vector<T> operator*(const Vector<other_type>& other)
 	{
 		return Vector<T>(this->x * other.x, this->y * other.y);
+	}
+
+	Vector<T> operator*(const double other)
+	{
+		return Vector<T>(this->x * other, this->y * other);
+	}
+
+	template <class other_type>
+	Vector<T>& operator+=(const Vector<other_type>& other)
+	{
+		this->x += other.x;
+		this->y += other.y;
+		return *this;
+	}
+
+	template <class other_type>
+	Vector<T>& operator-=(const Vector<other_type>& other)
+	{
+		this->x -= other.x;
+		this->y -= other.y;
+		return *this;
+	}
+
+	template <class other_type>
+	Vector<T> operator-(const Vector<other_type>& rhs) const
+	{
+		Vector<T> ret;
+		ret.x = this->x - rhs.x;
+		ret.y = this->y - rhs.y;
+		return ret;
 	}
 
 	T x;

@@ -9,7 +9,9 @@
 #include "ui-text-input.hpp"
 
 MainMenu::MainMenu(SDL_Renderer* renderer):
-GameState(renderer)
+GameState(renderer),
+position_animation(Ivec(0,700),Ivec(500,700),1000,5000),
+alpha_animation(0,255,1000,5000)
 {
 }
 
@@ -24,6 +26,10 @@ void MainMenu::update()
 	{
 		elements[i]->update();
 	}
+	Ivec position = position_animation.get_value();
+	uint8_t alpha = alpha_animation.get_value();
+	elements[3]->set_position(position);
+	elements[3]->set_color(SDL_Color{0,0,255,alpha});
 }
 
 void MainMenu::render()

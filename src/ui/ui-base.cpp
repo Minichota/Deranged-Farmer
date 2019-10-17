@@ -26,6 +26,16 @@ void UI_Base::set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 	this->color = {r,g,b,a};
 }
 
+void UI_Base::set_color(SDL_Color color)
+{
+	this->color = color;
+}
+
+void UI_Base::set_position(Ivec pos)
+{
+	this->pos = pos;
+}
+
 bool UI_Base::in_bounds(Ivec input_pos)
 {
 	Ivec actual_size = this->size * this->scale;
