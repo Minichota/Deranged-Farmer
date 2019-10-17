@@ -15,6 +15,8 @@ class UI_Base : public Renderable
 	virtual void render() = 0;
 
 	virtual void set_color(u_int8_t r, u_int8_t g, u_int8_t b, u_int8_t alpha = 255);
+	virtual void set_color(SDL_Color color);
+	virtual void set_position(Ivec pos);
 
 	protected:
 	Ivec pos;

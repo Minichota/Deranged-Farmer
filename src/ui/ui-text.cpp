@@ -4,7 +4,7 @@
 #include "ui-text.hpp"
 
 UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color):
-UI_Base(renderer, pos, size, scale)
+UI_Base(renderer, pos, size, scale, font_color)
 {
 	this->scale = scale;
 	this->tex_size = Ivec(0,0);
