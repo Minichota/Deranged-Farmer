@@ -1,7 +1,6 @@
 #include <vector>
 
 #include "game-state.hpp"
-#include "oscillator_animation.hpp"
 #include "vectors.hpp"
 
 class UI_Base;
@@ -24,5 +23,4 @@ class MainMenu : public GameState
 
 	private:
 	std::vector<UI_Base*> elements;
-	Oscillator_Animation<Ivec> position_animation;
 };
