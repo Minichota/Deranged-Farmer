@@ -7,10 +7,10 @@
 #include "ui-slider.hpp"
 #include "ui-switch.hpp"
 #include "ui-text-input.hpp"
+#include "interpolators.hpp"
 
 MainMenu::MainMenu(SDL_Renderer* renderer):
-GameState(renderer),
-position_animation(Ivec(0,700),Ivec(500,700),1000,1000)
+GameState(renderer)
 {
 }
 
@@ -25,7 +25,8 @@ void MainMenu::update()
 	{
 		elements[i]->update();
 	}
-	position_animation.update();
+
+	update_interpolators();
 }
 
 void MainMenu::render()
@@ -43,18 +44,18 @@ void test()
 
 void MainMenu::init()
 {
-	UI_Text* text_element = new UI_Text(renderer, Ivec(0,0), Ivec(500, 50), Fvec(2.0f,1.5f),
-			"Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255});
-	UI_Button* button = new UI_Button(renderer, Ivec(0,200), Ivec(20,20), Fvec(10.0f,10.0f), &test, SDL_Color{255,0,0,255});
-	UI_Slider* slider = new UI_Slider(renderer, Ivec(0,500), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{0,255,0,255});
-	UI_Switch* toggle = new UI_Switch(renderer, Ivec(0,700), Ivec(50,50), Fvec(1.0f,1.0f), SDL_Color{0,0,255,255});
-	UI_Text_Input* text_input = new UI_Text_Input(renderer, Ivec(0,900), Ivec(1000,200), Fvec(2.0f,2.0f), "res/graphics/font.ttf", SDL_Color{255,255,0,255});
-	position_animation.push_oscillator(&toggle->get_pos(), Ivec(0,700), Ivec(200,700));
-	elements.push_back(text_element);
-	elements.push_back(button);
-	elements.push_back(slider);
-	elements.push_back(toggle);
-	elements.push_back(text_input);
+	elements = {
+		new UI_Text(renderer, Ivec(0,0), Ivec(500, 50), Fvec(2.0f,1.5f), "Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255}),
+		new UI_Button(renderer, Ivec(0,200), Ivec(20,20), Fvec(10.0f,10.0f), &test, SDL_Color{255,0,0,255}),
+		new UI_Slider(renderer, Ivec(0,500), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{0,255,0,255}),
+		new UI_Switch(renderer, Ivec(0,700), Ivec(50,50), Fvec(1.0f,1.0f), SDL_Color{0,0,255,255}),
+		new UI_Text_Input(renderer, Ivec(0,900), Ivec(1000,200), Fvec(2.0f,2.0f), "res/graphics/font.ttf", SDL_Color{255,255,0,255})
+	};
+
+	ivec_interpolaters.push_back(Interpolator<Ivec>{&elements[3]->get_pos(), Ivec(0,700), Ivec(200,700), 1000, 1000, false, OSCILLATOR});
+	float_interpolaters.push_back(Interpolator<float>{&elements[3]->get_scale().x, 1.0f, 2.0f, 100, 100, false, OSCILLATOR});
+	float_interpolaters.push_back(Interpolator<float>{&elements[3]->get_scale().y, 1.0f, 2.0f, 100, 100, false, OSCILLATOR});
+
 }
 
 void MainMenu::clear()
