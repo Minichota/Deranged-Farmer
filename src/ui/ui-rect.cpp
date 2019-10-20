@@ -21,7 +21,6 @@ void UI_Rect::update()
 		this->size.x,
 		this->size.y
 	};
-	std::cout << get_pos() << size << std::endl;
 }
 
 void UI_Rect::render()
@@ -34,7 +33,7 @@ void UI_Rect::render()
 		{
 			SDL_RenderFillRect(renderer, &sprite);
 		} break;
-		case BORDER:
+		case NORMAL:
 		{
 			SDL_RenderDrawRect(renderer, &sprite);
 		} break;

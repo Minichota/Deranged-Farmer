@@ -2,9 +2,9 @@
 
 #include "ui-text-input.hpp"
 
-UI_Text_Input::UI_Text_Input(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string font_path, SDL_Color font_color):
+UI_Text_Input::UI_Text_Input(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string font_path, SDL_Color font_color, Fill_Type type):
 UI_Base(renderer, pos, size, scale, font_color),
-ui_text(renderer, pos, size, scale, "", font_path, font_color)
+ui_text(renderer, pos, size, scale, "", font_path, font_color, type)
 {
 	SDL_StartTextInput();
 }

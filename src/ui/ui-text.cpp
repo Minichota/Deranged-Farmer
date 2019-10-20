@@ -3,9 +3,10 @@
 
 #include "ui-text.hpp"
 
-UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color):
+UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color, Fill_Type type):
 UI_Base(renderer, pos, size, scale, font_color)
 {
+	this->type = type;
 	this->text = text;
 	this->prev_text = "";
 	this->prev_scale = Fvec(1.0f,1.0f);
@@ -17,12 +18,7 @@ UI_Base(renderer, pos, size, scale, font_color)
 		std::cout << "failed to create font face" << std::endl;
 	}
 	this->font_color = font_color;
-
-	SDL_Surface* new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
-	output = SDL_CreateTextureFromSurface(renderer, new_surface);
-	SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
-	this->prev_text = this->text;
-	SDL_FreeSurface(new_surface);
+	reload_texture();
 }
 
 UI_Text::~UI_Text()
@@ -43,10 +39,26 @@ void UI_Text::render()
 	{
 		reload_texture();
 	}
-	SDL_RenderSetScale(renderer, scale.x, scale.y);
-	SDL_Rect position = {get_pos().x, get_pos().y, tex_size.x, tex_size.y};
-	SDL_RenderCopy(renderer, output, NULL, &position);
-	SDL_RenderSetScale(renderer, 1.0f,1.0f);
+
+	switch(type)
+	{
+		case NORMAL:
+		{
+			SDL_RenderSetScale(renderer, scale.x, scale.y);
+			SDL_Rect position = {get_pos().x, get_pos().y, tex_size.x, tex_size.y};
+			SDL_RenderCopy(renderer, output, NULL, &position);
+			SDL_RenderSetScale(renderer, 1.0f,1.0f);
+		} break;
+		case FILL:
+		{
+			SDL_Rect position = {(int)(pos.x - origin.x * (size.x / (float)tex_size.x)),
+								 (int)(pos.y - origin.y * (size.y / (float)tex_size.y)),
+								 size.x,
+								 size.y};
+			std::cout << get_pos() << std::endl;
+			SDL_RenderCopy(renderer, output, NULL, &position);
+		} break;
+	}
 }
 
 void UI_Text::reload_texture()

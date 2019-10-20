@@ -3,12 +3,6 @@
 
 #include "ui-base.hpp"
 
-typedef enum
-{
-	FILL,
-	BORDER
-} Fill_Type;
-
 class UI_Rect : public UI_Base
 {
 	public:
