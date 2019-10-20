@@ -13,7 +13,6 @@ UI_Base(renderer, pos, size, scale, font_color)
 	this->prev_text = "";
 	this->font_path = font_path;
 
-	std::cout << font_path << std::endl;
 	this->font = TTF_OpenFont(font_path.c_str(), 24);
 	if(!font)
 	{
@@ -42,9 +41,10 @@ void UI_Text::render()
 		output = SDL_CreateTextureFromSurface(renderer, new_surface);
 		SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
 		this->prev_text = this->text;
+		SDL_FreeSurface(new_surface);
 	}
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
-	SDL_Rect position = {pos.x, pos.y, tex_size.x, tex_size.y};
+	SDL_Rect position = {(int)(pos.x/scale.x), (int)(pos.y / scale.y), tex_size.x, tex_size.y};
 	SDL_RenderCopy(renderer, output, NULL, &position);
 	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 }
@@ -57,4 +57,9 @@ void UI_Text::set_text(std::string text)
 void UI_Text::append_text(std::string text)
 {
 	this->text.append(text);
+}
+
+std::string UI_Text::get_text()
+{
+	return this->text;
 }

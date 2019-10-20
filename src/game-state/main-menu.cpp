@@ -53,7 +53,7 @@ void MainMenu::init()
 		new UI_Text_Input(renderer, Ivec(0,900), Ivec(1000,200), Fvec(2.0f,2.0f), "res/graphics/font.ttf", SDL_Color{255,255,0,255})
 	};
 
-	ivec_interpolaters.push_back(Interpolator<Ivec>{&elements[3]->get_pos(), Ivec(0,700), Ivec(200,700), 1000, 1000, false, OSCILLATOR});
+	ivec_interpolaters.push_back(Interpolator<Ivec>{&elements[3]->get_abs_pos(), Ivec(0,700), Ivec(200,700), 1000, 1000, false, OSCILLATOR});
 	float_interpolaters.push_back(Interpolator<float>{&elements[3]->get_scale().x, 1.0f, 2.0f, 100, 100, false, OSCILLATOR});
 	float_interpolaters.push_back(Interpolator<float>{&elements[3]->get_scale().y, 1.0f, 2.0f, 100, 100, false, OSCILLATOR});
 

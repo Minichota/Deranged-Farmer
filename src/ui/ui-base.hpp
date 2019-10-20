@@ -18,20 +18,26 @@ class UI_Base : public Renderable
 	virtual void set_color(SDL_Color color);
 	SDL_Color& get_color();
 
-	virtual void set_pos(Ivec pos);
-	virtual Ivec& get_pos();
+	virtual void set_abs_pos(Ivec pos);
+	virtual Ivec& get_abs_pos();
+
+	virtual Ivec get_pos();
 
 	virtual void set_scale(Fvec scale);
 	virtual Fvec& get_scale();
 
+	virtual void set_origin(Ivec origin);
+	virtual Ivec& get_origin();
+
+	protected:
+	virtual bool in_bounds(Ivec input_pos);
 
 	protected:
 	Ivec pos;
 	Ivec size;
 	Fvec scale;
+	Ivec origin;
 
 	SDL_Color color;
-
-	virtual bool in_bounds(Ivec input_pos);
 };
 #endif

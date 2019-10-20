@@ -22,7 +22,10 @@ void UI_Text_Input::update()
 
 void UI_Text_Input::render()
 {
-	ui_text.render();
+	if(ui_text.get_text().size() > 0)
+	{
+		ui_text.render();
+	}
 }
 
 void UI_Text_Input::handle_event(SDL_Event event)
