@@ -46,22 +46,20 @@ void test()
 void MainMenu::init()
 {
 	elements = {
-		new UI_Text(renderer, Ivec(500,50), Ivec(500, 50), Fvec(2.0f,1.5f), "Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255}),
-		new UI_Button(renderer, Ivec(500,200), Ivec(20,20), Fvec(1.0f,1.0f), &test, SDL_Color{255,0,0,255}),
-		new UI_Slider(renderer, Ivec(500,500), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{0,255,0,255}),
-		new UI_Switch(renderer, Ivec(500,700), Ivec(100,100), Fvec(1.0f,1.0f), SDL_Color{0,0,255,255}),
-		new UI_Text_Input(renderer, Ivec(0,500), Ivec(1000,200), Fvec(2.0f,2.0f), "res/graphics/font.ttf", SDL_Color{255,255,0,255})
+		new UI_Text(renderer, Ivec(400,100), Ivec(0, 0), Fvec(2.0f,1.5f), "Deranged farmer", "res/graphics/font.ttf", SDL_Color{255,255,255}),
+		new UI_Button(renderer, Ivec(400,300), Ivec(40,20), Fvec(5.0f,5.0f), &test, SDL_Color{255,0,0,255}),
+		new UI_Text(renderer, Ivec(400,300), Ivec(0, 0), Fvec(2.0f,1.5f), "Start", "res/graphics/font.ttf", SDL_Color{255,255,255}),
+		//new UI_Slider(renderer, Ivec(400,500), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{0,255,0,255}),
+		//new UI_Switch(renderer, Ivec(400,700), Ivec(100,100), Fvec(1.0f,1.0f), SDL_Color{0,0,255,255}),
+		//new UI_Text_Input(renderer, Ivec(0,500), Ivec(1000,200), Fvec(2.0f,2.0f), "res/graphics/font.ttf", SDL_Color{255,255,0,255})
 	};
 
 	elements[0]->set_origin(elements[0]->get_size()/2);
 	elements[1]->set_origin(elements[1]->get_size()/2);
 	elements[2]->set_origin(elements[2]->get_size()/2);
-	elements[3]->set_origin(elements[3]->get_size()/2);
-	elements[4]->set_origin(elements[4]->get_size()/2);
 
-	ivec_interpolaters.push_back(Interpolator<Ivec>{&elements[3]->get_abs_pos(), Ivec(400,700), Ivec(600,700), 1000, 1000, false, OSCILLATOR});
-	//float_interpolaters.push_back(Interpolator<float>{&elements[3]->get_scale().x, 1.0f, 2.0f, 1000, 1000, false, OSCILLATOR});
-	//float_interpolaters.push_back(Interpolator<float>{&elements[3]->get_scale().y, 1.0f, 2.0f, 1000, 1000, false, OSCILLATOR});
+	float_interpolaters.push_back(Interpolator<float>{&elements[0]->get_scale().x, 1.0f, 2.0f, 1000, 1000, false, OSCILLATOR});
+	float_interpolaters.push_back(Interpolator<float>{&elements[0]->get_scale().y, 1.0f, 2.0f, 1000, 1000, false, OSCILLATOR});
 
 }
 

@@ -86,10 +86,12 @@ Ivec& UI_Base::get_origin()
 bool UI_Base::in_bounds(Ivec input_pos)
 {
 	Ivec actual_size = this->size * this->scale;
-	Ivec bottom_left = Ivec(this->get_pos().x + actual_size.x,
-							this->get_pos().y + actual_size.y);
-	return this->get_pos().x <= input_pos.x &&
+	Ivec top_left    = Ivec(this->pos.x / scale.x - origin.x,
+							this->pos.y / scale.y - origin.y) * scale;
+	Ivec bottom_left = Ivec(top_left.x + actual_size.x,
+							top_left.y + actual_size.y);
+	return  top_left.x <= input_pos.x &&
 			input_pos.x <= bottom_left.x &&
-			this->get_pos().y <= input_pos.y &&
+			top_left.y <= input_pos.y &&
 			input_pos.y <= bottom_left.y;
 }

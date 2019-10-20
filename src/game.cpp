@@ -13,8 +13,8 @@ Game::Game()
 	window = SDL_CreateWindow("Deranged Farmer",
 		   					   SDL_WINDOWPOS_CENTERED,
 		   					   SDL_WINDOWPOS_CENTERED,
-		   					   1000,
-		   					   1000,
+		   					   800,
+		   					   600,
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
