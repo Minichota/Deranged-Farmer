@@ -49,7 +49,7 @@ void Game::run()
 		render();
 
 		SDL_RenderPresent(renderer);
-		SDL_Delay(1000.0f/60.0f);
+		SDL_Delay(1000.0f/144.0f);
 	}
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);

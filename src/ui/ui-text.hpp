@@ -11,14 +11,18 @@ class UI_Text : public UI_Base
 	UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color);
 	~UI_Text();
 
-	void set_text(std::string text);
-	void append_text(std::string text);
-
 	void update();
 	void render();
 
+	void reload_texture();
+
+	void set_text(std::string text);
+	void append_text(std::string text);
+
 	std::string get_text();
 	Ivec& get_size();
+
+	void set_font_size(int font_size);
 
 	private:
 	Ivec tex_size;
