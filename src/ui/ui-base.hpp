@@ -4,6 +4,12 @@
 #include "vectors.hpp"
 #include "renderable.hpp"
 
+typedef enum
+{
+	FILL,
+	NORMAL
+} Fill_Type;
+
 class UI_Base : public Renderable
 {
 	public:

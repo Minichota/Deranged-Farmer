@@ -17,7 +17,6 @@ Game::Game()
 		   					   600,
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetWindowResizable(window, SDL_FALSE);
 }
 
