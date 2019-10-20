@@ -23,6 +23,9 @@ class UI_Base : public Renderable
 
 	virtual Ivec get_pos();
 
+	virtual void set_size(Ivec size);
+	virtual Ivec& get_size();
+
 	virtual void set_scale(Fvec scale);
 	virtual Fvec& get_scale();
 
@@ -36,7 +39,7 @@ class UI_Base : public Renderable
 	Ivec pos;
 	Ivec size;
 	Fvec scale;
-	Ivec origin;
+	Ivec origin = Ivec(0,0);
 
 	SDL_Color color;
 };

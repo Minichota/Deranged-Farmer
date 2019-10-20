@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "ui-base.hpp"
 
 UI_Base::UI_Base(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color color):
@@ -48,8 +50,17 @@ Ivec& UI_Base::get_abs_pos()
 
 Ivec UI_Base::get_pos()
 {
-	Ivec half_size = size / 2;
-	return half_size * scale;
+	return pos / scale - origin;
+}
+
+void UI_Base::set_size(Ivec size)
+{
+	this->size = size;
+}
+
+Ivec& UI_Base::get_size()
+{
+	return this->size;
 }
 
 void UI_Base::set_scale(Fvec scale)
@@ -60,7 +71,6 @@ void UI_Base::set_scale(Fvec scale)
 Fvec& UI_Base::get_scale()
 {
 	return this->scale;
-
 }
 
 void UI_Base::set_origin(Ivec origin)
@@ -76,10 +86,10 @@ Ivec& UI_Base::get_origin()
 bool UI_Base::in_bounds(Ivec input_pos)
 {
 	Ivec actual_size = this->size * this->scale;
-	Ivec bottom_left = Ivec(this->pos.x + actual_size.x,
-							this->pos.y + actual_size.y);
-	return this->pos.x <= input_pos.x &&
+	Ivec bottom_left = Ivec(this->get_pos().x + actual_size.x,
+							this->get_pos().y + actual_size.y);
+	return this->get_pos().x <= input_pos.x &&
 			input_pos.x <= bottom_left.x &&
-			this->pos.y <= input_pos.y &&
+			this->get_pos().y <= input_pos.y &&
 			input_pos.y <= bottom_left.y;
 }

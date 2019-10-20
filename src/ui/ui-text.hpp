@@ -18,6 +18,7 @@ class UI_Text : public UI_Base
 	void render();
 
 	std::string get_text();
+	Ivec& get_size();
 
 	private:
 	Ivec tex_size;
