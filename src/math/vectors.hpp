@@ -29,6 +29,17 @@ class Vector
 		return os;
 	}
 
+	Vector<T> operator/(const int& other)
+	{
+		return Vector<T>(this->x / other, this->y / other);
+	}
+
+	template <class other_type>
+	Vector<T> operator/(const Vector<other_type>& other)
+	{
+		return Vector<T>(this->x / other.x, this->y / other.y);
+	}
+
 	template <class other_type>
 	Vector<T> operator*(const Vector<other_type>& other)
 	{
@@ -63,6 +74,12 @@ class Vector
 		ret.x = this->x - rhs.x;
 		ret.y = this->y - rhs.y;
 		return ret;
+	}
+
+	template <class other_type>
+	bool operator!=(const Vector<other_type>& other)
+	{
+		return this->x != other.x || this->y != other.y;
 	}
 
 	T x;

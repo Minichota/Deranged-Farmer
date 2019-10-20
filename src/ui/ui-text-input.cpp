@@ -16,13 +16,19 @@ UI_Text_Input::~UI_Text_Input()
 
 void UI_Text_Input::update()
 {
+	this->ui_text.set_scale(scale);
+	this->ui_text.set_abs_pos(pos);
+	this->ui_text.set_origin(origin);
 	this->ui_text.set_text(this->text);
 	this->ui_text.update();
 }
 
 void UI_Text_Input::render()
 {
-	ui_text.render();
+	if(ui_text.get_text().size() > 0)
+	{
+		ui_text.render();
+	}
 }
 
 void UI_Text_Input::handle_event(SDL_Event event)
