@@ -17,6 +17,9 @@ class UI_Text : public UI_Base
 	void update();
 	void render();
 
+	std::string get_text();
+	Ivec& get_size();
+
 	private:
 	Ivec tex_size;
 	Ivec actual_size;
@@ -25,8 +28,8 @@ class UI_Text : public UI_Base
 	std::string prev_text;
 	std::string text;
 
-	std::string font_path;
 	TTF_Font* font;
+	std::string font_path;
 	SDL_Color font_color;
 
 	SDL_Texture* output;

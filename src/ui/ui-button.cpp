@@ -18,8 +18,8 @@ void UI_Button::update()
 
 void UI_Button::render()
 {
-	SDL_Rect box = {(int)(this->pos.x/this->scale.x),
-					(int)(this->pos.y/this->scale.y),
+	SDL_Rect box = {get_pos().x,
+					get_pos().y,
 					this->size.x,
 					this->size.y};
 	SDL_RenderSetScale(renderer, this->scale.x, this->scale.y);

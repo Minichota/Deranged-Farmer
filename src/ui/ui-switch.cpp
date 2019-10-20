@@ -16,12 +16,12 @@ void UI_Switch::update()
 
 void UI_Switch::render()
 {
-	SDL_Rect border = {pos.x, pos.y, (int)(size.x * scale.x), (int)(size.y * scale.y)};
+	SDL_Rect border = {get_pos().x, get_pos().y, (int)(size.x * scale.x), (int)(size.y * scale.y)};
 	SDL_Rect fill;
 	if(toggle)
 	{
-		fill = {pos.x + (int)(2 * scale.x),
-				pos.y + (int)(2 * scale.y),
+		fill = {get_pos().x + (int)(2 * scale.x),
+				get_pos().y + (int)(2 * scale.y),
 				(int)((size.x * scale.x) - (4 * scale.x)),
 				(int)((size.y * scale.y) - (4 * scale.y))};
 	}
@@ -30,10 +30,12 @@ void UI_Switch::render()
 		fill = {0,0,0,0};
 	}
 
+	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawRect(renderer, &border);
 	SDL_RenderFillRect(renderer, &fill);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 }
 
 void UI_Switch::handle_event(SDL_Event event)
