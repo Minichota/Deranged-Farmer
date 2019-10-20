@@ -8,6 +8,7 @@
 #include "ui-switch.hpp"
 #include "ui-text-input.hpp"
 #include "interpolators.hpp"
+#include "game.hpp"
 
 MainMenu::MainMenu(SDL_Renderer* renderer):
 GameState(renderer)
@@ -39,7 +40,7 @@ void MainMenu::render()
 
 void test()
 {
-	std::cout << "button pressed, \n all is well" << std::endl;
+	Game::increment_state();
 }
 
 void MainMenu::init()
@@ -60,6 +61,10 @@ void MainMenu::init()
 
 void MainMenu::clear()
 {
+	for(UI_Base* element : elements)
+	{
+		delete element;
+	}
 	elements.clear();
 }
 

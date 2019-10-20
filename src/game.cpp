@@ -4,6 +4,10 @@
 #include "game.hpp"
 #include "main-menu.hpp"
 
+// static variables
+int Game::state;
+std::vector<GameState*> Game::game_states;
+
 Game::Game()
 {
 	window = SDL_CreateWindow("Deranged Farmer",
@@ -65,11 +69,11 @@ void Game::render()
 void Game::increment_state()
 {
 	// clear previous state
-	game_states[this->state]->clear();
-	this->state++;
+	game_states[Game::state]->clear();
+	Game::state++;
 	assert(state < STATE_COUNT);
 	// initialize new state
-	game_states[this->state]->init();
+	game_states[Game::state]->init();
 }
 
 void Game::set_state(int state)
@@ -78,11 +82,11 @@ void Game::set_state(int state)
 	// clear previous state
 	if(game_states.size() > 1)
 	{
-		game_states[this->state]->clear();
+		game_states[Game::state]->clear();
 	}
-	this->state = state;
+	Game::state = state;
 	// initialize new state
-	game_states[this->state]->init();
+	game_states[Game::state]->init();
 }
 
 void Game::handle_event(SDL_Event event)

@@ -17,12 +17,12 @@ class Game {
 
 	void run();
 
+	static void increment_state();
+	static void set_state(int state);
+
 	private:
 	void update();
 	void render();
-
-	void increment_state();
-	void set_state(int state);
 
 	void handle_event(SDL_Event event);
 
@@ -32,6 +32,6 @@ class Game {
 
 	bool closed;
 
-	std::vector<GameState*> game_states;
-	int state;
+	static std::vector<GameState*> game_states;
+	static int state;
 };
