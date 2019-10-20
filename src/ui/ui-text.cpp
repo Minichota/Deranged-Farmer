@@ -41,16 +41,22 @@ void UI_Text::render()
 {
 	if(this->text != this->prev_text || this->scale != this->prev_scale)
 	{
-		SDL_Surface* new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
-		output = SDL_CreateTextureFromSurface(renderer, new_surface);
-		SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
-		this->prev_text = this->text;
-		SDL_FreeSurface(new_surface);
+		reload_texture();
 	}
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_Rect position = {get_pos().x, get_pos().y, tex_size.x, tex_size.y};
 	SDL_RenderCopy(renderer, output, NULL, &position);
 	SDL_RenderSetScale(renderer, 1.0f,1.0f);
+}
+
+void UI_Text::reload_texture()
+{
+	SDL_Surface* new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
+	output = SDL_CreateTextureFromSurface(renderer, new_surface);
+	SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
+	this->prev_text = this->text;
+	this->prev_scale = this->scale;
+	SDL_FreeSurface(new_surface);
 }
 
 void UI_Text::set_text(std::string text)
@@ -71,4 +77,11 @@ std::string UI_Text::get_text()
 Ivec& UI_Text::get_size()
 {
 	return this->tex_size;
+}
+
+void UI_Text::set_font_size(int font_size)
+{
+	TTF_CloseFont(font);
+	TTF_OpenFont(font_path.c_str(), font_size);
+	reload_texture();
 }
