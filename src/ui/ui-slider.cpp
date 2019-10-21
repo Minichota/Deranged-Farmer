@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "ui-slider.hpp"
 
@@ -26,9 +27,12 @@ void UI_Slider::render()
 {
 	const int bar_height = 30 * scale.y;
 	const int bar_width  = 10 * scale.x;
-	SDL_Rect full_bar = {get_pos().x, get_pos().y, (int)(size.x * scale.x), (int)(size.y * scale.y)};
-	SDL_Rect pos_bar  = {(int)(get_pos().x + (size.x - bar_width) * state / pos_count),
-						(int)(get_pos().y - (bar_height - size.y) / 2),
+	SDL_Rect full_bar = {get_pos().x,
+						get_pos().y,
+						(int)std::round(size.x * scale.x),
+						(int)std::round(size.y * scale.y)};
+	SDL_Rect pos_bar  = {(int)std::round(get_pos().x + (size.x - bar_width) * state / pos_count),
+						(int)std::round(get_pos().y - (bar_height - size.y) / 2),
 						bar_width,
 						bar_height};
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);

@@ -45,7 +45,7 @@ void test()
 void MainMenu::init()
 {
 	elements = {
-		new UI_Rect(renderer, Ivec(400,100), Ivec(100, 100), Fvec(2.0f,1.5f), SDL_Color{255,0,255,255}, FILL),
+		new UI_Rect(renderer, Ivec(400,100), Ivec(100, 100), Fvec(2.0f,1.5f), SDL_Color{255,0,255,255}, NORMAL),
 		new UI_Text(renderer, Ivec(400,100), Ivec(0, 0), Fvec(2.0f,1.5f), "Deranged farmer", "res/graphics/font.ttf", SDL_Color{0,255,255}, NORMAL),
 		new UI_Button(renderer, Ivec(400,300), Ivec(40,20), Fvec(5.0f,5.0f), &test, SDL_Color{255,0,0,255}),
 		new UI_Text(renderer, Ivec(400,300), Ivec(192, 100), Fvec(1.0f,1.0f), "Start", "res/graphics/font.ttf", SDL_Color{255,255,255}, FILL)

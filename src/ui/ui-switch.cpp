@@ -16,14 +16,17 @@ void UI_Switch::update()
 
 void UI_Switch::render()
 {
-	SDL_Rect border = {get_pos().x, get_pos().y, (int)(size.x * scale.x), (int)(size.y * scale.y)};
+	SDL_Rect border = {get_pos().x,
+					   get_pos().y,
+					   (int)std::round(size.x * scale.x),
+					   (int)std::round(size.y * scale.y)};
 	SDL_Rect fill;
 	if(toggle)
 	{
 		fill = {get_pos().x + (int)(2 * scale.x),
 				get_pos().y + (int)(2 * scale.y),
-				(int)((size.x * scale.x) - (4 * scale.x)),
-				(int)((size.y * scale.y) - (4 * scale.y))};
+				(int)std::round((size.x * scale.x) - (4 * scale.x)),
+				(int)std::round((size.y * scale.y) - (4 * scale.y))};
 	}
 	else
 	{
