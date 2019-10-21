@@ -51,8 +51,8 @@ void UI_Text::render()
 		} break;
 		case FILL:
 		{
-			SDL_Rect position = {(int)(pos.x - origin.x * (size.x / (float)tex_size.x)),
-								 (int)(pos.y - origin.y * (size.y / (float)tex_size.y)),
+			SDL_Rect position = {(int)std::round(pos.x - origin.x * (size.x / (float)tex_size.x)),
+								 (int)std::round(pos.y - origin.y * (size.y / (float)tex_size.y)),
 								 size.x,
 								 size.y};
 			std::cout << get_pos() << std::endl;
