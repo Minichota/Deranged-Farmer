@@ -11,17 +11,17 @@
 #include "interpolators.hpp"
 #include "game.hpp"
 
-MainMenu::MainMenu(SDL_Renderer* renderer):
-GameState(renderer)
+Main_Menu::Main_Menu(SDL_Renderer* renderer):
+Game_State(renderer)
 {
 }
 
-MainMenu::~MainMenu()
+Main_Menu::~Main_Menu()
 {
 	clear();
 }
 
-void MainMenu::update()
+void Main_Menu::update()
 {
 	update_interpolators();
 	for(size_t i = 0; i < elements.size(); i++)
@@ -30,7 +30,7 @@ void MainMenu::update()
 	}
 }
 
-void MainMenu::render()
+void Main_Menu::render()
 {
 	for(size_t i = 0; i < elements.size(); i++)
 	{
@@ -39,10 +39,10 @@ void MainMenu::render()
 }
 void test()
 {
-	Game::increment_state();
+	Game::set_state(2);
 }
 
-void MainMenu::init()
+void Main_Menu::init()
 {
 	elements = {
 		new UI_Rect(renderer, Ivec(400,100), Ivec(100, 100), Fvec(2.0f,1.5f), SDL_Color{255,0,255,255}, NORMAL),
@@ -67,7 +67,7 @@ void MainMenu::init()
 	float_interpolaters.push_back(Interpolator<float>{&elements[0]->get_scale().y, 0.765f, 1.53f, 2000, 2000, false, OSCILLATOR});
 }
 
-void MainMenu::clear()
+void Main_Menu::clear()
 {
 	for(UI_Base* element : elements)
 	{
@@ -76,7 +76,7 @@ void MainMenu::clear()
 	elements.clear();
 }
 
-void MainMenu::handle_event(SDL_Event event)
+void Main_Menu::handle_event(SDL_Event event)
 {
 	for(size_t i = 0; i < elements.size(); i++)
 	{
@@ -88,12 +88,12 @@ void MainMenu::handle_event(SDL_Event event)
 	}
 }
 
-void MainMenu::push_element(UI_Base* element)
+void Main_Menu::push_element(UI_Base* element)
 {
 	elements.push_back(element);
 }
 
-UI_Base* MainMenu::get_element(size_t index)
+UI_Base* Main_Menu::get_element(size_t index)
 {
 	return elements[index];
 }

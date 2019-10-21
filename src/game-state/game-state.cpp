@@ -1,10 +1,10 @@
 #include "game-state.hpp"
 
-GameState::GameState(SDL_Renderer* renderer):
+Game_State::Game_State(SDL_Renderer* renderer):
 Renderable(renderer)
 {
 }
 
-GameState::~GameState()
+Game_State::~Game_State()
 {
 }
