@@ -4,11 +4,11 @@
 #include "renderable.hpp"
 #include "event-handler.hpp"
 
-class GameState : public Renderable, public Event_Handler
+class Game_State : public Renderable, public Event_Handler
 {
 	public:
-	GameState(SDL_Renderer* renderer);
-	virtual ~GameState();
+	Game_State(SDL_Renderer* renderer);
+	virtual ~Game_State();
 
 	virtual void update() = 0;
 	virtual void render() = 0;

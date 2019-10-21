@@ -8,7 +8,7 @@
 #include "renderable.hpp"
 #include "game-state.hpp"
 
-#define STATE_COUNT 1
+#define STATE_COUNT 2
 
 class Game {
 	public:
@@ -32,6 +32,6 @@ class Game {
 
 	bool closed;
 
-	static std::vector<GameState*> game_states;
+	static std::vector<Game_State*> game_states;
 	static int state;
 };

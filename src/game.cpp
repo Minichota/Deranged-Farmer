@@ -3,10 +3,11 @@
 
 #include "game.hpp"
 #include "main-menu.hpp"
+#include "level.hpp"
 
 // static variables
 int Game::state;
-std::vector<GameState*> Game::game_states;
+std::vector<Game_State*> Game::game_states;
 
 Game::Game()
 {
@@ -29,6 +30,8 @@ void Game::run()
 	// create state
 	MainMenu menu(renderer);
 	game_states.push_back(&menu);
+	Level level(renderer, "", "");
+	game_states.push_back(&level);
 	set_state(0);
 
 	closed = false;

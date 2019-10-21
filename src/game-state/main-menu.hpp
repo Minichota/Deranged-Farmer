@@ -4,7 +4,7 @@
 #include "vectors.hpp"
 
 class UI_Base;
-class MainMenu : public GameState
+class MainMenu : public Game_State
 {
 	public:
 	MainMenu(SDL_Renderer* renderer);

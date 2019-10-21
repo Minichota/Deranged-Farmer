@@ -12,7 +12,7 @@
 #include "game.hpp"
 
 MainMenu::MainMenu(SDL_Renderer* renderer):
-GameState(renderer)
+Game_State(renderer)
 {
 }
 
