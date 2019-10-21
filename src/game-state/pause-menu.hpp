@@ -1,14 +1,16 @@
+#ifndef PAUSE_MENU_HPP
+#define PAUSE_MENU_HPP
+
 #include <vector>
 
 #include "game-state.hpp"
-#include "vectors.hpp"
+#include "ui-base.hpp"
 
-class UI_Base;
-class Main_Menu : public Game_State
+class Pause_Menu : public Game_State
 {
 	public:
-	Main_Menu(SDL_Renderer* renderer);
-	~Main_Menu();
+	Pause_Menu(SDL_Renderer* renderer);
+	~Pause_Menu();
 
 	void update();
 	void render();
@@ -19,8 +21,10 @@ class Main_Menu : public Game_State
 	void handle_event(SDL_Event event);
 
 	void push_element(UI_Base* element);
-	UI_Base* get_element(size_t index);
+	UI_Base* get_element();
 
 	private:
 	std::vector<UI_Base*> elements;
 };
+
+#endif

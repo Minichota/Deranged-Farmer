@@ -8,7 +8,7 @@
 #include "renderable.hpp"
 #include "game-state.hpp"
 
-#define STATE_COUNT 2
+#define STATE_COUNT 3
 
 class Game {
 	public:

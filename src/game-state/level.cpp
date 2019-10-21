@@ -1,4 +1,5 @@
 #include "level.hpp"
+#include "game.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path):
 Game_State(renderer),
@@ -59,6 +60,19 @@ void Level::clear()
 
 void Level::handle_event(SDL_Event event)
 {
+	switch(event.type)
+	{
+		case SDL_KEYDOWN:
+		{
+			switch(event.key.keysym.sym)
+			{
+				case SDLK_ESCAPE:
+				{
+					Game::set_state(1);
+				}
+			}
+		}
+	}
 }
 
 void Level::push_element(UI_Base* element)

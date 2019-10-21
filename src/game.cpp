@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "main-menu.hpp"
 #include "level.hpp"
+#include "pause-menu.hpp"
 
 // static variables
 int Game::state;
@@ -28,10 +29,12 @@ Game::~Game()
 void Game::run()
 {
 	// create state
-	MainMenu menu(renderer);
-	game_states.push_back(&menu);
-	Level level(renderer, "", "");
-	game_states.push_back(&level);
+	game_states =
+	{
+		new Main_Menu(renderer),
+		new Pause_Menu(renderer),
+		new Level(renderer, "", "")
+	};
 	set_state(0);
 
 	closed = false;
