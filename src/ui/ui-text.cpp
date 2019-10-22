@@ -55,7 +55,6 @@ void UI_Text::render()
 								 (int)std::round(pos.y - origin.y * (size.y / (float)tex_size.y)),
 								 size.x,
 								 size.y};
-			std::cout << get_pos() << std::endl;
 			SDL_RenderCopy(renderer, output, NULL, &position);
 		} break;
 	}

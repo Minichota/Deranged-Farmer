@@ -9,6 +9,8 @@
 // static variables
 int Game::state;
 std::vector<Game_State*> Game::game_states;
+Pause_Menu* Game::pause;
+bool Game::paused;
 
 Game::Game()
 {
@@ -32,12 +34,13 @@ void Game::run()
 	game_states =
 	{
 		new Main_Menu(renderer),
-		new Pause_Menu(renderer),
 		new Level(renderer, "", "")
 	};
+	this->pause = new Pause_Menu(renderer);
 	set_state(0);
 
 	closed = false;
+	paused = false;
 	while(!closed)
 	{
 		SDL_Event event;
@@ -63,13 +66,27 @@ void Game::run()
 void Game::update()
 {
 	assert(state >= 0 && state < STATE_COUNT);
-	game_states[this->state]->update();
+	if(paused)
+	{
+		pause->update();
+	}
+	else
+	{
+		game_states[this->state]->update();
+	}
 }
 
 void Game::render()
 {
 	assert(state >= 0 && state < STATE_COUNT);
-	game_states[this->state]->render();
+	if(paused)
+	{
+		pause->render();
+	}
+	else
+	{
+		game_states[this->state]->render();
+	}
 }
 
 void Game::increment_state()
@@ -95,6 +112,15 @@ void Game::set_state(int state)
 	game_states[Game::state]->init();
 }
 
+void Game::toggle_pause()
+{
+	assert(state != 0);
+	if((paused = !paused))
+	{
+		pause->init();
+	}
+}
+
 void Game::handle_event(SDL_Event event)
 {
 	switch(event.type)
@@ -106,7 +132,14 @@ void Game::handle_event(SDL_Event event)
 		} break;
 		default:
 		{
-			game_states[this->state]->handle_event(event);
+			if(paused)
+			{
+				pause->handle_event(event);
+			}
+			else
+			{
+				game_states[this->state]->handle_event(event);
+			}
 		} break;
 	}
 }

@@ -58,7 +58,7 @@ void Pause_Menu::handle_event(SDL_Event event)
 			{
 				case SDLK_RETURN:
 				{
-					Game::increment_state();
+					Game::toggle_pause();
 				}
 			}
 		}

@@ -68,7 +68,7 @@ void Level::handle_event(SDL_Event event)
 			{
 				case SDLK_ESCAPE:
 				{
-					Game::set_state(1);
+					Game::toggle_pause();
 				}
 			}
 		}
