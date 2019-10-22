@@ -7,8 +7,9 @@
 
 #include "renderable.hpp"
 #include "game-state.hpp"
+#include "pause-menu.hpp"
 
-#define STATE_COUNT 3
+#define STATE_COUNT 2
 
 class Game {
 	public:
@@ -19,6 +20,7 @@ class Game {
 
 	static void increment_state();
 	static void set_state(int state);
+	static void toggle_pause();
 
 	private:
 	void update();
@@ -31,7 +33,9 @@ class Game {
 	SDL_Renderer* renderer;
 
 	bool closed;
+	static bool paused;
 
 	static std::vector<Game_State*> game_states;
+	static Pause_Menu* pause;
 	static int state;
 };

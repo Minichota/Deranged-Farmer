@@ -39,7 +39,7 @@ void Main_Menu::render()
 }
 void test()
 {
-	Game::set_state(2);
+	Game::increment_state();
 }
 
 void Main_Menu::init()
