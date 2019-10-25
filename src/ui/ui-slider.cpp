@@ -21,6 +21,10 @@ UI_Slider::~UI_Slider()
 
 void UI_Slider::update()
 {
+	if(binded_value != nullptr)
+	{
+		*binded_value = get_value();
+	}
 }
 
 void UI_Slider::render()
@@ -112,4 +116,9 @@ int UI_Slider::get_state()
 void UI_Slider::set_state(int state)
 {
 	this->state = state;
+}
+
+void UI_Slider::set_bind(int* value)
+{
+	this->binded_value = value;
 }
