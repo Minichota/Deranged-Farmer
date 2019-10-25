@@ -78,6 +78,19 @@ void Main_Menu::clear()
 
 void Main_Menu::handle_event(SDL_Event event)
 {
+	switch(event.type)
+	{
+		case SDL_KEYDOWN:
+		{
+			switch(event.key.keysym.sym)
+			{
+				case SDLK_RETURN:
+				{
+					Game::increment_state();
+				} break;
+			}
+		} break;
+	}
 	for(size_t i = 0; i < elements.size(); i++)
 	{
 		Event_Handler* element = dynamic_cast<Event_Handler*>(elements[i]);

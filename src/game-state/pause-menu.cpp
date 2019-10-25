@@ -56,6 +56,7 @@ void Pause_Menu::handle_event(SDL_Event event)
 		{
 			switch(event.key.keysym.sym)
 			{
+				case SDLK_ESCAPE:
 				case SDLK_RETURN:
 				{
 					Game::toggle_pause();
