@@ -32,7 +32,7 @@ class UI_Slider : public UI_Base, public Event_Handler
 	const double pos_fraction;
 	const int pos_count;
 
-	int* binded_value;
+	int* binded_value = nullptr;
 
 	bool mouse_down;
 
