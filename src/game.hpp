@@ -39,3 +39,5 @@ class Game {
 	static Pause_Menu* pause;
 	static int state;
 };
+
+void parse_file(std::string buffer, std::vector<std::string> names, std::vector<int*>& values);

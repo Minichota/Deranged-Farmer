@@ -22,6 +22,8 @@ class UI_Slider : public UI_Base, public Event_Handler
 	int get_state();
 	void set_state(int state);
 
+	void set_bind(int* binded_value);
+
 	private:
 	int state;
 	const int max_value;
@@ -29,6 +31,8 @@ class UI_Slider : public UI_Base, public Event_Handler
 	const int difference;
 	const double pos_fraction;
 	const int pos_count;
+
+	int* binded_value = nullptr;
 
 	bool mouse_down;
 
