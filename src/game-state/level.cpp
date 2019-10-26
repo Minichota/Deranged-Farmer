@@ -1,5 +1,6 @@
 #include "level.hpp"
 #include "game.hpp"
+#include "ui-text.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path):
 Game_State(renderer),
@@ -41,6 +42,12 @@ void Level::render()
 
 void Level::init()
 {
+	UI_Text* thing = new UI_Text(renderer, Ivec(400,300), Ivec(100,50), Fvec(0.0f,0.0f), "This is the level!", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, FILL);
+	thing->set_origin(thing->get_size()/2);
+	elements =
+	{
+		thing
+	};
 }
 
 void Level::clear()
