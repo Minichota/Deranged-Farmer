@@ -7,6 +7,7 @@
 #include "level.hpp"
 #include "pause-menu.hpp"
 #include "settings.hpp"
+#include "interpolators.hpp"
 
 // static variables
 int Game::state;
@@ -131,6 +132,7 @@ void Game::run()
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
+		update_interpolators();
 		update();
 		render();
 

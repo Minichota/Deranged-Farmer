@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "pause-menu.hpp"
 #include "ui-text.hpp"
+#include "interpolators.hpp"
 
 Pause_Menu::Pause_Menu(SDL_Renderer* renderer):
 Game_State(renderer)
@@ -32,11 +33,13 @@ void Pause_Menu::init()
 {
 	elements =
 	{
-		new UI_Text(renderer, Ivec(400,200), Ivec(300,150), Fvec(1.0f,1.0f), "PAUSED", "res/graphics/font.ttf", SDL_Color{255,255,255}, FILL),
-		new UI_Text(renderer, Ivec(400,500), Ivec(0,0), Fvec(1.0f,1.0f), "Press enter to continue", "res/graphics/font.ttf", SDL_Color{255,255,255}, NORMAL)
+		new UI_Text(renderer, Ivec(400,200), Ivec(300,150), Fvec(1.0f,1.0f), "PAUSED", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, FILL),
+		new UI_Text(renderer, Ivec(400,500), Ivec(0,0), Fvec(1.0f,1.0f), "Press enter to continue", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL)
 	};
 	elements[0]->set_origin(elements[0]->get_size()/2);
 	elements[1]->set_origin(elements[1]->get_size()/2);
+
+	uchar_interpolaters.push_back(Interpolator<unsigned char>{&elements[1]->get_color().a,0,255,750,750});
 }
 
 void Pause_Menu::clear()
