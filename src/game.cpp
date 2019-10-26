@@ -1,10 +1,12 @@
 #include <cassert>
+#include <fstream>
 #include <iostream>
 
 #include "game.hpp"
 #include "main-menu.hpp"
 #include "level.hpp"
 #include "pause-menu.hpp"
+#include "settings.hpp"
 
 // static variables
 int Game::state;
@@ -22,10 +24,86 @@ Game::Game()
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetWindowResizable(window, SDL_FALSE);
+
+	std::vector<std::string> setting_names =
+	{
+		"volume",
+		"iq"
+	};
+
+	// load settings
+	std::ifstream read("res/save/settings.txt");
+	if(!read)
+	{
+		std::cout << "failed to load settings, creating settings file" << std::endl;
+		std::ofstream write("res/save/settings.txt");
+		if(!write)
+		{
+			std::cout << "failed to create settings file" << std::endl;
+		}
+		for(size_t i = 0; i < setting_names.size(); i++)
+		{
+			char* to_write = (char*)setting_names[i].c_str();
+			strcpy(to_write + setting_names[i].size(), " = 0\n");
+			write << to_write;
+		}
+		write.close();
+		read.close();
+		read.open("res/save/settings.txt");
+	}
+	std::string buffer(std::istreambuf_iterator<char>(read), {});
+	read.close();
+
+	parse_file(buffer, setting_names, Settings::all);
 }
 
 Game::~Game()
 {
+}
+
+void parse_file(std::string buffer, std::vector<std::string> names, std::vector<int*>& values)
+{
+	// TODO make this actually good
+	std::string data;
+	bool begin_parse = false;
+	for(size_t i = 0; i < names.size(); i++)
+	{
+		size_t pos = buffer.find(names[i]);
+		if(pos != std::string::npos)
+		{
+			bool cont = true;
+			for(size_t j = pos; j < buffer.size(); j++)
+			{
+				if(!cont)
+					break;
+				switch(buffer[j])
+				{
+					case '=':
+					{
+						begin_parse = true;
+					} break;
+					case '\n':
+					{
+						// done
+						if(begin_parse)
+						{
+							*values[i] = std::stoi(data);
+							begin_parse = false;
+							data.clear();
+							cont = false;
+						}
+					} break;
+					default:
+					{
+						if(begin_parse && buffer[j] != ' ')
+						{
+							data.push_back(buffer[j]);
+						}
+					} break;
+				}
+			}
+		}
+	}
 }
 
 void Game::run()

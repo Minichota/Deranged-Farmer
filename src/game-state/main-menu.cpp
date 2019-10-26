@@ -11,6 +11,7 @@
 #include "ui-image.hpp"
 #include "interpolators.hpp"
 #include "game.hpp"
+#include "settings.hpp"
 
 Main_Menu::Main_Menu(SDL_Renderer* renderer):
 Game_State(renderer)
@@ -55,6 +56,7 @@ void Main_Menu::init()
 	};
 
 	dynamic_cast<UI_Text*>(elements[1])->set_font_size(30);
+	dynamic_cast<UI_Slider*>(elements[5])->set_bind(&Settings::volume);
 
 	elements[0]->set_size(elements[1]->get_size());
 
