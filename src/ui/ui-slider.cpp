@@ -9,10 +9,9 @@ UI_Base(renderer, pos, size, scale, bar_color),
 max_value(max_value),
 min_value(min_value),
 difference(max_value - min_value),
-pos_fraction(size.x / pos_count),
+pos_fraction((size.x * scale.x) / pos_count),
 pos_count(pos_count)
 {
-	assert(pos_count <= size.x - 10 * scale.x);
 	this->state = 0;
 	this->mouse_down = false;
 	this->slider_color = slider_color;
@@ -32,21 +31,21 @@ void UI_Slider::update()
 
 void UI_Slider::render()
 {
-	const int bar_height = 30 * scale.y;
-	const int bar_width  = 10 * scale.x;
 	SDL_Rect full_bar = {get_pos().x,
 						get_pos().y,
-						(int)std::round(size.x * scale.x),
-						(int)std::round(size.y * scale.y)};
-	SDL_Rect pos_bar  = {(int)std::round(get_pos().x + (size.x - bar_width) * state / pos_count),
-						(int)std::round(get_pos().y - (bar_height - size.y) / 2),
-						bar_width,
-						bar_height};
+						size.x,
+						size.y};
+	SDL_Rect pos_bar  = {(int)std::round(get_pos().x + (size.x - 10) * state / pos_count),
+						 (int)std::round(get_pos().y - (30 - size.y) / 2.0f),
+						 10,
+						 30};
+	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderFillRect(renderer, &full_bar);
 	SDL_SetRenderDrawColor(renderer, slider_color.r, slider_color.g, slider_color.b, slider_color.a);
 	SDL_RenderFillRect(renderer, &pos_bar);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 }
 
 void UI_Slider::handle_event(SDL_Event event)
@@ -77,8 +76,8 @@ void UI_Slider::handle_event(SDL_Event event)
 
 int UI_Slider::get_closest_tick(Ivec click_pos)
 {
-	int dx = click_pos.x - this->get_pos().x;
-	if(dx > size.x - 10 * scale.x)
+	int dx = click_pos.x - this->get_pos().x * scale.x;
+	if(dx > size.x * scale.x - 10 * scale.x)
 	{
 		return this->pos_count;
 	}
@@ -88,8 +87,7 @@ int UI_Slider::get_closest_tick(Ivec click_pos)
 	}
 	else
 	{
-		std::cout << std::round(dx / (double)pos_fraction) << std::endl;
-		return std::round(dx / (double)pos_fraction);
+		return std::round(dx / (double)(size.x/pos_count) / scale.x);
 	}
 }
 
@@ -97,8 +95,8 @@ bool UI_Slider::in_bounds(Ivec point)
 {
 	const int bar_width  = 10 * scale.x;
 	const int bar_height = 30 * scale.y;
-	Ivec slider_pos			= Ivec(get_pos().x + (size.x - bar_width) * state / pos_count,
-								   get_pos().y - (bar_height - size.y) / 2);
+	Ivec slider_pos	= Ivec(scale.x*(get_pos().x + (size.x - 10) * state / pos_count),
+						   scale.y*(get_pos().y - (30 - size.y) / 2.0f));
 	Ivec slider_bottom_left = Ivec(slider_pos.x + bar_width,
 								   slider_pos.y + bar_height);
 	return UI_Base::in_bounds(point) ||
