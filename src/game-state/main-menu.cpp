@@ -30,8 +30,8 @@ void Main_Menu::init()
 		new UI_Text(renderer, Ivec(400,100), Ivec(0,0), Fvec(2.0f,1.5f), "Deranged farmer", "res/graphics/font.ttf", SDL_Color{0,255,255,255}, NORMAL),
 		new UI_Button(renderer, Ivec(400,300), Ivec(40,20), Fvec(5.0f,5.0f), &test, SDL_Color{255,0,0,255}),
 		new UI_Text(renderer, Ivec(400,300), Ivec(192,100), Fvec(1.0f,1.0f), "Start", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, FILL),
-		new UI_Image(renderer, Ivec(745,550), Ivec(50,50), Fvec(1.0f,1.0f), FILL, "res/graphics/volume.png"),
-		new UI_Slider(renderer, Ivec(745,580), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{255,255,255,255}, SDL_Color{127,127,127,255})
+		new UI_Image(renderer, Ivec(735,550), Ivec(50,50), Fvec(1.0f,1.0f), FILL, "res/graphics/volume.png"),
+		new UI_Slider(renderer, Ivec(735,580), Ivec(110,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{255,255,255,255}, SDL_Color{127,127,127,255})
 	};
 
 	dynamic_cast<UI_Text*>(elements[1])->set_font_size(30);
