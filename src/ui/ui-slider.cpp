@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <cassert>
 
 #include "ui-slider.hpp"
 
@@ -11,6 +12,7 @@ difference(max_value - min_value),
 pos_fraction(size.x / pos_count),
 pos_count(pos_count)
 {
+	assert(pos_count <= size.x - 10 * scale.x);
 	this->state = 0;
 	this->mouse_down = false;
 	this->slider_color = slider_color;
@@ -56,7 +58,7 @@ void UI_Slider::handle_event(SDL_Event event)
 			if(in_bounds(Ivec(event.button.x, event.button.y)))
 			{
 				mouse_down = true;
-				set_state(get_closest_tick(Ivec(event.button.x, event.button.y)));
+				set_state(get_closest_tick(Ivec(event.button.x - 5 * scale.x, event.button.y)));
 			}
 		} break;
 		case SDL_MOUSEBUTTONUP:
@@ -67,7 +69,7 @@ void UI_Slider::handle_event(SDL_Event event)
 		{
 			if(mouse_down)
 			{
-				set_state(get_closest_tick(Ivec(event.motion.x, event.motion.y)));
+				set_state(get_closest_tick(Ivec(event.motion.x - 5 * scale.x, event.motion.y)));
 			}
 		} break;
 	}
@@ -76,7 +78,7 @@ void UI_Slider::handle_event(SDL_Event event)
 int UI_Slider::get_closest_tick(Ivec click_pos)
 {
 	int dx = click_pos.x - this->get_pos().x;
-	if(dx > size.x)
+	if(dx > size.x - 10 * scale.x)
 	{
 		return this->pos_count;
 	}
@@ -86,18 +88,19 @@ int UI_Slider::get_closest_tick(Ivec click_pos)
 	}
 	else
 	{
+		std::cout << std::round(dx / (double)pos_fraction) << std::endl;
 		return std::round(dx / (double)pos_fraction);
 	}
 }
 
 bool UI_Slider::in_bounds(Ivec point)
 {
-	const int bar_height = 30 * scale.y;
 	const int bar_width  = 10 * scale.x;
+	const int bar_height = 30 * scale.y;
 	Ivec slider_pos			= Ivec(get_pos().x + (size.x - bar_width) * state / pos_count,
 								   get_pos().y - (bar_height - size.y) / 2);
-	Ivec slider_bottom_left = Ivec(slider_pos.x + 10 * scale.x,
-								   slider_pos.y + 30 * scale.y);
+	Ivec slider_bottom_left = Ivec(slider_pos.x + bar_width,
+								   slider_pos.y + bar_height);
 	return UI_Base::in_bounds(point) ||
 		(slider_pos.x <= point.x &&
 		point.x <= slider_bottom_left.x &&
