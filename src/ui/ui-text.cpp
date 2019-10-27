@@ -95,6 +95,6 @@ Ivec& UI_Text::get_size()
 void UI_Text::set_font_size(int font_size)
 {
 	TTF_CloseFont(font);
-	TTF_OpenFont(font_path.c_str(), font_size);
+	font = TTF_OpenFont(font_path.c_str(), font_size);
 	reload_texture();
 }
