@@ -3,8 +3,8 @@
 
 #include "ui-slider.hpp"
 
-UI_Slider::UI_Slider(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, int min_value, int max_value, int pos_count, SDL_Color color):
-UI_Base(renderer, pos, size, scale, color),
+UI_Slider::UI_Slider(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, int min_value, int max_value, int pos_count, SDL_Color bar_color, SDL_Color slider_color):
+UI_Base(renderer, pos, size, scale, bar_color),
 max_value(max_value),
 min_value(min_value),
 difference(max_value - min_value),
@@ -13,6 +13,7 @@ pos_count(pos_count)
 {
 	this->state = 0;
 	this->mouse_down = false;
+	this->slider_color = slider_color;
 }
 
 UI_Slider::~UI_Slider()
@@ -41,6 +42,7 @@ void UI_Slider::render()
 						bar_height};
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderFillRect(renderer, &full_bar);
+	SDL_SetRenderDrawColor(renderer, slider_color.r, slider_color.g, slider_color.b, slider_color.a);
 	SDL_RenderFillRect(renderer, &pos_bar);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
