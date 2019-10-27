@@ -16,4 +16,6 @@ class Pause_Menu : public Game_State
 	void handle_event(SDL_Event event);
 };
 
+void quit();
+
 #endif
