@@ -40,6 +40,7 @@ void UI_Text::render()
 		reload_texture();
 	}
 
+	SDL_SetTextureAlphaMod(output, color.a);
 	switch(type)
 	{
 		case NORMAL:
@@ -58,6 +59,7 @@ void UI_Text::render()
 			SDL_RenderCopy(renderer, output, NULL, &position);
 		} break;
 	}
+	SDL_SetRenderDrawColor(renderer,0,0,0,255);
 }
 
 void UI_Text::reload_texture()

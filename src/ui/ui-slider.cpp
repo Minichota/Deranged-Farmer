@@ -121,4 +121,5 @@ void UI_Slider::set_state(int state)
 void UI_Slider::set_bind(int* value)
 {
 	this->binded_value = value;
+	this->state = *value;
 }

@@ -1,8 +1,11 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
+#include <vector>
+
 #include "renderable.hpp"
 #include "event-handler.hpp"
+#include "ui-base.hpp"
 
 class Game_State : public Renderable, public Event_Handler
 {
@@ -10,12 +13,18 @@ class Game_State : public Renderable, public Event_Handler
 	Game_State(SDL_Renderer* renderer);
 	virtual ~Game_State();
 
-	virtual void update() = 0;
-	virtual void render() = 0;
+	virtual void update();
+	virtual void render();
 
 	virtual void init()   = 0;
-	virtual void clear()  = 0;
+	virtual void clear();
 
-	virtual void handle_event(SDL_Event event) = 0;
+	virtual void handle_event(SDL_Event event);
+
+	void push_element(UI_Base* element);
+	UI_Base* get_element(size_t index);
+
+	protected:
+	std::vector<UI_Base*> elements;
 };
 #endif

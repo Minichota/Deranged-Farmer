@@ -20,11 +20,7 @@ class Level : public Game_State
 
 	void handle_event(SDL_Event event);
 
-	void push_element(UI_Base* element);
-	UI_Base* get_element(size_t index);
-
 	private:
-	std::vector<UI_Base*> elements;
 	// TODO implement entity class
 	//std::vector<Entity*> entities;
 	const std::string entity_file_path;

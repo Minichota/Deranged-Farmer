@@ -18,27 +18,6 @@ Game_State(renderer)
 {
 }
 
-Main_Menu::~Main_Menu()
-{
-	clear();
-}
-
-void Main_Menu::update()
-{
-	update_interpolators();
-	for(size_t i = 0; i < elements.size(); i++)
-	{
-		elements[i]->update();
-	}
-}
-
-void Main_Menu::render()
-{
-	for(size_t i = 0; i < elements.size(); i++)
-	{
-		elements[i]->render();
-	}
-}
 void test()
 {
 	Game::increment_state();
@@ -48,11 +27,11 @@ void Main_Menu::init()
 {
 	elements = {
 		new UI_Rect(renderer, Ivec(400,100), Ivec(100, 100), Fvec(2.0f,1.5f), SDL_Color{255,0,255,255}, NORMAL),
-		new UI_Text(renderer, Ivec(400,100), Ivec(0,0), Fvec(2.0f,1.5f), "Deranged farmer", "res/graphics/font.ttf", SDL_Color{0,255,255}, NORMAL),
+		new UI_Text(renderer, Ivec(400,100), Ivec(0,0), Fvec(2.0f,1.5f), "Deranged farmer", "res/graphics/font.ttf", SDL_Color{0,255,255,255}, NORMAL),
 		new UI_Button(renderer, Ivec(400,300), Ivec(40,20), Fvec(5.0f,5.0f), &test, SDL_Color{255,0,0,255}),
-		new UI_Text(renderer, Ivec(400,300), Ivec(192,100), Fvec(1.0f,1.0f), "Start", "res/graphics/font.ttf", SDL_Color{255,255,255}, FILL),
+		new UI_Text(renderer, Ivec(400,300), Ivec(192,100), Fvec(1.0f,1.0f), "Start", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, FILL),
 		new UI_Image(renderer, Ivec(745,550), Ivec(50,50), Fvec(1.0f,1.0f), FILL, "res/graphics/volume.png"),
-		new UI_Slider(renderer, Ivec(745,580), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{255,255,255})
+		new UI_Slider(renderer, Ivec(745,580), Ivec(100,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{255,255,255,255})
 	};
 
 	dynamic_cast<UI_Text*>(elements[1])->set_font_size(30);
@@ -74,15 +53,6 @@ void Main_Menu::init()
 	float_interpolaters.push_back(Interpolator<float>{&elements[0]->get_scale().y, 0.765f, 1.53f, 2000, 2000, false, OSCILLATOR});
 }
 
-void Main_Menu::clear()
-{
-	for(UI_Base* element : elements)
-	{
-		delete element;
-	}
-	elements.clear();
-}
-
 void Main_Menu::handle_event(SDL_Event event)
 {
 	switch(event.type)
@@ -98,22 +68,5 @@ void Main_Menu::handle_event(SDL_Event event)
 			}
 		} break;
 	}
-	for(size_t i = 0; i < elements.size(); i++)
-	{
-		Event_Handler* element = dynamic_cast<Event_Handler*>(elements[i]);
-		if(element != nullptr)
-		{
-			element->handle_event(event);
-		}
-	}
-}
-
-void Main_Menu::push_element(UI_Base* element)
-{
-	elements.push_back(element);
-}
-
-UI_Base* Main_Menu::get_element(size_t index)
-{
-	return elements[index];
+	Game_State::handle_event(event);
 }

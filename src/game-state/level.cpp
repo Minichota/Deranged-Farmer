@@ -1,5 +1,6 @@
 #include "level.hpp"
 #include "game.hpp"
+#include "ui-text.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path):
 Game_State(renderer),
@@ -19,11 +20,7 @@ void Level::update()
 	//{
 	//	entity->update();
 	//}
-
-	for(UI_Base* ui_elem : elements)
-	{
-		ui_elem->update();
-	}
+	Game_State::update();
 }
 
 void Level::render()
@@ -32,15 +29,17 @@ void Level::render()
 	//{
 	//	entity->render();
 	//}
-
-	for(UI_Base* ui_elem : elements)
-	{
-		ui_elem->render();
-	}
+	Game_State::render();
 }
 
 void Level::init()
 {
+	UI_Text* thing = new UI_Text(renderer, Ivec(400,300), Ivec(100,50), Fvec(0.0f,0.0f), "This is the level!", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, FILL);
+	thing->set_origin(thing->get_size()/2);
+	elements =
+	{
+		thing
+	};
 }
 
 void Level::clear()
@@ -51,11 +50,7 @@ void Level::clear()
 	//}
 	//entities.clear()
 
-	for(UI_Base* ui_elem : elements)
-	{
-		delete ui_elem;
-	}
-	elements.clear();
+	Game_State::clear();
 }
 
 void Level::handle_event(SDL_Event event)
@@ -73,14 +68,4 @@ void Level::handle_event(SDL_Event event)
 			}
 		}
 	}
-}
-
-void Level::push_element(UI_Base* element)
-{
-	elements.push_back(element);
-}
-
-UI_Base* Level::get_element(size_t index)
-{
-	return elements[index];
 }
