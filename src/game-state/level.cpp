@@ -20,11 +20,7 @@ void Level::update()
 	//{
 	//	entity->update();
 	//}
-
-	for(UI_Base* ui_elem : elements)
-	{
-		ui_elem->update();
-	}
+	Game_State::update();
 }
 
 void Level::render()
@@ -33,11 +29,7 @@ void Level::render()
 	//{
 	//	entity->render();
 	//}
-
-	for(UI_Base* ui_elem : elements)
-	{
-		ui_elem->render();
-	}
+	Game_State::render();
 }
 
 void Level::init()
@@ -58,11 +50,7 @@ void Level::clear()
 	//}
 	//entities.clear()
 
-	for(UI_Base* ui_elem : elements)
-	{
-		delete ui_elem;
-	}
-	elements.clear();
+	Game_State::clear();
 }
 
 void Level::handle_event(SDL_Event event)
@@ -80,14 +68,4 @@ void Level::handle_event(SDL_Event event)
 			}
 		}
 	}
-}
-
-void Level::push_element(UI_Base* element)
-{
-	elements.push_back(element);
-}
-
-UI_Base* Level::get_element(size_t index)
-{
-	return elements[index];
 }

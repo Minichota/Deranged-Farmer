@@ -18,26 +18,6 @@ Game_State(renderer)
 {
 }
 
-Main_Menu::~Main_Menu()
-{
-	clear();
-}
-
-void Main_Menu::update()
-{
-	for(size_t i = 0; i < elements.size(); i++)
-	{
-		elements[i]->update();
-	}
-}
-
-void Main_Menu::render()
-{
-	for(size_t i = 0; i < elements.size(); i++)
-	{
-		elements[i]->render();
-	}
-}
 void test()
 {
 	Game::increment_state();
@@ -73,15 +53,6 @@ void Main_Menu::init()
 	float_interpolaters.push_back(Interpolator<float>{&elements[0]->get_scale().y, 0.765f, 1.53f, 2000, 2000, false, OSCILLATOR});
 }
 
-void Main_Menu::clear()
-{
-	for(UI_Base* element : elements)
-	{
-		delete element;
-	}
-	elements.clear();
-}
-
 void Main_Menu::handle_event(SDL_Event event)
 {
 	switch(event.type)
@@ -97,22 +68,5 @@ void Main_Menu::handle_event(SDL_Event event)
 			}
 		} break;
 	}
-	for(size_t i = 0; i < elements.size(); i++)
-	{
-		Event_Handler* element = dynamic_cast<Event_Handler*>(elements[i]);
-		if(element != nullptr)
-		{
-			element->handle_event(event);
-		}
-	}
-}
-
-void Main_Menu::push_element(UI_Base* element)
-{
-	elements.push_back(element);
-}
-
-UI_Base* Main_Menu::get_element(size_t index)
-{
-	return elements[index];
+	Game_State::handle_event(event);
 }
