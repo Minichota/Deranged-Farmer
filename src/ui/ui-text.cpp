@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "ui-text.hpp"
+#include "error.hpp"
 
 UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color, Fill_Type type):
 UI_Base(renderer, pos, size, scale, font_color)
@@ -12,11 +13,11 @@ UI_Base(renderer, pos, size, scale, font_color)
 	this->prev_scale = Fvec(1.0f,1.0f);
 	this->font_path = font_path;
 
-	this->font = TTF_OpenFont(font_path.c_str(), 24);
-	if(!font)
 	{
-		std::cout << "failed to create font face" << std::endl;
+		this->font = TTF_OpenFont(font_path.c_str(), 24);
+		Error font_ld(!font, {"failed to create font face"});
 	}
+
 	this->font_color = font_color;
 	this->output = nullptr;
 	reload_texture();

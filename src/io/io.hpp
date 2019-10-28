@@ -1,10 +1,10 @@
 #ifndef IO_HPP
 #define IO_HPP
 
-#include <iostream>
 #include <fstream>
 
 #include "settings.hpp"
+#include "error.hpp"
 
 std::string read(const char* file_path);
 
@@ -37,7 +37,6 @@ static void parse(std::string data, const char delimiter, std::vector<Settings::
 						// end of line
 						if(start_parsing)
 						{
-							std::cout << curr_data << std::endl;
 							values[i]->data = std::stoi(curr_data);
 							start_parsing = false;
 							curr_data.clear();
@@ -61,10 +60,7 @@ template <class T>
 static void write(const char* file_path, std::vector<Settings::Setting<T>*> data)
 {
 	std::ofstream write(file_path);
-	if(!write)
-	{
-		std::cout << "failed to write file" << std::endl;
-	}
+	Error e(!write, {"failed to write to file:", file_path});
 	for(size_t i = 0; i < data.size(); i++)
 	{
 		write << data[i]->name << " = " << data[i]->data << '\n';

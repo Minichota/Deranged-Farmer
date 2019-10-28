@@ -21,14 +21,13 @@ class Game {
 	static void increment_state();
 	static void set_state(int state);
 	static void toggle_pause();
+	static void close();
 
 	private:
 	void update();
 	void render();
 
 	void handle_event(SDL_Event event);
-
-	void save_settings(const char* file, std::vector<std::string> names, std::vector<int*> values);
 
 	private:
 	SDL_Window* window;
