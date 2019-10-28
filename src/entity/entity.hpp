@@ -22,6 +22,12 @@ class Entity : public Renderable, public Event_Handler
 	void handle_physics();
 	void move();
 
+	void set_health(int health);
+	void heal(int health);
+	void damage(int health);
+	int& get_health();
+	int& get_max_health();
+
 	void set_texture(SDL_Texture* texture);
 	SDL_Texture* get_texture();
 
@@ -50,6 +56,9 @@ class Entity : public Renderable, public Event_Handler
 	Fvec max_vel;
 
 	bool falling;
+
+	int health;
+	int max_health;
 
 	SDL_Texture* texture;
 };
