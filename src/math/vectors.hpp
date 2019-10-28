@@ -60,6 +60,12 @@ class Vector
 	}
 
 	template <class other_type>
+	Vector<T> operator+(const Vector<other_type>& other)
+	{
+		return Vector<T>(this->x + other.x, this->y + other.y);
+	}
+
+	template <class other_type>
 	Vector<T>& operator-=(const Vector<other_type>& other)
 	{
 		this->x -= other.x;

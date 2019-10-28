@@ -4,25 +4,27 @@
 #include <vector>
 #include <variant>
 #include <iostream>
+#include <cassert>
 
 #include "renderable.hpp"
 #include "vectors.hpp"
 
 typedef enum
 {
-	OSCILLATOR
+	OSCILLATOR,
+	REPEATER
 } Interpolator_Type;
 
 template <class T>
 struct Interpolator
 {
+	Interpolator_Type type;
 	T* actual_value;
 	T min_value;
 	T max_value;
 	long delay_1;
 	long delay_2;
-	bool flag;
-	Interpolator_Type type;
+	bool* flag;
 };
 
 void update_interpolators();
@@ -52,7 +54,17 @@ void oscillate(Interpolator<T>& i)
 	{
 		return_value -= (i.max_value - i.min_value) * time_fraction;
 	}
-	(*i.actual_value) = return_value;
+	*i.actual_value = return_value;
+}
+
+template <class T>
+void repeat(Interpolator<T>& i)
+{
+	long curr_time = SDL_GetTicks();
+
+	long pos = curr_time % i.delay_1;
+
+	*i.actual_value = i.min_value + (i.max_value - i.min_value) * (pos / (double)i.delay_1);
 }
 
 template <class T>

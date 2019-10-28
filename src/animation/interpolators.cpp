@@ -1,8 +1,8 @@
 #include "interpolators.hpp"
 
 std::vector<Interpolator<float>> float_interpolaters;
-std::vector<Interpolator<int>> int_interpolaters;
 std::vector<Interpolator<unsigned char>> uchar_interpolaters;
+std::vector<Interpolator<int>> int_interpolaters;
 std::vector<Interpolator<Ivec>> ivec_interpolaters;
 
 extern void update_interpolators()
@@ -15,6 +15,10 @@ extern void update_interpolators()
 			{
 				oscillate(i);
 			} break;
+			case REPEATER:
+			{
+				repeat(i);
+			} break;
 		}
 	}
 
@@ -25,6 +29,10 @@ extern void update_interpolators()
 			case OSCILLATOR:
 			{
 				oscillate(i);
+			} break;
+			case REPEATER:
+			{
+				repeat(i);
 			} break;
 		}
 	}
@@ -37,6 +45,10 @@ extern void update_interpolators()
 			{
 				oscillate(i);
 			} break;
+			case REPEATER:
+			{
+				repeat(i);
+			} break;
 		}
 	}
 	for(Interpolator<Ivec> i : ivec_interpolaters)
@@ -46,6 +58,10 @@ extern void update_interpolators()
 			case OSCILLATOR:
 			{
 				oscillate(i);
+			} break;
+			case REPEATER:
+			{
+				repeat(i);
 			} break;
 		}
 	}

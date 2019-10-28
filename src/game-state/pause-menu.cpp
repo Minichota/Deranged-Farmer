@@ -38,7 +38,7 @@ void Pause_Menu::init()
 
 	dynamic_cast<UI_Slider*>(elements[5])->set_bind(&Settings::volume);
 
-	uchar_interpolaters.push_back(Interpolator<unsigned char>{&elements[1]->get_color().a,0,255,750,750});
+	uchar_interpolaters.push_back(Interpolator<unsigned char>{OSCILLATOR,&elements[1]->get_color().a,0,255,750,750});
 }
 
 void Pause_Menu::handle_event(SDL_Event event)
