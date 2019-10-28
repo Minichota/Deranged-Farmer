@@ -1,6 +1,9 @@
+#include <iostream>
+
 #include "level.hpp"
 #include "game.hpp"
 #include "ui-text.hpp"
+#include "player.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path):
 Game_State(renderer),
@@ -16,20 +19,20 @@ Level::~Level()
 
 void Level::update()
 {
-	//for(Entity* entity : entities)
-	//{
-	//	entity->update();
-	//}
 	Game_State::update();
+	for(Entity* entity : entities)
+	{
+		entity->update();
+	}
 }
 
 void Level::render()
 {
-	//for(Entity* entity : entities)
-	//{
-	//	entity->render();
-	//}
 	Game_State::render();
+	for(Entity* entity : entities)
+	{
+		entity->render();
+	}
 }
 
 void Level::init()
@@ -40,15 +43,25 @@ void Level::init()
 	{
 		thing
 	};
+	entities =
+	{
+		new Player(renderer, Ivec(400,300), Ivec(32,32), Fvec(1.0f,1.0f), Ivec(16,16))
+	};
+	SDL_Texture* player_texture = IMG_LoadTexture(renderer, "res/graphics/player.png");
+	if(player_texture == nullptr)
+	{
+		std::cout << SDL_GetError() << std::endl;
+	}
+	entities[0]->set_texture(player_texture);
 }
 
 void Level::clear()
 {
-	//for(Entity* entity : entities)
-	//{
-	//	delete entity;
-	//}
-	//entities.clear()
+	for(Entity* entity : entities)
+	{
+		delete entity;
+	}
+	entities.clear();
 
 	Game_State::clear();
 }
