@@ -30,6 +30,8 @@ Game::Game()
 
 Game::~Game()
 {
+	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(renderer);
 }
 
 void Game::run()
@@ -67,8 +69,6 @@ void Game::run()
 		SDL_RenderPresent(renderer);
 		SDL_Delay(1000.0f/144.0f);
 	}
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
 	write("res/save/settings.txt", Settings::all);
 }
 
@@ -127,6 +127,12 @@ void Game::toggle_pause()
 	{
 		pause->init();
 	}
+}
+
+void Game::close()
+{
+	write("res/save/settings.txt", Settings::all);
+	exit(-1);
 }
 
 void Game::handle_event(SDL_Event event)

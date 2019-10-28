@@ -1,15 +1,15 @@
 #include <iostream>
 
 #include "ui-image.hpp"
+#include "error.hpp"
 
 UI_Image::UI_Image(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, Fill_Type fill_type, std::string file_path):
 UI_Base(renderer, pos, size, scale, SDL_Color{})
 {
 	this->fill_type = fill_type;
-	this->texture = IMG_LoadTexture(renderer, file_path.c_str());
-	if(!texture)
 	{
-		std::cout << "failed to load image texture" << std::endl;
+		this->texture = IMG_LoadTexture(renderer, file_path.c_str());
+		Error texture_ld(!texture, {"failed to load image texture"});
 	}
 	switch(fill_type)
 	{

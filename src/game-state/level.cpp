@@ -5,6 +5,7 @@
 #include "ui-text.hpp"
 #include "ui-health_bar.hpp"
 #include "player.hpp"
+#include "error.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path):
 Game_State(renderer),
@@ -48,10 +49,10 @@ void Level::init()
 	{
 		health_Bar
 	};
-	SDL_Texture* player_texture = IMG_LoadTexture(renderer, "res/graphics/player.png");
-	if(player_texture == nullptr)
+	SDL_Texture* player_texture;
 	{
-		std::cout << SDL_GetError() << std::endl;
+		player_texture = IMG_LoadTexture(renderer, "res/graphics/player.png");
+		Error e(player_texture == nullptr, {"Failed to load player texture", SDL_GetError()});
 	}
 	entities[0]->set_texture(player_texture);
 }
