@@ -28,7 +28,6 @@ class Game {
 
 	void handle_event(SDL_Event event);
 
-	std::string read_file(const char* file_path);
 	void save_settings(const char* file, std::vector<std::string> names, std::vector<int*> values);
 
 	private:
@@ -42,5 +41,3 @@ class Game {
 	static Pause_Menu* pause;
 	static int state;
 };
-
-void parse_file(std::string buffer, std::vector<std::string> names, std::vector<int*> values);

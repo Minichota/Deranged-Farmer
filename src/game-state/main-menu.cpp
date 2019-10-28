@@ -35,7 +35,7 @@ void Main_Menu::init()
 	};
 
 	dynamic_cast<UI_Text*>(elements[0])->set_font_size(30);
-	dynamic_cast<UI_Slider*>(elements[5])->set_bind(&Settings::volume);
+	dynamic_cast<UI_Slider*>(elements[5])->set_bind(&Settings::volume.data);
 
 	elements[0]->set_size(elements[1]->get_size());
 
