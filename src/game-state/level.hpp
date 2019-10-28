@@ -22,7 +22,6 @@ class Level : public Game_State
 	void handle_event(SDL_Event event);
 
 	private:
-	// TODO implement entity class
 	std::vector<Entity*> entities;
 	const std::string entity_file_path;
 	// TODO implement map

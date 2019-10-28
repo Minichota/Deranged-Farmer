@@ -25,44 +25,40 @@ Game::Game()
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetWindowResizable(window, SDL_FALSE);
-
-	std::vector<std::string> setting_names =
-	{
-		"volume",
-		"iq"
-	};
-
-	// load settings
-	std::ifstream read("res/save/settings.txt");
-	if(!read)
-	{
-		std::cout << "failed to load settings, creating settings file" << std::endl;
-		std::ofstream write("res/save/settings.txt");
-		if(!write)
-		{
-			std::cout << "failed to create settings file" << std::endl;
-		}
-		for(size_t i = 0; i < setting_names.size(); i++)
-		{
-			char* to_write = (char*)setting_names[i].c_str();
-			strcpy(to_write + setting_names[i].size(), " = 0\n");
-			write << to_write;
-		}
-		write.close();
-		read.close();
-		read.open("res/save/settings.txt");
-	}
-	std::string buffer(std::istreambuf_iterator<char>(read), {});
-	read.close();
-
-	parse_file(buffer, setting_names, Settings::all);
 }
 
 Game::~Game()
 {
 }
 
-void parse_file(std::string buffer, std::vector<std::string> names, std::vector<int*>& values)
+std::string Game::read_file(const char* file_path)
+{
+	// load settings
+	std::ifstream read(file_path);
+	if(!read)
+	{
+		std::cout << "failed to read file" << std::endl;
+	}
+	std::string buffer(std::istreambuf_iterator<char>(read), {});
+	read.close();
+	return buffer;
+}
+
+void Game::save_settings(const char* file_path, std::vector<std::string> names, std::vector<int*> values)
+{
+	std::ofstream write(file_path);
+	if(!write)
+	{
+		std::cout << "failed to open file to write" << std::endl;
+	}
+	for(size_t i = 0; i < names.size(); i++)
+	{
+		write << names[i]+" = "+std::to_string(*values[i])+"\n";
+	}
+	write.close();
+}
+
+void parse_file(std::string buffer, std::vector<std::string> names, std::vector<int*> values)
 {
 	// TODO make this actually good
 	std::string data;
@@ -75,6 +71,7 @@ void parse_file(std::string buffer, std::vector<std::string> names, std::vector<
 			bool cont = true;
 			for(size_t j = pos; j < buffer.size(); j++)
 			{
+				std::cout << "just checked: " << buffer[j] << std::endl;
 				if(!cont)
 					break;
 				switch(buffer[j])
@@ -109,12 +106,17 @@ void parse_file(std::string buffer, std::vector<std::string> names, std::vector<
 
 void Game::run()
 {
-	// create state
+	std::string settings_data = read_file("res/save/settings.txt");
+	std::vector<std::string> setting_names = { "volume", "iq" };
+
+	parse_file(settings_data, setting_names, Settings::all);
+
 	game_states =
 	{
 		new Main_Menu(renderer),
 		new Level(renderer, "", "")
 	};
+
 	this->pause = new Pause_Menu(renderer);
 	set_state(0);
 
@@ -141,6 +143,8 @@ void Game::run()
 	}
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	// TODO create struct to store data with it's name
+	save_settings("res/save/settings.txt", setting_names, Settings::all);
 }
 
 void Game::update()
