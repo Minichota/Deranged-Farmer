@@ -18,6 +18,7 @@ UI_Base(renderer, pos, size, scale, font_color)
 		std::cout << "failed to create font face" << std::endl;
 	}
 	this->font_color = font_color;
+	this->output = nullptr;
 	reload_texture();
 }
 
@@ -65,6 +66,10 @@ void UI_Text::render()
 void UI_Text::reload_texture()
 {
 	SDL_Surface* new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
+	if(output != nullptr)
+	{
+		SDL_DestroyTexture(output);
+	}
 	output = SDL_CreateTextureFromSurface(renderer, new_surface);
 	SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
 	this->prev_text = this->text;
