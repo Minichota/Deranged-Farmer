@@ -3,6 +3,7 @@
 #include "level.hpp"
 #include "game.hpp"
 #include "ui-text.hpp"
+#include "ui-health_bar.hpp"
 #include "player.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path):
@@ -37,15 +38,15 @@ void Level::render()
 
 void Level::init()
 {
-	UI_Text* thing = new UI_Text(renderer, Ivec(400,300), Ivec(100,50), Fvec(0.0f,0.0f), "This is the level!", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, FILL);
-	thing->set_origin(thing->get_size()/2);
-	elements =
-	{
-		thing
-	};
 	entities =
 	{
 		new Player(renderer, Ivec(400,300), Ivec(32,32), Fvec(1.0f,1.0f), Ivec(16,16))
+	};
+	UI_Health_Bar* health_Bar = new UI_Health_Bar(renderer, Ivec(400,0), Ivec(350/3.0f,50/3.0f), Fvec(3.0f,3.0f), SDL_Color{255, 0, 0, 255}, SDL_Color{255,100,0,255}, &entities[0]->get_health(), entities[0]->get_max_health());
+	health_Bar->set_origin(Ivec(health_Bar->get_size().x/2,0));
+	elements =
+	{
+		health_Bar
 	};
 	SDL_Texture* player_texture = IMG_LoadTexture(renderer, "res/graphics/player.png");
 	if(player_texture == nullptr)
@@ -77,8 +78,12 @@ void Level::handle_event(SDL_Event event)
 				case SDLK_ESCAPE:
 				{
 					Game::toggle_pause();
-				}
+				} break;
 			}
 		}
+	}
+	for(Entity* entity : entities)
+	{
+		entity->handle_event(event);
 	}
 }

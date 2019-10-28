@@ -71,7 +71,6 @@ void parse_file(std::string buffer, std::vector<std::string> names, std::vector<
 			bool cont = true;
 			for(size_t j = pos; j < buffer.size(); j++)
 			{
-				std::cout << "just checked: " << buffer[j] << std::endl;
 				if(!cont)
 					break;
 				switch(buffer[j])
@@ -177,6 +176,7 @@ void Game::increment_state()
 	Game::state++;
 	assert(state < STATE_COUNT);
 	// initialize new state
+	clear_interpolators();
 	game_states[Game::state]->init();
 }
 
@@ -190,6 +190,7 @@ void Game::set_state(int state)
 	}
 	Game::state = state;
 	// initialize new state
+	clear_interpolators();
 	game_states[Game::state]->init();
 }
 
