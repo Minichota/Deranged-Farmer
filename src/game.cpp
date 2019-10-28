@@ -71,7 +71,6 @@ void parse_file(std::string buffer, std::vector<std::string> names, std::vector<
 			bool cont = true;
 			for(size_t j = pos; j < buffer.size(); j++)
 			{
-				std::cout << "just checked: " << buffer[j] << std::endl;
 				if(!cont)
 					break;
 				switch(buffer[j])

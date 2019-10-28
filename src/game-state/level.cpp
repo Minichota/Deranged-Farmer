@@ -81,4 +81,8 @@ void Level::handle_event(SDL_Event event)
 			}
 		}
 	}
+	for(Entity* entity : entities)
+	{
+		entity->handle_event(event);
+	}
 }

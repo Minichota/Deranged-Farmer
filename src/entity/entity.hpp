@@ -18,11 +18,18 @@ class Entity : public Renderable, public Event_Handler
 
 	virtual void handle_event(SDL_Event event) = 0;
 
+	void accelerate(Fvec vel);
+	void handle_physics();
+	void move();
+
 	void set_texture(SDL_Texture* texture);
 	SDL_Texture* get_texture();
 
 	void set_pos(Ivec pos);
 	Ivec& get_pos();
+
+	void set_vel(Fvec vel);
+	Fvec& get_vel();
 
 	void set_size(Ivec size);
 	Ivec& get_size();
@@ -35,9 +42,14 @@ class Entity : public Renderable, public Event_Handler
 
 	protected:
 	Ivec pos;
+	Fvec vel;
 	Ivec size;
 	Fvec scale;
 	Ivec origin;
+
+	Fvec max_vel;
+
+	bool falling;
 
 	SDL_Texture* texture;
 };

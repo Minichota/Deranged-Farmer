@@ -37,6 +37,44 @@ void Entity::set_texture(SDL_Texture* texture)
 	this->texture = texture;
 }
 
+void Entity::accelerate(Fvec vel)
+{
+	this->vel += vel;
+	if(this->vel.x > max_vel.x)
+	{
+		this->vel.x = max_vel.x;
+	}
+	else if(this->vel.x < -max_vel.x)
+	{
+		this->vel.x = -max_vel.x;
+	}
+   	else if(this->vel.y > max_vel.y)
+	{
+		this->vel.y = max_vel.y;
+	}
+   	else if(this->vel.y < -max_vel.y)
+	{
+		this->vel.y = -max_vel.y;
+	}
+}
+
+void Entity::handle_physics()
+{
+	if((falling = vel.y >= 0.0f))
+	{
+		vel.y += 0.15f;
+	}
+	else
+	{
+		vel.y += 0.1f;
+	}
+}
+
+void Entity::move()
+{
+	this->pos += this->vel;
+}
+
 SDL_Texture* Entity::get_texture()
 {
 	return this->texture;
@@ -75,6 +113,9 @@ Fvec& Entity::get_scale()
 void Entity::set_origin(Ivec origin)
 {
 	this->origin = origin;
+	// TODO make more comparisons in vector class
+	assert(this->origin.x <= this->size.x &&
+		   this->origin.y <= this->size.y);
 }
 
 Ivec& Entity::get_origin()
