@@ -8,6 +8,7 @@
 #include "pause-menu.hpp"
 #include "settings.hpp"
 #include "interpolators.hpp"
+#include "io.hpp"
 
 // static variables
 int Game::state;
@@ -31,84 +32,10 @@ Game::~Game()
 {
 }
 
-std::string Game::read_file(const char* file_path)
-{
-	// load settings
-	std::ifstream read(file_path);
-	if(!read)
-	{
-		std::cout << "failed to read file" << std::endl;
-	}
-	std::string buffer(std::istreambuf_iterator<char>(read), {});
-	read.close();
-	return buffer;
-}
-
-void Game::save_settings(const char* file_path, std::vector<std::string> names, std::vector<int*> values)
-{
-	std::ofstream write(file_path);
-	if(!write)
-	{
-		std::cout << "failed to open file to write" << std::endl;
-	}
-	for(size_t i = 0; i < names.size(); i++)
-	{
-		write << names[i]+" = "+std::to_string(*values[i])+"\n";
-	}
-	write.close();
-}
-
-void parse_file(std::string buffer, std::vector<std::string> names, std::vector<int*> values)
-{
-	// TODO make this actually good
-	std::string data;
-	bool begin_parse = false;
-	for(size_t i = 0; i < names.size(); i++)
-	{
-		size_t pos = buffer.find(names[i]);
-		if(pos != std::string::npos)
-		{
-			bool cont = true;
-			for(size_t j = pos; j < buffer.size(); j++)
-			{
-				if(!cont)
-					break;
-				switch(buffer[j])
-				{
-					case '=':
-					{
-						begin_parse = true;
-					} break;
-					case '\n':
-					{
-						// done
-						if(begin_parse)
-						{
-							*values[i] = std::stoi(data);
-							begin_parse = false;
-							data.clear();
-							cont = false;
-						}
-					} break;
-					default:
-					{
-						if(begin_parse && buffer[j] != ' ')
-						{
-							data.push_back(buffer[j]);
-						}
-					} break;
-				}
-			}
-		}
-	}
-}
-
 void Game::run()
 {
-	std::string settings_data = read_file("res/save/settings.txt");
-	std::vector<std::string> setting_names = { "volume", "iq" };
-
-	parse_file(settings_data, setting_names, Settings::all);
+	std::string settings_data = read("res/save/settings.txt");
+	parse(settings_data, '=', Settings::all);
 
 	game_states =
 	{
@@ -142,8 +69,7 @@ void Game::run()
 	}
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
-	// TODO create struct to store data with it's name
-	save_settings("res/save/settings.txt", setting_names, Settings::all);
+	write("res/save/settings.txt", Settings::all);
 }
 
 void Game::update()

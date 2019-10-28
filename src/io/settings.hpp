@@ -12,9 +12,16 @@ namespace Settings
 	   Video,
 	   Keybindings
 	*/
-	extern int volume;
-	extern int iq;
-	extern std::vector<int*> all;
+	template <class T>
+	struct Setting
+	{
+		std::string name;
+		T data;
+	};
+
+	extern Setting<int> volume;
+	extern Setting<int> iq;
+	extern std::vector<Setting<int>*> all;
 }
 
 #endif
