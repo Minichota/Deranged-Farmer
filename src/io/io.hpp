@@ -60,7 +60,7 @@ template <class T>
 static void write(const char* file_path, std::vector<Settings::Setting<T>*> data)
 {
 	std::ofstream write(file_path);
-	Error e(!write, {"failed to write to file:", file_path});
+	Error(!write, {"failed to write to file:", file_path});
 	for(size_t i = 0; i < data.size(); i++)
 	{
 		write << data[i]->name << " = " << data[i]->data << '\n';

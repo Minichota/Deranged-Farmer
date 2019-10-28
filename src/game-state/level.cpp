@@ -52,7 +52,7 @@ void Level::init()
 	SDL_Texture* player_texture;
 	{
 		player_texture = IMG_LoadTexture(renderer, "res/graphics/player.png");
-		Error e(player_texture == nullptr, {"Failed to load player texture", SDL_GetError()});
+		Error(player_texture == nullptr, {"Failed to load player texture", SDL_GetError()});
 	}
 	entities[0]->set_texture(player_texture);
 }
