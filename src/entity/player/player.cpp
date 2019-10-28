@@ -7,18 +7,24 @@ Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size):
 Entity(renderer, pos, size)
 {
 	this->max_vel = Fvec(5.5f,5.5f);
+	this->max_health = 100;
+	set_health(max_health);
 }
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
 Entity(renderer, pos, size, scale)
 {
 	this->max_vel = Fvec(5.5f,5.5f);
+	this->max_health = 100;
+	set_health(max_health);
 }
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, Ivec origin):
 Entity(renderer, pos, size, scale, origin)
 {
 	this->max_vel = Fvec(5.5f,5.5f);
+	this->max_health = 100;
+	set_health(max_health);
 }
 
 Player::~Player()

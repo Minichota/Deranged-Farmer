@@ -75,6 +75,43 @@ void Entity::move()
 	this->pos += this->vel;
 }
 
+void Entity::set_health(int health)
+{
+	this->health = health;
+	if(this->health < 0)
+	{
+		this->health = 0;
+	}
+}
+
+void Entity::heal(int health)
+{
+	this->health += health;
+	if(this->health > max_health)
+	{
+		this->health = max_health;
+	}
+}
+
+void Entity::damage(int health)
+{
+	this->health -= health;
+	if(this->health < 0)
+	{
+		this->health = 0;
+	}
+}
+
+int& Entity::get_health()
+{
+	return this->health;
+}
+
+int& Entity::get_max_health()
+{
+	return this->max_health;
+}
+
 SDL_Texture* Entity::get_texture()
 {
 	return this->texture;

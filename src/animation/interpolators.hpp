@@ -28,6 +28,7 @@ struct Interpolator
 };
 
 void update_interpolators();
+void clear_interpolators();
 
 template <class T>
 void oscillate(Interpolator<T>& i)
