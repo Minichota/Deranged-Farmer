@@ -40,4 +40,5 @@ void UI_Image::render()
 {
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, texture, NULL, &output_rect);
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 }

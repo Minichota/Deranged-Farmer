@@ -1,2 +1,2 @@
-volume = 0
+volume = 50
 iq = 0

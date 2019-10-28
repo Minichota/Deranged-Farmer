@@ -48,6 +48,7 @@ void Main_Menu::init()
 
 	float_interpolaters.push_back(Interpolator<float>{OSCILLATOR, &elements[0]->get_scale().x, 1.0f, 2.0f, 1000, 1000});
 	float_interpolaters.push_back(Interpolator<float>{OSCILLATOR, &elements[0]->get_scale().y, 0.75f, 1.5f, 2000, 2000});
+	std::cout << "initialized main_menu " << std::endl;
 }
 
 void Main_Menu::handle_event(SDL_Event event)

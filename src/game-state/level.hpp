@@ -5,6 +5,7 @@
 
 #include "game-state.hpp"
 #include "ui-base.hpp"
+#include "entity.hpp"
 
 class Level : public Game_State
 {
@@ -22,7 +23,7 @@ class Level : public Game_State
 
 	private:
 	// TODO implement entity class
-	//std::vector<Entity*> entities;
+	std::vector<Entity*> entities;
 	const std::string entity_file_path;
 	// TODO implement map
 	//Map map;
