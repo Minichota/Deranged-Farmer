@@ -42,9 +42,8 @@ void Map::init()
 		new Settings::Data<int>{"height"}
 	};
 	parse(data, '=', size);
-	// TODO tile_loading
-	tiles.push_back(new Tile(renderer, Ivec(0,0), Ivec(32,32), Fvec(1.0f,1.0f)));
-	tiles[0]->load_texture(image_path, Ivec(0,0));
+	std::vector<std::vector<int>> map_data;
+	parse_csv(data, map_data);
 }
 
 void Map::clear()
