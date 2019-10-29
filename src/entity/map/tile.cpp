@@ -32,8 +32,8 @@ void Tile::update()
 	};
 	this->src_rect =
 	{
-		(int)std::round(relative_pos.x/scale.x),
-		(int)std::round(relative_pos.y/scale.y),
+		relative_pos.x,
+		relative_pos.y,
 		size.x,
 		size.y
 	};
@@ -48,8 +48,11 @@ void Tile::render()
 
 void Tile::load_texture(const char* file_path, Ivec relative_pos)
 {
-	this->full_texture = IMG_LoadTexture(renderer, file_path);
-	Error(!full_texture, {"Failed to load image: ", file_path});
+	this->relative_pos = relative_pos;
+	{
+		this->full_texture = IMG_LoadTexture(renderer, file_path);
+		Error(full_texture == nullptr, {"Failed to load image: ", file_path});
+	}
 }
 
 void Tile::set_texture(SDL_Texture* texture, Ivec relative_pos)

@@ -25,6 +25,7 @@ class Tile : public Renderable
 
 	SDL_Texture* full_texture;
 	Ivec relative_pos;
+
 	SDL_Rect rect;
 	SDL_Rect src_rect;
 };

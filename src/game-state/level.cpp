@@ -10,7 +10,7 @@
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path):
 Game_State(renderer),
 entity_file_path(entity_file_path),
-map(renderer, map_data_file_path, map_image_file_path),
+map(renderer, map_data_file_path, map_image_file_path, Ivec(32,32)),
 map_data_file_path(map_data_file_path),
 map_image_file_path(map_image_file_path)
 {
@@ -28,6 +28,7 @@ void Level::update()
 	{
 		entity->update();
 	}
+	map.update();
 }
 
 void Level::render()
@@ -37,6 +38,7 @@ void Level::render()
 	{
 		entity->render();
 	}
+	map.render();
 }
 
 void Level::init()
