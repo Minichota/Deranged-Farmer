@@ -13,15 +13,14 @@ namespace Settings
 	   Keybindings
 	*/
 	template <class T>
-	struct Setting
+	struct Data
 	{
 		std::string name;
 		T data;
 	};
 
-	extern Setting<int> volume;
-	extern Setting<int> iq;
-	extern std::vector<Setting<int>*> all;
+	extern std::vector<Data<int>*> all;
+	Data<int>* get_setting(std::vector<Data<int>*>& data, std::string name);
 }
 
 #endif
