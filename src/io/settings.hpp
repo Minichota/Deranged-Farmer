@@ -19,9 +19,8 @@ namespace Settings
 		T data;
 	};
 
-	extern Data<int> volume;
-	extern Data<int> iq;
 	extern std::vector<Data<int>*> all;
+	Data<int>* get_setting(std::vector<Data<int>*>& data, std::string name);
 }
 
 #endif

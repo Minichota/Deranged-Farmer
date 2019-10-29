@@ -1,2 +1,2 @@
-volume = 23
-iq = 0
+volume = 70
+test = 50
