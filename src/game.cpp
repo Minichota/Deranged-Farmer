@@ -42,7 +42,7 @@ void Game::run()
 	game_states =
 	{
 		new Main_Menu(renderer),
-		new Level(renderer, "", "")
+		new Level(renderer, "", "res/map/test_map.dat", "")
 	};
 
 	this->pause = new Pause_Menu(renderer);

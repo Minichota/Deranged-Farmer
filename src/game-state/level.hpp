@@ -6,11 +6,12 @@
 #include "game-state.hpp"
 #include "ui-base.hpp"
 #include "entity.hpp"
+#include "map.hpp"
 
 class Level : public Game_State
 {
 	public:
-	Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path);
+	Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path);
 	~Level();
 
 	void update();
@@ -24,9 +25,9 @@ class Level : public Game_State
 	private:
 	std::vector<Entity*> entities;
 	const std::string entity_file_path;
-	// TODO implement map
-	//Map map;
-	const std::string map_file_path;
+	Map map;
+	const std::string map_data_file_path;
+	const std::string map_image_file_path;
 };
 
 #endif

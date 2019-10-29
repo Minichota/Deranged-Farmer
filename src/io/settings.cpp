@@ -1,14 +1,14 @@
 #include "settings.hpp"
 
-Settings::Setting<int> Settings::volume =
+Settings::Data<int> Settings::volume =
 {
 	"volume"
 };
-Settings::Setting<int> Settings::iq =
+Settings::Data<int> Settings::iq =
 {
 	"iq"
 };
-std::vector<Settings::Setting<int>*> Settings::all
+std::vector<Settings::Data<int>*> Settings::all
 {
 	&Settings::volume,
 	&Settings::iq

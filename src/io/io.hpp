@@ -9,7 +9,7 @@
 std::string read(const char* file_path);
 
 template <class T>
-static void parse(std::string data, const char delimiter, std::vector<Settings::Setting<T>*>& values)
+static void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>*>& values)
 {
 	std::string curr_data;
 	bool start_parsing = false;
@@ -57,7 +57,7 @@ static void parse(std::string data, const char delimiter, std::vector<Settings::
 }
 
 template <class T>
-static void write(const char* file_path, std::vector<Settings::Setting<T>*> data)
+static void write(const char* file_path, std::vector<Settings::Data<T>*> data)
 {
 	std::ofstream write(file_path);
 	Error(!write, {"failed to write to file:", file_path});

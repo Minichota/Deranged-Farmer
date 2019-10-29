@@ -7,10 +7,12 @@
 #include "player.hpp"
 #include "error.hpp"
 
-Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_file_path):
+Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path):
 Game_State(renderer),
 entity_file_path(entity_file_path),
-map_file_path(map_file_path)
+map(renderer, map_data_file_path, map_image_file_path),
+map_data_file_path(map_data_file_path),
+map_image_file_path(map_image_file_path)
 {
 }
 
@@ -55,6 +57,7 @@ void Level::init()
 		Error(player_texture == nullptr, {"Failed to load player texture", SDL_GetError()});
 	}
 	entities[0]->set_texture(player_texture);
+	map.init();
 }
 
 void Level::clear()
@@ -65,6 +68,7 @@ void Level::clear()
 	}
 	entities.clear();
 
+	map.clear();
 	Game_State::clear();
 }
 
