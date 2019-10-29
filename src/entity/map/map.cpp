@@ -36,14 +36,28 @@ void Map::init()
 {
 	// load file
 	std::string data = read(data_path);
-	std::vector<Settings::Data<int>*> size =
-	{
-		new Settings::Data<int>{"width"},
-		new Settings::Data<int>{"height"}
-	};
-	parse(data, '=', size);
+	std::vector<Settings::Data<int>*> tile_count;
+	parse(data, '=', tile_count);
+
 	std::vector<std::vector<int>> map_data;
 	parse_csv(data, map_data);
+
+	for(size_t y = 0; y < map_data.size(); y++)
+	{
+		for(size_t x = 0; x < map_data[y].size(); x++)
+		{
+			if(map_data[y][x] == 0)
+			{
+				// null tile
+				continue;
+			}
+			int tile_type = map_data[y][x] - 1;
+			Tile* tile = new Tile(renderer, Ivec(x * tile_size.x, y * tile_size.y), tile_size);
+			SDL_Texture* image_texture = IMG_LoadTexture(renderer, image_path);
+			tile->set_texture(image_texture, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
+			tiles.push_back(tile);
+		}
+	}
 }
 
 void Map::clear()

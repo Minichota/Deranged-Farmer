@@ -72,11 +72,13 @@ static void parse_csv(std::string data, std::vector<std::vector<T>>& values)
 					values.push_back(std::vector<int>());
 				}
 				values[value_pos].push_back(std::stoi(curr_data));
+				curr_data.clear();
 			} break;
 			case '\n':
 			{
 				values[value_pos].push_back(std::stoi(curr_data));
 				value_pos++;
+				curr_data.clear();
 			} break;
 			default:
 			{
