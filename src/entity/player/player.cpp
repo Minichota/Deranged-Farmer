@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+#include <math.h>
 
 #include "player.hpp"
 #include "vectors.hpp"
@@ -50,7 +52,10 @@ void Player::render()
 		size.x,
 		size.y
 	};
-	SDL_RenderCopy(renderer, texture, NULL, &box);
+	Ivec mouse_pos;
+	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
+	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - this->pos.y, mouse_pos.x - this->pos.x) + 90;
+	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
 }
 
 void Player::handle_input()
