@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ostream>
 #include <iostream>
+#include <cmath>
 
 template <class T>
 class Vector

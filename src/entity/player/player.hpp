@@ -14,6 +14,6 @@ class Player : public Entity
 	void update();
 	void render();
 
-	void handle_event(SDL_Event event);
+	void handle_input();
 };
 #endif

@@ -9,6 +9,7 @@
 #include "settings.hpp"
 #include "interpolators.hpp"
 #include "io.hpp"
+#include "util.hpp"
 
 // static variables
 int Game::state;
@@ -39,6 +40,7 @@ void Game::run()
 	std::string settings_data = read("res/save/settings.txt");
 	parse(settings_data, '=', Settings::all);
 
+
 	game_states =
 	{
 		new Main_Menu(renderer),
@@ -53,6 +55,7 @@ void Game::run()
 	while(!closed)
 	{
 		SDL_Event event;
+		keys = (unsigned char*)SDL_GetKeyboardState(NULL);
 		while(SDL_PollEvent(&event) > 0)
 		{
 			handle_event(event);
