@@ -6,7 +6,7 @@
 #include "vectors.hpp"
 #include "util.hpp"
 
-#define MAX_VEL 2.7f
+#define MAX_VEL 3.2f
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size):
 Entity(renderer, pos, size)

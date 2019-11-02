@@ -14,6 +14,10 @@ class Map : public Renderable
 
 	void init();
 	void clear();
+
+	Tile* get_tile(size_t x, size_t y);
+	Ivec& get_tile_size();
+
 	private:
 	Ivec tile_size;
 	Ivec tile_count;

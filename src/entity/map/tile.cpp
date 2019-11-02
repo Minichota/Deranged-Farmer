@@ -17,6 +17,12 @@ Renderable(renderer)
 	this->scale = Fvec(1.0f,1.0f);
 }
 
+Tile::Tile():
+Renderable(nullptr)
+{
+	this->pos = Ivec(-1, -1);
+}
+
 Tile::~Tile()
 {
 }
@@ -64,4 +70,9 @@ void Tile::set_texture(SDL_Texture* texture, Ivec relative_pos)
 SDL_Texture* Tile::get_texture()
 {
 	return this->full_texture;
+}
+
+Ivec& Tile::get_pos()
+{
+	return this->pos;
 }

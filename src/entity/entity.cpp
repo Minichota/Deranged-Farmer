@@ -159,6 +159,16 @@ Ivec& Entity::get_pos()
 	return this->pos;
 }
 
+void Entity::set_vel(Fvec vel)
+{
+	this->vel = vel;
+}
+
+Fvec& Entity::get_vel()
+{
+	return this->vel;
+}
+
 void Entity::set_size(Ivec size)
 {
 	this->size = size;

@@ -30,10 +30,10 @@ class Game {
 	void handle_event(SDL_Event event);
 
 	private:
-	SDL_Window* window;
-	SDL_Renderer* renderer;
+	static SDL_Window* window;
+	static SDL_Renderer* renderer;
 
-	bool closed;
+	static bool closed;
 	static bool paused;
 
 	static std::vector<Game_State*> game_states;

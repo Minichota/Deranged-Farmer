@@ -36,19 +36,23 @@ void Map::init()
 {
 	// load file
 	std::string data = read(data_path);
-	std::vector<Settings::Data<int>*> tile_count;
-	parse(data, '=', tile_count);
+	std::vector<Settings::Data<int>*> size;
+	parse(data, '=', size);
+	tile_count = Ivec(size[0]->data, size[1]->data);
 
 	std::vector<std::vector<int>> map_data;
 	parse_csv(data, map_data);
 
-	for(size_t y = 0; y < map_data.size(); y++)
+
+	for(int y = 0; y < tile_count.y; y++)
 	{
-		for(size_t x = 0; x < map_data[y].size(); x++)
+		for(int x = 0; x < tile_count.x; x++)
 		{
 			if(map_data[y][x] == 0)
 			{
 				// null tile
+				Tile* tile = new Tile();
+				tiles.push_back(tile);
 				continue;
 			}
 			int tile_type = map_data[y][x] - 1;
@@ -67,4 +71,14 @@ void Map::clear()
 		delete tile;
 	}
 	tiles.clear();
+}
+
+Tile* Map::get_tile(size_t x, size_t y)
+{
+	return tiles[y * tile_count.x + x];
+}
+
+Ivec& Map::get_tile_size()
+{
+	return tile_size;
 }

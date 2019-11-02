@@ -33,6 +33,7 @@ class Entity : public Renderable, public Event_Handler
 
 	void set_pos(Ivec pos);
 	Ivec& get_pos();
+	Ivec& get_abs_pos();
 
 	void set_vel(Fvec vel);
 	Fvec& get_vel();

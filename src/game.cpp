@@ -15,7 +15,10 @@
 int Game::state;
 std::vector<Game_State*> Game::game_states;
 Pause_Menu* Game::pause;
-bool Game::paused;
+SDL_Window* Game::window;
+SDL_Renderer* Game::renderer;
+bool Game::paused = false;
+bool Game::closed = false;
 
 Game::Game()
 {
