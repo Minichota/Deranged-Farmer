@@ -1,5 +1,6 @@
 #include "tile.hpp"
 #include "error.hpp"
+#include "debug.hpp"
 
 Tile::Tile(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
 Renderable(renderer)
@@ -50,6 +51,13 @@ void Tile::render()
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
 	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+#ifdef DEBUG
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderDrawRect(renderer, &rect);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	Ivec draw_pos = { this->pos.x + size.x, this->pos.y - size.y };
+	Debug::render_debug_text(renderer, draw_pos, { this->pos, this->size });
+#endif
 }
 
 void Tile::load_texture(const char* file_path, Ivec relative_pos)

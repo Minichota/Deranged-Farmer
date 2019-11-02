@@ -3,6 +3,7 @@
 #include "map.hpp"
 #include "io.hpp"
 #include "settings.hpp"
+#include "collisions.hpp"
 
 Map::Map(SDL_Renderer* renderer, const char* data_path, const char* image_path, Ivec tile_size):
 Renderable(renderer)
@@ -71,6 +72,20 @@ void Map::clear()
 		delete tile;
 	}
 	tiles.clear();
+}
+
+void Map::handle_collision(Entity* entity)
+{
+	for(Tile* tile : tiles)
+	{
+		tile->update();
+		if(test_collision_movingAA(entity->get_pos(), entity->get_size(), entity->get_vel(),
+								   tile->get_pos(), tile_size))
+		{
+			handle_collision_movingAA(entity->get_pos(), entity->get_size(), entity->get_vel(),
+									  tile->get_pos(), tile_size);
+		}
+	}
 }
 
 Tile* Map::get_tile(size_t x, size_t y)
