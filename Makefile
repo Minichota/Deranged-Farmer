@@ -2,9 +2,10 @@ PROGRAM_NAME=Deranged-farmer
 SRC_DIR=src
 O_DIR=obj
 CXX=g++
-cpp_dirs=math game-state ui animation io entity entity/player entity/map
+cpp_dirs=math game-state ui animation io entity entity/player entity/map debug
 external_files=
 SRC=src
+DEBUG=false
 
 SRC_FILES= $(wildcard $(SRC)/*.cpp $(addsuffix /*.cpp,$(addprefix $(SRC)/,$(cpp_dirs))))
 H_FILES=$(SRC_DIR) $(addprefix $(SRC_DIR)/,$(cpp_dirs))
@@ -19,18 +20,31 @@ all: $(O_DIR)/$(PROGRAM_NAME) | run
 compile: $(O_DIR)/$(PROGRAM_NAME)
 
 $(O_DIR)/$(PROGRAM_NAME): $(OBJ_FILES)
-	$(CXX) -o $@ $^ $(CXX_FLAGS) $(external_files)
+ifeq ($(DEBUG),true)
+	@$(CXX) -D"DEBUG=true" -o $@ $^ $(CXX_FLAGS) $(external_files)
+	@echo "done :)"
+else
+	@$(CXX) -o $@ $^ $(CXX_FLAGS) $(external_files)
+	@echo "done :)"
+endif
 
 $(O_DIR)/%.o: %.cpp | $(addprefix $(O_DIR)/,$(cpp_dirs))
-	$(CXX) -c -o $@ $< $(CXX_FLAGS)
+ifeq ($(DEBUG),true)
+	@$(CXX) -D"DEBUG=true" -c -o $@ $< $(CXX_FLAGS)
+	@echo "compiling: $@"
+else
+	@$(CXX) -c -o $@ $< $(CXX_FLAGS)
+	@echo "compiling: $@"
+endif
 
 
 $(addprefix $(O_DIR)/,$(cpp_dirs)):
-	mkdir -p $@
+	@mkdir -p $@
 
 .PHONY: clean run
 clean:
-	rm -rf $(O_DIR)
+	@echo "cleaned :)"
+	@rm -rf $(O_DIR)
 
 run: $(O_DIR)/$(PROGRAM_NAME)
-	$<
+	@$<
