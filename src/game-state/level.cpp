@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 #include "level.hpp"
 #include "game.hpp"
@@ -7,6 +8,7 @@
 #include "player.hpp"
 #include "error.hpp"
 #include "collisions.hpp"
+#include "io.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path):
 Game_State(renderer),
@@ -62,6 +64,7 @@ void Level::init()
 		Error(player_texture == nullptr, {"Failed to load player texture", SDL_GetError()});
 	}
 	entities[0]->set_texture(player_texture);
+	load_entities();
 	map.init();
 }
 
@@ -95,5 +98,31 @@ void Level::handle_event(SDL_Event event)
 	for(Entity* entity : entities)
 	{
 		entity->handle_event(event);
+	}
+}
+
+void Level::load_entities()
+{
+	std::string data = read(entity_file_path.c_str());
+	std::vector<Settings::Data<int>*> types;
+	std::vector<std::vector<int>> properties;
+
+	parse(data, '=', types);
+	parse_csv(data, properties);
+
+	assert(types.size() == properties.size());
+
+	for(size_t i = 0; i < properties.size(); i++)
+	{
+		switch(types[i]->data)
+		{
+			case 0:
+			{
+				// some weird entity
+				// TODO implement some entity classes
+				Tile* tile = new Tile(renderer, Ivec(properties[i][0], properties[i][1]), Ivec(properties[i][2], properties[i][3]));
+				(void)tile;
+			} break;
+		}
 	}
 }
