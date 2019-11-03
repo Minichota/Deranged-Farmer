@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cmath>
 
 #include "entity.hpp"
 
@@ -31,6 +32,10 @@ Entity::~Entity()
 	SDL_DestroyTexture(texture);
 }
 
+void Entity::handle_event(SDL_Event e)
+{
+}
+
 void Entity::set_texture(SDL_Texture* texture)
 {
 	assert(texture != nullptr);
@@ -48,7 +53,7 @@ void Entity::accelerate(Fvec vel)
 	{
 		this->vel.x = -max_vel.x;
 	}
-   	else if(this->vel.y > max_vel.y)
+   	if(this->vel.y > max_vel.y)
 	{
 		this->vel.y = max_vel.y;
 	}
@@ -60,19 +65,46 @@ void Entity::accelerate(Fvec vel)
 
 void Entity::handle_physics()
 {
-	if((falling = vel.y >= 0.0f))
+	Fvec final_application;
+	if(this->vel.x > 0)
 	{
-		vel.y += 0.15f;
+		final_application.x = -0.2f;
+		if(vel.x + final_application.x < 0)
+		{
+			final_application.x = -vel.x;
+		}
 	}
-	else
+	else if(this->vel.x < 0)
 	{
-		vel.y += 0.1f;
+		final_application.x = 0.2f;
+		if(vel.x + final_application.x > 0)
+		{
+			final_application.x = -vel.x;
+		}
 	}
+	if(this->vel.y > 0)
+	{
+		final_application.y = -0.2f;
+		if(vel.y + final_application.y < 0)
+		{
+			final_application.x = -vel.x;
+		}
+	}
+	else if(this->vel.y < 0)
+	{
+		final_application.y = 0.2f;
+		if(vel.y + final_application.y > 0)
+		{
+			final_application.y = -vel.y;
+		}
+	}
+	accelerate(final_application);
 }
 
 void Entity::move()
 {
-	this->pos += this->vel;
+	this->pos.x +=std::round(this->vel.x);
+	this->pos.y +=std::round(this->vel.y);
 }
 
 void Entity::set_health(int health)
@@ -125,6 +157,16 @@ void Entity::set_pos(Ivec pos)
 Ivec& Entity::get_pos()
 {
 	return this->pos;
+}
+
+void Entity::set_vel(Fvec vel)
+{
+	this->vel = vel;
+}
+
+Fvec& Entity::get_vel()
+{
+	return this->vel;
 }
 
 void Entity::set_size(Ivec size)

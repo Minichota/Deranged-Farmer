@@ -9,12 +9,16 @@
 #include "settings.hpp"
 #include "interpolators.hpp"
 #include "io.hpp"
+#include "util.hpp"
 
 // static variables
 int Game::state;
 std::vector<Game_State*> Game::game_states;
 Pause_Menu* Game::pause;
-bool Game::paused;
+SDL_Window* Game::window;
+SDL_Renderer* Game::renderer;
+bool Game::paused = false;
+bool Game::closed = false;
 
 Game::Game()
 {
@@ -39,6 +43,7 @@ void Game::run()
 	std::string settings_data = read("res/save/settings.txt");
 	parse(settings_data, '=', Settings::all);
 
+
 	game_states =
 	{
 		new Main_Menu(renderer),
@@ -53,6 +58,7 @@ void Game::run()
 	while(!closed)
 	{
 		SDL_Event event;
+		keys = (unsigned char*)SDL_GetKeyboardState(NULL);
 		while(SDL_PollEvent(&event) > 0)
 		{
 			handle_event(event);
@@ -88,7 +94,7 @@ void Game::update()
 void Game::render()
 {
 	assert(state >= 0 && state < STATE_COUNT);
-		game_states[this->state]->render();
+	game_states[this->state]->render();
 	if(paused)
 	{
 		pause->render();

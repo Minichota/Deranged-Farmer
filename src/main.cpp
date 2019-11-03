@@ -4,6 +4,7 @@
 
 #include "game.hpp"
 #include "error.hpp"
+#include "debug.hpp"
 
 int main(){
 	{
@@ -13,6 +14,10 @@ int main(){
 		int imgFlags = IMG_INIT_PNG;
 		Error(!(IMG_Init(imgFlags) & imgFlags), {"Failed to initialize SDL_image: ", SDL_GetError()}, true);
 	}
+
+#ifdef DEBUG
+	Debug::init();
+#endif
 	Game game = Game();
 	game.run();
 	return 0;

@@ -16,7 +16,7 @@ class Entity : public Renderable, public Event_Handler
 	virtual void update() = 0;
 	virtual void render() = 0;
 
-	virtual void handle_event(SDL_Event event) = 0;
+	virtual void handle_event(SDL_Event event);
 
 	void accelerate(Fvec vel);
 	void handle_physics();
@@ -33,6 +33,7 @@ class Entity : public Renderable, public Event_Handler
 
 	void set_pos(Ivec pos);
 	Ivec& get_pos();
+	Ivec& get_abs_pos();
 
 	void set_vel(Fvec vel);
 	Fvec& get_vel();
@@ -54,8 +55,6 @@ class Entity : public Renderable, public Event_Handler
 	Ivec origin;
 
 	Fvec max_vel;
-
-	bool falling;
 
 	int health;
 	int max_health;

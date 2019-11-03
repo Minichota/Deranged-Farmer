@@ -2,6 +2,7 @@
 
 #include "tile.hpp"
 #include "renderable.hpp"
+#include "entity.hpp"
 
 class Map : public Renderable
 {
@@ -14,6 +15,12 @@ class Map : public Renderable
 
 	void init();
 	void clear();
+
+	void handle_collision(Entity* entity);
+
+	Tile* get_tile(size_t x, size_t y);
+	Ivec& get_tile_size();
+
 	private:
 	Ivec tile_size;
 	Ivec tile_count;
