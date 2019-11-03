@@ -23,6 +23,9 @@ class Level : public Game_State
 	void handle_event(SDL_Event event);
 
 	private:
+	void load_entities();
+
+	private:
 	std::vector<Entity*> entities;
 	const std::string entity_file_path;
 	Map map;
