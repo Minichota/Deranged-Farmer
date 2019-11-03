@@ -3,10 +3,25 @@
 bool test_collision_movingAA(Ivec lhs_pos, Ivec lhs_size, Fvec lhs_vel, Ivec rhs_pos, Ivec rhs_size)
 {
 	Ivec lhs_bottom_right = lhs_pos + lhs_size;
-	return lhs_pos.x <= rhs_pos.x &&
-		   rhs_pos.x <= lhs_bottom_right.x &&
-		   lhs_pos.y <= rhs_pos.y &&
-		   rhs_pos.y <= lhs_bottom_right.y;
+	return
+		   (
+		   	(
+			   lhs_pos.x <= rhs_pos.x &&
+			   rhs_pos.x <= lhs_bottom_right.x
+			) || (
+			   rhs_pos.x <= lhs_pos.x &&
+			   lhs_pos.x <= rhs_pos.x + rhs_size.x
+			)
+		   ) &&
+		   (
+		   	(
+			   lhs_pos.y <= rhs_pos.y &&
+			   rhs_pos.y <= lhs_bottom_right.y
+			) || (
+			   rhs_pos.y <= lhs_pos.y &&
+			   lhs_pos.y <= rhs_pos.y + rhs_size.y
+			)
+		   );
 }
 
 bool test_collision_movingAABB(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec& rhs_pos, Ivec rhs_size, Fvec& rhs_vel)
@@ -26,31 +41,30 @@ void handle_collision_movingAA(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec
 	float l_collision = lhs_right - rhs_pos.x;
 	float r_collision = rhs_right - lhs_pos.x;
 
-	std::cout << rhs_pos << rhs_size << lhs_pos << lhs_size << std::endl;
 
-	if (t_collision < b_collision && t_collision < l_collision && t_collision < r_collision )
+	if (t_collision < b_collision && t_collision < l_collision && t_collision < r_collision)
 	{
-	//Top collision
+		// Top collision
 		std::cout << "up collision" << std::endl;
-		//lhs_vel.y = -3.0f;
+		lhs_vel.y = -3.2f;
 	}
 	if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision)
 	{
-	//bottom collision
+		// bottom collision
 		std::cout << "down collision" << std::endl;
-		//lhs_vel.y = 3.0f;
+		lhs_vel.y = 3.2f;
 	}
 	if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision)
 	{
-	//Left collision
+		// Left collision
 		std::cout << "left collision" << std::endl;
-		//lhs_vel.x = -3.0f;
+		lhs_vel.x = -3.2f;
 	}
-	if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision )
+	if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision)
 	{
-	//Right collision
+		// Right collision
 		std::cout << "right collision" << std::endl;
-		//lhs_vel.x = 3.0f;
+		lhs_vel.x = 3.2f;
 	}
 }
 
