@@ -10,6 +10,7 @@
 #include "interpolators.hpp"
 #include "io.hpp"
 #include "util.hpp"
+#include "debug.hpp"
 
 // static variables
 int Game::state;
@@ -150,6 +151,16 @@ void Game::handle_event(SDL_Event event)
 			// user closes window
 			closed = true;
 		} break;
+		case SDL_KEYDOWN:
+		{
+			switch(event.key.keysym.sym)
+			{
+				case SDLK_F12:
+				{
+					Debug::toggle();
+				} break;
+			}
+		}
 		default:
 		{
 			if(paused)

@@ -4,10 +4,13 @@
 #include "debug.hpp"
 #include "error.hpp"
 
+bool Debug::active = false;
+TTF_Font* Debug::font = nullptr;
+
 void Debug::init()
 {
 	Debug::font = TTF_OpenFont("res/graphics/font.ttf", 16);
-	Error(!font, {"failed to load font", SDL_GetError()});
+	Error(!Debug::font, {"failed to load font", SDL_GetError()});
 }
 
 void Debug::render_debug_text(SDL_Renderer* renderer, Ivec pos, std::vector<Ivec> values)
@@ -31,4 +34,9 @@ void Debug::render_debug_text(SDL_Renderer* renderer, Ivec pos, std::vector<Ivec
 		SDL_FreeSurface(surf);
 		pos.y += 16;
 	}
+}
+
+void Debug::toggle()
+{
+	active = !active;
 }

@@ -8,9 +8,10 @@
 
 namespace Debug
 {
-	static TTF_Font* font;
 	void init();
 	void render_debug_text(SDL_Renderer* renderer, Ivec pos, std::vector<Ivec> x = {});
+	void toggle();
+	extern TTF_Font* font;
+	extern bool active;
 };
-
 #endif

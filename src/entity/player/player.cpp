@@ -55,13 +55,15 @@ void Player::render()
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - this->pos.y, mouse_pos.x - this->pos.x) + 90;
-#ifdef DEBUG
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderDrawRect(renderer, &box);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	Ivec draw_pos = { this->pos.x + size.x, this->pos.y - size.y };
-	Debug::render_debug_text(renderer, draw_pos, {this->pos, this->size});
-#endif
+	if(Debug::active)
+	{
+		std::cout << "debug active" << std::endl;
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderDrawRect(renderer, &box);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		Ivec draw_pos = { this->pos.x + size.x, this->pos.y - size.y };
+		Debug::render_debug_text(renderer, draw_pos, {this->pos, this->size});
+	}
 	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
 }
 
