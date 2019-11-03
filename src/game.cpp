@@ -94,7 +94,7 @@ void Game::update()
 void Game::render()
 {
 	assert(state >= 0 && state < STATE_COUNT);
-		game_states[this->state]->render();
+	game_states[this->state]->render();
 	if(paused)
 	{
 		pause->render();

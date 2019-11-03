@@ -6,6 +6,7 @@ cpp_dirs=math game-state ui animation io entity entity/player entity/map debug
 external_files=
 SRC=src
 DEBUG=false
+FILE=NULL
 
 SRC_FILES= $(wildcard $(SRC)/*.cpp $(addsuffix /*.cpp,$(addprefix $(SRC)/,$(cpp_dirs))))
 H_FILES=$(SRC_DIR) $(addprefix $(SRC_DIR)/,$(cpp_dirs))
@@ -18,6 +19,8 @@ CXX_FLAGS=$(addprefix -I, $(H_FILES)) `sdl2-config --libs --cflags` -O3 -Wall -l
 all: $(O_DIR)/$(PROGRAM_NAME) | run
 
 compile: $(O_DIR)/$(PROGRAM_NAME)
+
+single: $(O_DIR)/$(FILE).o
 
 $(O_DIR)/$(PROGRAM_NAME): $(OBJ_FILES)
 ifeq ($(DEBUG),true)

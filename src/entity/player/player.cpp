@@ -41,7 +41,6 @@ void Player::update()
 {
 	handle_input();
 	handle_physics();
-	move();
 }
 
 void Player::render()

@@ -3,8 +3,7 @@
 bool test_collision_movingAA(Ivec lhs_pos, Ivec lhs_size, Fvec lhs_vel, Ivec rhs_pos, Ivec rhs_size)
 {
 	Ivec lhs_bottom_right = lhs_pos + lhs_size;
-	return
-		   (
+	return (
 		   	(
 			   lhs_pos.x <= rhs_pos.x &&
 			   rhs_pos.x <= lhs_bottom_right.x
@@ -12,8 +11,7 @@ bool test_collision_movingAA(Ivec lhs_pos, Ivec lhs_size, Fvec lhs_vel, Ivec rhs
 			   rhs_pos.x <= lhs_pos.x &&
 			   lhs_pos.x <= rhs_pos.x + rhs_size.x
 			)
-		   ) &&
-		   (
+		   ) && (
 		   	(
 			   lhs_pos.y <= rhs_pos.y &&
 			   rhs_pos.y <= lhs_bottom_right.y
@@ -45,26 +43,50 @@ void handle_collision_movingAA(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec
 	if (t_collision < b_collision && t_collision < l_collision && t_collision < r_collision)
 	{
 		// Top collision
-		std::cout << "up collision" << std::endl;
-		lhs_vel.y = -3.2f;
+		if(lhs_vel.y > 0.0f)
+		{
+			lhs_vel.y = 0.0f;
+		}
+		while(lhs_pos.y + lhs_size.y > rhs_pos.y)
+		{
+			lhs_pos.y -= 1;
+		}
 	}
-	if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision)
+	else if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision)
 	{
 		// bottom collision
-		std::cout << "down collision" << std::endl;
-		lhs_vel.y = 3.2f;
+		if(lhs_vel.y < 0.0f)
+		{
+			lhs_vel.y = 0.0f;
+		}
+		while(lhs_pos.y < rhs_pos.y + rhs_size.y)
+		{
+			lhs_pos.y += 1;
+		}
 	}
-	if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision)
+	else if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision)
 	{
 		// Left collision
-		std::cout << "left collision" << std::endl;
-		lhs_vel.x = -3.2f;
+		if(lhs_vel.x > 0.0f)
+		{
+			lhs_vel.x = 0.0f;
+		}
+		while(lhs_pos.x + lhs_size.x > rhs_pos.x)
+		{
+			lhs_pos.x -= 1;
+		}
 	}
-	if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision)
+	else if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision)
 	{
 		// Right collision
-		std::cout << "right collision" << std::endl;
-		lhs_vel.x = 3.2f;
+		if(lhs_vel.x < 0.0f)
+		{
+			lhs_vel.x = 0.0f;
+		}
+		while(lhs_pos.x > rhs_pos.x + rhs_size.x)
+		{
+			lhs_pos.x += 1;
+		}
 	}
 }
 
