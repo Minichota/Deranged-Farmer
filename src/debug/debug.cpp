@@ -6,7 +6,9 @@
 
 bool Debug::active = false;
 TTF_Font* Debug::font = nullptr;
-std::vector<Ivec> Debug::to_render = {};
+std::vector<Debug_Element> Debug::to_render = {};
+std::vector<SDL_Rect> Debug::rects = {};
+int Debug::selection = 0;
 
 void Debug::init()
 {
@@ -16,26 +18,55 @@ void Debug::init()
 
 void Debug::render_debug_text(SDL_Renderer* renderer, Ivec pos)
 {
+	rects.clear();
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	// outer layer
+	Ivec draw_pos = pos;
 	for(size_t i = 0; i < to_render.size(); i++)
 	{
-		std::string output_str = std::to_string(to_render[i].x) + " " + std::to_string(to_render[i].y);
-		SDL_Surface* surf = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
+		std::string output_str = to_render[i].name;
+		SDL_Surface* surface = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
 		Ivec tex_size;
-		SDL_Texture* output = SDL_CreateTextureFromSurface(renderer, surf);
+		SDL_Texture* output = SDL_CreateTextureFromSurface(renderer, surface);
 		SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
 		SDL_Rect size_rect =
 		{
-			pos.x,
-			pos.y,
+			draw_pos.x,
+			draw_pos.y,
 			tex_size.x,
 			tex_size.y
 		};
+		rects.push_back(size_rect);
 		SDL_RenderCopy(renderer, output, NULL, &size_rect);
 		SDL_DestroyTexture(output);
-		SDL_FreeSurface(surf);
-		pos.y += tex_size.y;
+		SDL_FreeSurface(surface);
+		draw_pos.y += tex_size.y;
 	}
+	draw_pos = pos;
+	// inner layer
+	for(size_t i = 0; i < to_render[selection].renders.size(); i++)
+	{
+		std::string output_str = std::to_string(to_render[selection].renders[i].x) + " " + std::to_string(to_render[selection].renders[i].y);
+		SDL_Surface* surface = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
+		Ivec tex_size;
+		SDL_Texture* output = SDL_CreateTextureFromSurface(renderer, surface);
+		SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
+		SDL_Rect size_rect =
+		{
+			draw_pos.x + 50,
+			draw_pos.y,
+			tex_size.x,
+			tex_size.y
+		};
+		rects.push_back(size_rect);
+		SDL_RenderCopy(renderer, output, NULL, &size_rect);
+		SDL_DestroyTexture(output);
+		SDL_FreeSurface(surface);
+		draw_pos.y += tex_size.y;
+	}
+
 	to_render.clear();
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
 void Debug::toggle()
@@ -43,10 +74,22 @@ void Debug::toggle()
 	active = !active;
 }
 
-void Debug::push_render(std::vector<Ivec> render)
+void Debug::push_render(std::string name, std::vector<Ivec> render)
 {
-	for(Ivec x : render)
+	to_render.push_back(Debug_Element{name, render});
+}
+
+void Debug::open_selection(Ivec pos)
+{
+	for(size_t i = 0; i < rects.size(); i++)
 	{
-		to_render.push_back(x);
+		if(pos.x > rects[i].x &&
+		   pos.y > rects[i].y &&
+		   pos.x < rects[i].x + rects[i].w &&
+		   pos.y < rects[i].y + rects[i].h)
+		{
+			selection = i;
+			break;
+		}
 	}
 }

@@ -62,7 +62,7 @@ void Player::render()
 		SDL_RenderDrawRect(renderer, &box);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		Ivec draw_pos = { this->pos.x, this->pos.y };
-		Debug::push_render({this->pos, this->size});
+		Debug::push_render("Player", {this->pos, this->size});
 	}
 }
 

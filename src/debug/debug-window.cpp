@@ -22,10 +22,10 @@ void Debug_Window::update()
 
 void Debug_Window::render()
 {
-	Ivec pos = {this->pos.x, this->pos.y - scroll_pos};
 	if(Debug::active)
 	{
-		Debug::render_debug_text(renderer, pos);
+		Ivec draw_pos = {this->pos.x, this->pos.y - scroll_pos};
+		Debug::render_debug_text(renderer, draw_pos);
 	}
 }
 
@@ -35,6 +35,17 @@ void Debug_Window::handle_event(SDL_Event event)
 	{
 		switch(event.type)
 		{
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				Ivec mouse_position = Ivec(event.button.x, event.button.y);
+				switch(event.button.button)
+				{
+					case SDL_BUTTON_LEFT:
+					{
+						Debug::open_selection(mouse_position);
+					} break;
+				}
+			} break;
 			case SDL_MOUSEWHEEL:
 			{
 				if(event.wheel.y > 0)
