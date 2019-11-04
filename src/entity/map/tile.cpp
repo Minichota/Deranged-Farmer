@@ -53,11 +53,14 @@ void Tile::render()
 	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 	if(Debug::active)
 	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderDrawRect(renderer, &rect);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		Ivec draw_pos = { this->pos.x + size.x, this->pos.y - size.y };
-		Debug::render_debug_text(renderer, draw_pos, { this->pos, this->size });
+		if(renderer != nullptr)
+		{
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_RenderDrawRect(renderer, &rect);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			Ivec draw_pos = { this->pos.x + 2, this->pos.y + 2 };
+			Debug::push_render({ this->pos, this->size });
+		}
 	}
 }
 

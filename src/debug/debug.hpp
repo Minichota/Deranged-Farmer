@@ -9,8 +9,11 @@
 namespace Debug
 {
 	void init();
-	void render_debug_text(SDL_Renderer* renderer, Ivec pos, std::vector<Ivec> x = {});
+	void render_debug_text(SDL_Renderer* renderer, Ivec pos);
 	void toggle();
+	void push_render(std::vector<Ivec> render);
+
+	extern std::vector<Ivec> to_render;
 	extern TTF_Font* font;
 	extern bool active;
 };

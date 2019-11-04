@@ -11,6 +11,7 @@
 #include "io.hpp"
 #include "util.hpp"
 #include "debug.hpp"
+#include "debug-window.hpp"
 
 // static variables
 int Game::state;
@@ -20,6 +21,7 @@ SDL_Window* Game::window;
 SDL_Renderer* Game::renderer;
 bool Game::paused = false;
 bool Game::closed = false;
+Debug_Window* Game::debug;
 
 Game::Game()
 {
@@ -43,8 +45,7 @@ void Game::run()
 {
 	std::string settings_data = read("res/save/settings.txt");
 	parse(settings_data, '=', Settings::all);
-
-
+ 	Game::debug = new Debug_Window(renderer);
 	game_states =
 	{
 		new Main_Menu(renderer),
@@ -90,6 +91,7 @@ void Game::update()
 	{
 		game_states[this->state]->update();
 	}
+	debug->update();
 }
 
 void Game::render()
@@ -100,6 +102,7 @@ void Game::render()
 	{
 		pause->render();
 	}
+	debug->render();
 }
 
 void Game::increment_state()
@@ -171,6 +174,7 @@ void Game::handle_event(SDL_Event event)
 			{
 				game_states[this->state]->handle_event(event);
 			}
+			debug->handle_event(event);
 		} break;
 	}
 }

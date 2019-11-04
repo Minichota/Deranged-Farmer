@@ -8,6 +8,7 @@
 #include "renderable.hpp"
 #include "game-state.hpp"
 #include "pause-menu.hpp"
+#include "debug-window.hpp"
 
 #define STATE_COUNT 2
 
@@ -39,4 +40,6 @@ class Game {
 	static std::vector<Game_State*> game_states;
 	static Pause_Menu* pause;
 	static int state;
+
+	static Debug_Window* debug;
 };
