@@ -58,8 +58,8 @@ void Tile::render()
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderDrawRect(renderer, &rect);
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-			Ivec draw_pos = { this->pos.x + 2, this->pos.y + 2 };
-			Debug::push_render("Tile", { this->pos, this->size });
+			Ivec draw_pos = { this->pos.x, this->pos.y };
+			Debug::push_render("Tile", { this->pos, this->size, Ivec((int)this->scale.x, (int)this->scale.y), this->relative_pos });
 		}
 	}
 }

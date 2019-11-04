@@ -44,25 +44,28 @@ void Debug::render_debug_text(SDL_Renderer* renderer, Ivec pos)
 	}
 	draw_pos = pos;
 	// inner layer
-	for(size_t i = 0; i < to_render[selection].renders.size(); i++)
+	if(selection >= 0)
 	{
-		std::string output_str = std::to_string(to_render[selection].renders[i].x) + " " + std::to_string(to_render[selection].renders[i].y);
-		SDL_Surface* surface = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
-		Ivec tex_size;
-		SDL_Texture* output = SDL_CreateTextureFromSurface(renderer, surface);
-		SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
-		SDL_Rect size_rect =
+		for(size_t i = 0; i < to_render[selection].renders.size(); i++)
 		{
-			draw_pos.x + 50,
-			draw_pos.y,
-			tex_size.x,
-			tex_size.y
-		};
-		rects.push_back(size_rect);
-		SDL_RenderCopy(renderer, output, NULL, &size_rect);
-		SDL_DestroyTexture(output);
-		SDL_FreeSurface(surface);
-		draw_pos.y += tex_size.y;
+			std::string output_str = std::to_string(to_render[selection].renders[i].x) + " " + std::to_string(to_render[selection].renders[i].y);
+			SDL_Surface* surface = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
+			Ivec tex_size;
+			SDL_Texture* output = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
+			SDL_Rect size_rect =
+			{
+				draw_pos.x + 50,
+				draw_pos.y,
+				tex_size.x,
+				tex_size.y
+			};
+			rects.push_back(size_rect);
+			SDL_RenderCopy(renderer, output, NULL, &size_rect);
+			SDL_DestroyTexture(output);
+			SDL_FreeSurface(surface);
+			draw_pos.y += tex_size.y;
+		}
 	}
 
 	to_render.clear();
@@ -89,7 +92,8 @@ void Debug::open_selection(Ivec pos)
 		   pos.y < rects[i].y + rects[i].h)
 		{
 			selection = i;
-			break;
+			return;
 		}
 	}
+	selection = -1;
 }
