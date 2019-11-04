@@ -29,7 +29,7 @@ Game::Game()
 		   					   SDL_WINDOWPOS_CENTERED,
 		   					   SDL_WINDOWPOS_CENTERED,
 		   					   800,
-		   					   600,
+		   					   608,
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetWindowResizable(window, SDL_FALSE);

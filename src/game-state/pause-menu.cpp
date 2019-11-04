@@ -27,8 +27,8 @@ void Pause_Menu::init()
 		new UI_Text(renderer, Ivec(400,500), Ivec(0,0), Fvec(1.0f,1.0f), "Press enter to continue", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
 		new UI_Button(renderer, Ivec(0,0), Ivec(0,0), Fvec(2.0f,2.0f), &quit, SDL_Color{255,255,255,255}),
 		new UI_Text(renderer, Ivec(0,0), Ivec(0,0), Fvec(1.0f,1.0f), "Main Menu", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
-		new UI_Image(renderer, Ivec(735,550), Ivec(50,50), Fvec(1.0f,1.0f), FILL, "res/graphics/volume.png"),
-		new UI_Slider(renderer, Ivec(735,580), Ivec(110,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{255,255,255,255}, SDL_Color{127,127,127,255})
+		new UI_Image(renderer, Ivec(735,560), Ivec(50,50), Fvec(1.0f,1.0f), FILL, "res/graphics/volume.png"),
+		new UI_Slider(renderer, Ivec(735,590), Ivec(110,10), Fvec(1.0f,1.0f), 0, 100, 100, SDL_Color{255,255,255,255}, SDL_Color{127,127,127,255})
 	};
 	elements[0]->set_origin(elements[0]->get_size()/2);
 	elements[1]->set_origin(elements[1]->get_size()/2);
