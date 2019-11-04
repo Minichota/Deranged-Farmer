@@ -20,6 +20,18 @@ class Vector
 	y(0)
 	{
 	}
+	template <class X>
+	Vector(Vector<X>&& old):
+	x(old.x),
+	y(old.y)
+	{
+	}
+	template <class X>
+	Vector(Vector<X>& old):
+	x(old.x),
+	y(old.y)
+	{
+	}
 	~Vector()
 	{
 	}

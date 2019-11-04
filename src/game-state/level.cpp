@@ -50,7 +50,7 @@ void Level::init()
 {
 	entities =
 	{
-		new Player(renderer, Ivec(50,50), Ivec(32,32), Fvec(1.0f,1.0f))
+		new Player(renderer, Ivec(50,50), Ivec(25,27), Fvec(1.0f,1.0f))
 	};
 	UI_Health_Bar* health_Bar = new UI_Health_Bar(renderer, Ivec(400,0), Ivec(350/3.0f,50/3.0f), Fvec(3.0f,3.0f), SDL_Color{255, 0, 0, 255}, SDL_Color{255,100,0,255}, &entities[0]->get_health(), entities[0]->get_max_health());
 	health_Bar->set_origin(Ivec(health_Bar->get_size().x/2,0));

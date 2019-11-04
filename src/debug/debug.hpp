@@ -9,7 +9,7 @@
 typedef struct
 {
 	std::string name;
-	std::vector<Ivec> renders;
+	std::vector<Fvec> renders;
 } Debug_Element;
 
 namespace Debug
@@ -17,7 +17,7 @@ namespace Debug
 	void init();
 	void render_debug_text(SDL_Renderer* renderer, Ivec pos);
 	void toggle();
-	void push_render(std::string name, std::vector<Ivec> render);
+	void push_render(std::string name, std::vector<Fvec> render);
 	void open_selection(Ivec pos);
 
 	extern int selection;
@@ -26,5 +26,6 @@ namespace Debug
 	extern std::vector<SDL_Rect> rects;
 	extern TTF_Font* font;
 	extern bool active;
+
 };
 #endif

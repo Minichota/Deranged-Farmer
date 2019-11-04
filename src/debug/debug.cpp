@@ -3,6 +3,9 @@
 
 #include "debug.hpp"
 #include "error.hpp"
+#include "vectors.hpp"
+
+#define FLOAT_ACCURACY 3
 
 bool Debug::active = false;
 TTF_Font* Debug::font = nullptr;
@@ -48,7 +51,11 @@ void Debug::render_debug_text(SDL_Renderer* renderer, Ivec pos)
 	{
 		for(size_t i = 0; i < to_render[selection].renders.size(); i++)
 		{
-			std::string output_str = std::to_string(to_render[selection].renders[i].x) + " " + std::to_string(to_render[selection].renders[i].y);
+			std::string x = std::to_string(to_render[selection].renders[i].x);
+			x.erase(x.find_last_not_of('0') + FLOAT_ACCURACY, std::string::npos);
+			std::string y = std::to_string(to_render[selection].renders[i].y);
+			y.erase(y.find_last_not_of('0') + FLOAT_ACCURACY, std::string::npos);
+			std::string output_str = x + " " + y;
 			SDL_Surface* surface = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
 			Ivec tex_size;
 			SDL_Texture* output = SDL_CreateTextureFromSurface(renderer, surface);
@@ -77,7 +84,7 @@ void Debug::toggle()
 	active = !active;
 }
 
-void Debug::push_render(std::string name, std::vector<Ivec> render)
+void Debug::push_render(std::string name, std::vector<Fvec> render)
 {
 	to_render.push_back(Debug_Element{name, render});
 }

@@ -1,4 +1,5 @@
 #include "collisions.hpp"
+#include "debug.hpp"
 
 bool test_collision_movingAA(Ivec lhs_pos, Ivec lhs_size, Fvec lhs_vel, Ivec rhs_pos, Ivec rhs_size)
 {
@@ -38,7 +39,6 @@ void handle_collision_movingAA(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec
 	float t_collision = lhs_bottom - rhs_pos.y;
 	float l_collision = lhs_right - rhs_pos.x;
 	float r_collision = rhs_right - lhs_pos.x;
-
 
 	if (t_collision < b_collision && t_collision < l_collision && t_collision < r_collision)
 	{
@@ -83,7 +83,7 @@ void handle_collision_movingAA(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec
 		{
 			lhs_vel.x = 0.0f;
 		}
-		while(lhs_pos.x > rhs_pos.x + rhs_size.x)
+		while(lhs_pos.x < rhs_pos.x + rhs_size.x)
 		{
 			lhs_pos.x += 1;
 		}
