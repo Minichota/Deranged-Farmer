@@ -10,7 +10,6 @@
 #include "interpolators.hpp"
 #include "io.hpp"
 #include "util.hpp"
-#include "debug.hpp"
 #include "debug-window.hpp"
 
 // static variables
@@ -33,6 +32,7 @@ Game::Game()
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetWindowResizable(window, SDL_FALSE);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 }
 
 Game::~Game()
@@ -91,7 +91,10 @@ void Game::update()
 	{
 		game_states[this->state]->update();
 	}
-	debug->update();
+	if(debug->active)
+	{
+		debug->update();
+	}
 }
 
 void Game::render()
@@ -102,7 +105,10 @@ void Game::render()
 	{
 		pause->render();
 	}
-	debug->render();
+	if(debug->active)
+	{
+		debug->render();
+	}
 }
 
 void Game::increment_state()
@@ -160,7 +166,7 @@ void Game::handle_event(SDL_Event event)
 			{
 				case SDLK_F12:
 				{
-					Debug::toggle();
+					debug->toggle();
 				} break;
 			}
 		}
@@ -174,7 +180,10 @@ void Game::handle_event(SDL_Event event)
 			{
 				game_states[this->state]->handle_event(event);
 			}
-			debug->handle_event(event);
+			if(debug->active)
+			{
+				debug->handle_event(event);
+			}
 		} break;
 	}
 }

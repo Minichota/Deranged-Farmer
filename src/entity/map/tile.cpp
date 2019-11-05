@@ -1,6 +1,6 @@
 #include "tile.hpp"
 #include "error.hpp"
-#include "debug.hpp"
+#include "game.hpp"
 
 Tile::Tile(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
 Renderable(renderer)
@@ -51,7 +51,7 @@ void Tile::render()
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
 	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
-	if(Debug::active)
+	if(Game::debug->active)
 	{
 		if(renderer != nullptr)
 		{
@@ -59,7 +59,7 @@ void Tile::render()
 			SDL_RenderDrawRect(renderer, &rect);
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			Ivec draw_pos = { this->pos.x, this->pos.y };
-			Debug::push_render("Tile", { this->pos, this->size, this->scale, this->relative_pos });
+			Game::debug->push_render("Tile", { this->pos, this->size, this->scale, this->relative_pos });
 		}
 	}
 }

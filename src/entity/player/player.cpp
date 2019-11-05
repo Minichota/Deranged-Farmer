@@ -5,7 +5,7 @@
 #include "player.hpp"
 #include "vectors.hpp"
 #include "util.hpp"
-#include "debug.hpp"
+#include "game.hpp"
 
 #define MAX_VEL 3.2f
 
@@ -56,13 +56,13 @@ void Player::render()
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - this->pos.y, mouse_pos.x - this->pos.x) + 90;
 	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
-	if(Debug::active)
+	if(Game::debug->active)
 	{
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &box);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		Ivec draw_pos = { this->pos.x, this->pos.y };
-		Debug::push_render("Player", {this->pos, this->size});
+		Game::debug->push_render("Player", {this->pos, this->size});
 	}
 }
 

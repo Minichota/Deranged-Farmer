@@ -24,6 +24,8 @@ class Game {
 	static void toggle_pause();
 	static void close();
 
+	static Debug_Window* debug;
+
 	private:
 	void update();
 	void render();
@@ -40,6 +42,4 @@ class Game {
 	static std::vector<Game_State*> game_states;
 	static Pause_Menu* pause;
 	static int state;
-
-	static Debug_Window* debug;
 };
