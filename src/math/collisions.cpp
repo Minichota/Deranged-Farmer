@@ -1,8 +1,8 @@
 #include "collisions.hpp"
 
-bool test_collision_movingAA(Ivec lhs_pos, Ivec lhs_size, Fvec lhs_vel, Ivec rhs_pos, Ivec rhs_size)
+bool test_collision_movingAA(Fvec lhs_pos, Fvec lhs_size, Fvec lhs_vel, Fvec rhs_pos, Fvec rhs_size)
 {
-	Ivec lhs_bottom_right = lhs_pos + lhs_size;
+	Fvec lhs_bottom_right = lhs_pos + lhs_size;
 	return (
 		   	(
 			   lhs_pos.x <= rhs_pos.x &&
@@ -22,12 +22,12 @@ bool test_collision_movingAA(Ivec lhs_pos, Ivec lhs_size, Fvec lhs_vel, Ivec rhs
 		   );
 }
 
-bool test_collision_movingAABB(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec& rhs_pos, Ivec rhs_size, Fvec& rhs_vel)
+bool test_collision_movingAABB(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec& rhs_pos, Fvec rhs_size, Fvec& rhs_vel)
 {
 	return true;
 }
 
-void handle_collision_movingAA(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec& rhs_pos, Ivec rhs_size)
+void handle_collision_movingAA(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec& rhs_pos, Fvec rhs_size)
 {
 	float lhs_bottom = lhs_pos.y + lhs_size.y;
 	float rhs_bottom = rhs_pos.y + rhs_size.y;
@@ -89,6 +89,6 @@ void handle_collision_movingAA(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec
 	}
 }
 
-void handle_collision_movingAABB(Ivec& lhs_pos, Ivec lhs_size, Fvec& lhs_vel, Ivec& rhs_pos, Ivec rhs_size, Fvec& rhs_vel)
+void handle_collision_movingAABB(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec& rhs_pos, Fvec rhs_size, Fvec& rhs_vel)
 {
 }

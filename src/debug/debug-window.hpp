@@ -7,11 +7,12 @@
 #include "renderable.hpp"
 #include "vectors.hpp"
 #include "event-handler.hpp"
+#include "ui-text-input.hpp"
 
 typedef struct
 {
 	std::string name;
-	std::vector<Fvec> values;
+	std::vector<Fvec*> values;
 } Debug_Element;
 
 class Debug_Window : public Renderable, public Event_Handler
@@ -25,7 +26,7 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	void handle_event(SDL_Event event);
 
-	void push_render(std::string name_repr, std::vector<Fvec> values);
+	void push_render(std::string name_repr, std::vector<Fvec*> values);
 
 	void toggle();
 
@@ -46,5 +47,9 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	int outer_selection;
 	int inner_selection;
+
+	UI_Text_Input x_text_input;
+	UI_Text_Input y_text_input;
+	int curr_input;
 };
 #endif

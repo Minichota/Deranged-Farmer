@@ -47,10 +47,10 @@ void Player::render()
 {
 	SDL_Rect box =
 	{
-		pos.x,
-		pos.y,
-		size.x,
-		size.y
+		(int)std::round(pos.x),
+		(int)std::round(pos.y),
+		(int)std::round(size.x),
+		(int)std::round(size.y)
 	};
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
@@ -61,8 +61,7 @@ void Player::render()
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &box);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		Ivec draw_pos = { this->pos.x, this->pos.y };
-		Game::debug->push_render("Player", {this->pos, this->size});
+		Game::debug->push_render("Player", {&this->pos, &this->size});
 	}
 }
 
