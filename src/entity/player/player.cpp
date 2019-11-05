@@ -5,7 +5,7 @@
 #include "player.hpp"
 #include "vectors.hpp"
 #include "util.hpp"
-#include "debug.hpp"
+#include "game.hpp"
 
 #define MAX_VEL 3.2f
 
@@ -47,24 +47,22 @@ void Player::render()
 {
 	SDL_Rect box =
 	{
-		pos.x,
-		pos.y,
-		size.x,
-		size.y
+		(int)std::round(pos.x),
+		(int)std::round(pos.y),
+		(int)std::round(size.x),
+		(int)std::round(size.y)
 	};
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - this->pos.y, mouse_pos.x - this->pos.x) + 90;
-	if(Debug::active)
+	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
+	if(Game::debug->active)
 	{
-		std::cout << "debug active" << std::endl;
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &box);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		Ivec draw_pos = { this->pos.x + size.x, this->pos.y - size.y };
-		Debug::render_debug_text(renderer, draw_pos, {this->pos, this->size});
+		Game::debug->push_render("Player", {&this->pos, &this->size});
 	}
-	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
 }
 
 void Player::handle_input()

@@ -10,7 +10,7 @@
 #include "interpolators.hpp"
 #include "io.hpp"
 #include "util.hpp"
-#include "debug.hpp"
+#include "debug-window.hpp"
 
 // static variables
 int Game::state;
@@ -20,6 +20,7 @@ SDL_Window* Game::window;
 SDL_Renderer* Game::renderer;
 bool Game::paused = false;
 bool Game::closed = false;
+Debug_Window* Game::debug;
 
 Game::Game()
 {
@@ -27,10 +28,11 @@ Game::Game()
 		   					   SDL_WINDOWPOS_CENTERED,
 		   					   SDL_WINDOWPOS_CENTERED,
 		   					   800,
-		   					   600,
+		   					   608,
 		   					   SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetWindowResizable(window, SDL_FALSE);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 }
 
 Game::~Game()
@@ -43,8 +45,7 @@ void Game::run()
 {
 	std::string settings_data = read("res/save/settings.txt");
 	parse(settings_data, '=', Settings::all);
-
-
+ 	Game::debug = new Debug_Window(renderer);
 	game_states =
 	{
 		new Main_Menu(renderer),
@@ -90,6 +91,10 @@ void Game::update()
 	{
 		game_states[this->state]->update();
 	}
+	if(debug->active)
+	{
+		debug->update();
+	}
 }
 
 void Game::render()
@@ -99,6 +104,10 @@ void Game::render()
 	if(paused)
 	{
 		pause->render();
+	}
+	if(debug->active)
+	{
+		debug->render();
 	}
 }
 
@@ -157,7 +166,7 @@ void Game::handle_event(SDL_Event event)
 			{
 				case SDLK_F12:
 				{
-					Debug::toggle();
+					debug->toggle();
 				} break;
 			}
 		}
@@ -170,6 +179,10 @@ void Game::handle_event(SDL_Event event)
 			else
 			{
 				game_states[this->state]->handle_event(event);
+			}
+			if(debug->active)
+			{
+				debug->handle_event(event);
 			}
 		} break;
 	}

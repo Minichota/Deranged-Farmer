@@ -1,8 +1,8 @@
 #include "tile.hpp"
 #include "error.hpp"
-#include "debug.hpp"
+#include "game.hpp"
 
-Tile::Tile(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
+Tile::Tile(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
 Renderable(renderer)
 {
 	this->pos = pos;
@@ -10,7 +10,7 @@ Renderable(renderer)
 	this->scale = scale;
 }
 
-Tile::Tile(SDL_Renderer* renderer, Ivec pos, Ivec size):
+Tile::Tile(SDL_Renderer* renderer, Fvec pos, Fvec size):
 Renderable(renderer)
 {
 	this->pos = pos;
@@ -21,7 +21,7 @@ Renderable(renderer)
 Tile::Tile():
 Renderable(nullptr)
 {
-	this->pos = Ivec(-1, -1);
+	this->pos = Fvec(-1, -1);
 }
 
 Tile::~Tile()
@@ -34,15 +34,15 @@ void Tile::update()
 	{
 		(int)std::round(pos.x/scale.x),
 		(int)std::round(pos.y/scale.y),
-		size.x,
-		size.y
+		(int)std::round(size.x),
+		(int)std::round(size.y),
 	};
 	this->src_rect =
 	{
-		relative_pos.x,
-		relative_pos.y,
-		size.x,
-		size.y
+		(int)std::round(relative_pos.x),
+		(int)std::round(relative_pos.y),
+		(int)std::round(size.x),
+		(int)std::round(size.y),
 	};
 }
 
@@ -51,13 +51,15 @@ void Tile::render()
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
 	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
-	if(Debug::active)
+	if(Game::debug->active)
 	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderDrawRect(renderer, &rect);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		Ivec draw_pos = { this->pos.x + size.x, this->pos.y - size.y };
-		Debug::render_debug_text(renderer, draw_pos, { this->pos, this->size });
+		if(renderer != nullptr)
+		{
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_RenderDrawRect(renderer, &rect);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			Game::debug->push_render("Tile", { &this->pos, &this->size, &this->scale });
+		}
 	}
 }
 
@@ -81,7 +83,7 @@ SDL_Texture* Tile::get_texture()
 	return this->full_texture;
 }
 
-Ivec& Tile::get_pos()
+Fvec& Tile::get_pos()
 {
 	return this->pos;
 }

@@ -8,6 +8,7 @@
 #include "renderable.hpp"
 #include "game-state.hpp"
 #include "pause-menu.hpp"
+#include "debug-window.hpp"
 
 #define STATE_COUNT 2
 
@@ -22,6 +23,8 @@ class Game {
 	static void set_state(int state);
 	static void toggle_pause();
 	static void close();
+
+	static Debug_Window* debug;
 
 	private:
 	void update();

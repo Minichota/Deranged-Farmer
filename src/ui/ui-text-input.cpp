@@ -54,3 +54,13 @@ void UI_Text_Input::handle_event(SDL_Event event)
 		} break;
 	}
 }
+
+void UI_Text_Input::set_string(std::string str)
+{
+	this->text = str;
+}
+
+std::string& UI_Text_Input::get_string()
+{
+	return this->text;
+}

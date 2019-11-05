@@ -3,14 +3,14 @@
 
 #include "entity.hpp"
 
-Entity::Entity(SDL_Renderer* renderer, Ivec pos, Ivec size):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size):
 Renderable(renderer)
 {
 	this->pos = pos;
 	this->size = size;
 }
 
-Entity::Entity(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
 Renderable(renderer)
 {
 	this->pos = pos;
@@ -18,7 +18,7 @@ Renderable(renderer)
 	this->scale = scale;
 }
 
-Entity::Entity(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, Ivec origin):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, Ivec origin):
 Renderable(renderer)
 {
 	this->pos = pos;
@@ -103,8 +103,8 @@ void Entity::handle_physics()
 
 void Entity::move()
 {
-	this->pos.x +=std::round(this->vel.x);
-	this->pos.y +=std::round(this->vel.y);
+	this->pos.x = std::round(this->pos.x + this->vel.x);
+	this->pos.y = std::round(this->pos.y + this->vel.y);
 }
 
 void Entity::set_health(int health)
@@ -149,12 +149,12 @@ SDL_Texture* Entity::get_texture()
 	return this->texture;
 }
 
-void Entity::set_pos(Ivec pos)
+void Entity::set_pos(Fvec pos)
 {
 	this->pos = pos;
 }
 
-Ivec& Entity::get_pos()
+Fvec& Entity::get_pos()
 {
 	return this->pos;
 }
@@ -169,12 +169,12 @@ Fvec& Entity::get_vel()
 	return this->vel;
 }
 
-void Entity::set_size(Ivec size)
+void Entity::set_size(Fvec size)
 {
 	this->size = size;
 }
 
-Ivec& Entity::get_size()
+Fvec& Entity::get_size()
 {
 	return this->size;
 }

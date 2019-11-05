@@ -8,9 +8,9 @@
 class Entity : public Renderable, public Event_Handler
 {
 	public:
-	Entity(SDL_Renderer* renderer, Ivec pos, Ivec size);
-	Entity(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale);
-	Entity(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, Ivec origin);
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size);
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale);
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, Ivec origin);
 	virtual ~Entity();
 
 	virtual void update() = 0;
@@ -31,15 +31,15 @@ class Entity : public Renderable, public Event_Handler
 	void set_texture(SDL_Texture* texture);
 	SDL_Texture* get_texture();
 
-	void set_pos(Ivec pos);
-	Ivec& get_pos();
-	Ivec& get_abs_pos();
+	void set_pos(Fvec pos);
+	Fvec& get_pos();
+	Fvec& get_abs_pos();
 
 	void set_vel(Fvec vel);
 	Fvec& get_vel();
 
-	void set_size(Ivec size);
-	Ivec& get_size();
+	void set_size(Fvec size);
+	Fvec& get_size();
 
 	void set_scale(Fvec size);
 	Fvec& get_scale();
@@ -48,9 +48,9 @@ class Entity : public Renderable, public Event_Handler
 	Ivec& get_origin();
 
 	protected:
-	Ivec pos;
+	Fvec pos;
 	Fvec vel;
-	Ivec size;
+	Fvec size;
 	Fvec scale;
 	Ivec origin;
 
