@@ -61,7 +61,7 @@ void Player::render()
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &box);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		Game::debug->push_render(this, "Player", {&this->pos, &this->size});
+		Game::debug->push_render(this, "Player", {&this->pos, &this->size, &this->scale, &this->origin});
 	}
 }
 

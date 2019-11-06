@@ -93,17 +93,25 @@ void Debug_Window::render()
 			};
 			inner_rects.push_back(size_rect);
 			SDL_RenderCopy(renderer, texture, NULL, &size_rect);
+			SDL_DestroyTexture(texture);
 			draw_pos.y += tex_size.y;
 		}
+		Ivec tex_size;
+		SDL_QueryTexture(to_render[outer_selection].texture, NULL, NULL, &tex_size.x, &tex_size.y);
+		SDL_Rect selected_outline = {pos.x, pos.y + (-scroll_pos + 19 * outer_selection), tex_size.x, tex_size.y};
+		SDL_RenderDrawRect(renderer, &selected_outline);
 	}
 	if(inner_selection >= 0)
 	{
 		// selected drawing
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_Rect x = {400, curr_input ? 470 : 400,5,5};
-		SDL_RenderFillRect(renderer, &x);
+		SDL_Rect selected_box = {400, curr_input ? 470 : 400,5,5};
+		SDL_RenderFillRect(renderer, &selected_box);
+		Ivec tex_size;
+		SDL_Rect selected_box_2 = {pos.x + 50, pos.y + 19 * inner_selection, 5, 5};
+		SDL_RenderDrawRect(renderer, &selected_box_2);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	}
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
 	x_text_input.render();
 	y_text_input.render();

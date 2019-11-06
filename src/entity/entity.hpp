@@ -10,7 +10,7 @@ class Entity : public Renderable, public Event_Handler
 	public:
 	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size);
 	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale);
-	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, Ivec origin);
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, Fvec origin);
 	virtual ~Entity();
 
 	virtual void update() = 0;
@@ -44,15 +44,15 @@ class Entity : public Renderable, public Event_Handler
 	void set_scale(Fvec size);
 	Fvec& get_scale();
 
-	void set_origin(Ivec origin);
-	Ivec& get_origin();
+	void set_origin(Fvec origin);
+	Fvec& get_origin();
 
 	protected:
 	Fvec pos;
 	Fvec vel;
 	Fvec size;
 	Fvec scale;
-	Ivec origin;
+	Fvec origin;
 
 	Fvec max_vel;
 
