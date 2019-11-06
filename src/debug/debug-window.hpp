@@ -11,8 +11,10 @@
 
 typedef struct
 {
+	void* address;
 	std::string name;
 	std::vector<Fvec*> values;
+	SDL_Texture* texture;
 } Debug_Element;
 
 class Debug_Window : public Renderable, public Event_Handler
@@ -26,7 +28,7 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	void handle_event(SDL_Event event);
 
-	void push_render(std::string name_repr, std::vector<Fvec*> values);
+	void push_render(void* address, std::string name_repr, std::vector<Fvec*> values);
 
 	void toggle();
 
