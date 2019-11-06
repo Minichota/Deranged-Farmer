@@ -58,7 +58,7 @@ void Tile::render()
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderDrawRect(renderer, &rect);
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-			Game::debug->push_render("Tile", { &this->pos, &this->size, &this->scale });
+			Game::debug->push_render(this, "Tile", { &this->pos, &this->size, &this->scale });
 		}
 	}
 }
