@@ -7,7 +7,6 @@
 class Tile : public Renderable
 {
 	public:
-	Tile(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale);
 	Tile(SDL_Renderer* renderer, Fvec pos, Fvec size);
 	Tile();
 	~Tile();
@@ -24,7 +23,6 @@ class Tile : public Renderable
 	private:
 	Fvec pos;
 	Fvec size;
-	Fvec scale;
 
 	SDL_Texture* full_texture;
 	Ivec relative_pos;

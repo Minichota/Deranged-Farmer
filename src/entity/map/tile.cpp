@@ -2,20 +2,11 @@
 #include "error.hpp"
 #include "game.hpp"
 
-Tile::Tile(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
-Renderable(renderer)
-{
-	this->pos = pos;
-	this->size = size;
-	this->scale = scale;
-}
-
 Tile::Tile(SDL_Renderer* renderer, Fvec pos, Fvec size):
 Renderable(renderer)
 {
 	this->pos = pos;
 	this->size = size;
-	this->scale = Fvec(1.0f,1.0f);
 }
 
 Tile::Tile():
@@ -32,8 +23,8 @@ void Tile::update()
 {
 	this->rect =
 	{
-		(int)std::round(pos.x/scale.x),
-		(int)std::round(pos.y/scale.y),
+		(int)std::round(pos.x),
+		(int)std::round(pos.y),
 		(int)std::round(size.x),
 		(int)std::round(size.y),
 	};
@@ -48,9 +39,7 @@ void Tile::update()
 
 void Tile::render()
 {
-	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
-	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 	if(Game::debug->active)
 	{
 		if(renderer != nullptr)
@@ -58,7 +47,7 @@ void Tile::render()
 		//	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		//	SDL_RenderDrawRect(renderer, &rect);
 		//	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-			Game::debug->push_render(this, "Tile", { &this->pos, &this->size, &this->scale });
+			Game::debug->push_render(this, "Tile", { &this->pos, &this->size });
 		}
 	}
 }
