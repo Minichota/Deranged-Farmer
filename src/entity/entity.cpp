@@ -8,6 +8,7 @@ Renderable(renderer)
 {
 	this->pos = pos;
 	this->size = size;
+	this->scale = Fvec(1.0f, 1.0f);
 }
 
 Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
@@ -16,15 +17,6 @@ Renderable(renderer)
 	this->pos = pos;
 	this->size = size;
 	this->scale = scale;
-}
-
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, Fvec origin):
-Renderable(renderer)
-{
-	this->pos = pos;
-	this->size = size;
-	this->scale = scale;
-	this->origin = origin;
 }
 
 Entity::~Entity()
@@ -187,17 +179,4 @@ void Entity::set_scale(Fvec scale)
 Fvec& Entity::get_scale()
 {
 	return this->scale;
-}
-
-void Entity::set_origin(Fvec origin)
-{
-	this->origin = origin;
-	// TODO make more comparisons in vector class
-	assert(this->origin.x <= this->size.x &&
-		   this->origin.y <= this->size.y);
-}
-
-Fvec& Entity::get_origin()
-{
-	return this->origin;
 }
