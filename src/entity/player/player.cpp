@@ -47,21 +47,23 @@ void Player::render()
 {
 	SDL_Rect box =
 	{
-		(int)std::round(pos.x),
-		(int)std::round(pos.y),
+		(int)std::round(pos.x / scale.x),
+		(int)std::round(pos.y / scale.y),
 		(int)std::round(size.x),
 		(int)std::round(size.y)
 	};
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - this->pos.y, mouse_pos.x - this->pos.x) + 90;
+	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 	if(Game::debug->active)
 	{
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &box);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		Game::debug->push_render(this, "Player", {&this->pos, &this->size, &this->scale, &this->origin});
+		Game::debug->push_render(this, "Player", {&this->pos, &this->size, &this->scale, &this->origin, &this->max_vel});
 	}
 }
 
