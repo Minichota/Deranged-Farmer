@@ -26,6 +26,8 @@ class Debug_Window : public Renderable, public Event_Handler
 	void update();
 	void render();
 
+	void clear();
+
 	void handle_event(SDL_Event event);
 
 	void push_render(void* address, std::string name_repr, std::vector<Fvec*> values);

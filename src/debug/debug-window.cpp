@@ -117,6 +117,17 @@ void Debug_Window::render()
 	y_text_input.render();
 }
 
+void Debug_Window::clear()
+{
+	x_text_input.set_string("");
+	y_text_input.set_string("");
+	curr_input = 0;
+	outer_selection = -1;
+	inner_selection = -1;
+	to_render.clear();
+	active = false;
+}
+
 void Debug_Window::handle_event(SDL_Event event)
 {
 	if(active)
@@ -220,11 +231,7 @@ void Debug_Window::toggle()
 	this->active = !this->active;
 	if(!active)
 	{
-		outer_selection = -1;
-		inner_selection = -1;
-		x_text_input.set_string("");
-		y_text_input.set_string("");
-		curr_input = 0;
+		clear();
 	}
 }
 

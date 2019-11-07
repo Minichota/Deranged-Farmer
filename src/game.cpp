@@ -118,6 +118,7 @@ void Game::increment_state()
 	Game::state++;
 	assert(state < STATE_COUNT);
 	// initialize new state
+	debug->clear();
 	clear_interpolators();
 	game_states[Game::state]->init();
 }
@@ -130,6 +131,7 @@ void Game::set_state(int state)
 	{
 		game_states[Game::state]->clear();
 	}
+	debug->clear();
 	Game::state = state;
 	// initialize new state
 	clear_interpolators();
