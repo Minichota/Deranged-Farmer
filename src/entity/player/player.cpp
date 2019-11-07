@@ -25,14 +25,6 @@ Entity(renderer, pos, size, scale)
 	set_health(max_health);
 }
 
-Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, Ivec origin):
-Entity(renderer, pos, size, scale, origin)
-{
-	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
-	this->max_health = 100;
-	set_health(max_health);
-}
-
 Player::~Player()
 {
 }
@@ -57,14 +49,14 @@ void Player::render()
 	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - this->pos.y, mouse_pos.x - this->pos.x) + 90;
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
-	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 	if(Game::debug->active)
 	{
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &box);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		Game::debug->push_render(this, "Player", {&this->pos, &this->size, &this->scale, &this->origin, &this->max_vel});
+		Game::debug->push_render(this, "Player", {&this->pos, &this->size, &this->scale, &this->max_vel});
 	}
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 }
 
 void Player::handle_input()

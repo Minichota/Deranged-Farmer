@@ -8,7 +8,6 @@ class Player : public Entity
 	public:
 	Player(SDL_Renderer* renderer, Ivec pos, Ivec size);
 	Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale);
-	Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, Ivec origin);
 	~Player();
 
 	void update();
