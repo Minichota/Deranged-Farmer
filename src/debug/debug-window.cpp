@@ -8,9 +8,7 @@
 
 Debug_Window::Debug_Window(SDL_Renderer* renderer):
 Renderable(renderer),
-x_text_input(renderer, Ivec(400,400), Ivec(100,100), Fvec(1.0f, 1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
-y_text_input(renderer, Ivec(400,470), Ivec(100,100), Fvec(1.0f, 1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
-curr_input(0)
+text_input(renderer, Ivec(400,400), Ivec(100,100), Fvec(1.0f, 1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL)
 {
 	this->inner_selection = -1;
 	this->outer_selection = -1;
@@ -27,8 +25,7 @@ Debug_Window::~Debug_Window()
 
 void Debug_Window::update()
 {
-	x_text_input.update();
-	y_text_input.update();
+	text_input.update();
 }
 
 void Debug_Window::render()
@@ -72,13 +69,10 @@ void Debug_Window::render()
 	{
 		for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
 		{
-			std::string x = std::to_string(to_render[outer_selection].values[i]->x);
+			std::string x = std::to_string(*to_render[outer_selection].values[i]);
 			remove_zeros(x);
-			std::string y = std::to_string(to_render[outer_selection].values[i]->y);
-			remove_zeros(y);
-			std::string output_str = x + " " + y;
 
-			surface = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
+			surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,255,255,255});
 			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 			SDL_FreeSurface(surface);
 			Ivec tex_size;
@@ -103,24 +97,21 @@ void Debug_Window::render()
 	if(inner_selection >= 0)
 	{
 		// selected drawing
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_Rect selected_box = {400, curr_input ? 470 : 400,5,5};
-		SDL_RenderFillRect(renderer, &selected_box);
+		//SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		//SDL_Rect selected_box = {400, curr_input ? 470 : 400,5,5};
+		//SDL_RenderFillRect(renderer, &selected_box);
 		Ivec tex_size;
 		SDL_Rect selected_box_2 = {pos.x + 50, pos.y + 19 * inner_selection, 5, 5};
 		SDL_RenderDrawRect(renderer, &selected_box_2);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	}
 
-	x_text_input.render();
-	y_text_input.render();
+	text_input.render();
 }
 
 void Debug_Window::clear()
 {
-	x_text_input.set_string("");
-	y_text_input.set_string("");
-	curr_input = 0;
+	text_input.set_string("");
 	outer_selection = -1;
 	inner_selection = -1;
 	to_render.clear();
@@ -171,32 +162,9 @@ void Debug_Window::handle_event(SDL_Event event)
 				{
 					case SDLK_RETURN:
 					{
-						to_render[outer_selection].values[inner_selection]->x = atof(x_text_input.get_string().c_str());
-						to_render[outer_selection].values[inner_selection]->y = atof(y_text_input.get_string().c_str());
+						*to_render[outer_selection].values[inner_selection] = atof(text_input.get_string().c_str());
 						inner_selection = -1;
-						x_text_input.set_string("");
-						y_text_input.set_string("");
-						curr_input = 0;
-						return;
-					} break;
-					case SDLK_DOWN:
-					{
-						// down
-						curr_input--;
-						if(curr_input < 0)
-						{
-							curr_input = 1;
-						}
-						return;
-					} break;
-					case SDLK_UP:
-					{
-						// up
-						curr_input++;
-						if(curr_input > 1)
-						{
-							curr_input = 0;
-						}
+						text_input.set_string("");
 						return;
 					} break;
 				}
@@ -205,18 +173,11 @@ void Debug_Window::handle_event(SDL_Event event)
 	}
 	if(inner_selection >= 0)
 	{
-		if(curr_input == 0)
-		{
-			x_text_input.handle_event(event);
-		}
-		else
-		{
-			y_text_input.handle_event(event);
-		}
+		text_input.handle_event(event);
 	}
 }
 
-void Debug_Window::push_render(void* address, std::string name_repr, std::vector<Fvec*> values)
+void Debug_Window::push_render(void* address, std::string name_repr, std::vector<float*> values)
 {
 	Debug_Element maybe{address, name_repr, values};
 	if(!(std::find_if(to_render.begin(), to_render.end(), [&cr = maybe](const Debug_Element& cr2) -> bool {return cr2.address == cr.address;}) != to_render.end()))
@@ -255,20 +216,16 @@ void Debug_Window::select(Ivec pos)
 		   pos.y < inner_rects[i].y + inner_rects[i].h)
 		{
 			inner_selection = i;
-			std::string x_str = std::to_string(to_render[outer_selection].values[inner_selection]->x);
-			std::string y_str = std::to_string(to_render[outer_selection].values[inner_selection]->y);
-			remove_zeros(x_str);
-			remove_zeros(y_str);
-			x_text_input.set_string(x_str);
-			y_text_input.set_string(y_str);
+			std::string str = std::to_string(*to_render[outer_selection].values[inner_selection]);
+			remove_zeros(str);
+			text_input.set_string(str);
 			return;
 		}
 	}
 	inner_selection = -1;
 	outer_selection = -1;
 
-	x_text_input.set_string("");
-	y_text_input.set_string("");
+	text_input.set_string("");
 }
 
 void Debug_Window::remove_zeros(std::string& input)

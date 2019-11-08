@@ -13,7 +13,7 @@ typedef struct
 {
 	void* address;
 	std::string name;
-	std::vector<Fvec*> values;
+	std::vector<float*> values;
 	SDL_Texture* texture;
 } Debug_Element;
 
@@ -30,7 +30,7 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	void handle_event(SDL_Event event);
 
-	void push_render(void* address, std::string name_repr, std::vector<Fvec*> values);
+	void push_render(void* address, std::string name_repr, std::vector<float*> values);
 
 	void toggle();
 
@@ -54,8 +54,6 @@ class Debug_Window : public Renderable, public Event_Handler
 	int outer_selection;
 	int inner_selection;
 
-	UI_Text_Input x_text_input;
-	UI_Text_Input y_text_input;
-	int curr_input;
+	UI_Text_Input text_input;
 };
 #endif
