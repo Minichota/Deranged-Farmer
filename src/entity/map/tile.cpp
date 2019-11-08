@@ -44,10 +44,8 @@ void Tile::render()
 	{
 		if(renderer != nullptr)
 		{
-		//	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		//	SDL_RenderDrawRect(renderer, &rect);
-		//	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-			Game::debug->push_render(this, "Tile", { &this->pos, &this->size });
+			Game::debug->push_render(this, "Tile", { &this->pos.x, &this->pos.y,
+													 &this->size.x, &this->size.y });
 		}
 	}
 }
