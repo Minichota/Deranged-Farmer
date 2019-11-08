@@ -35,8 +35,10 @@ class Debug_Window : public Renderable, public Event_Handler
 	void toggle();
 
 	bool active = false;
+
 	private:
 	void select(Ivec pos);
+	void remove_zeros(std::string& input);
 
 	private:
 	TTF_Font* font;

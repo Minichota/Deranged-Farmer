@@ -46,7 +46,7 @@ void Player::render()
 	};
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
-	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - this->pos.y, mouse_pos.x - this->pos.x) + 90;
+	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
 	if(Game::debug->active)

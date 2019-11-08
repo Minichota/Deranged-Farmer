@@ -5,7 +5,6 @@
 #include "error.hpp"
 
 #define MAX_SCROLL 1600
-#define FLOAT_ACCURACY 3
 
 Debug_Window::Debug_Window(SDL_Renderer* renderer):
 Renderable(renderer),
@@ -74,9 +73,9 @@ void Debug_Window::render()
 		for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
 		{
 			std::string x = std::to_string(to_render[outer_selection].values[i]->x);
-			x.erase(x.find_last_not_of('0') + FLOAT_ACCURACY, std::string::npos);
+			remove_zeros(x);
 			std::string y = std::to_string(to_render[outer_selection].values[i]->y);
-			y.erase(y.find_last_not_of('0') + FLOAT_ACCURACY, std::string::npos);
+			remove_zeros(y);
 			std::string output_str = x + " " + y;
 
 			surface = TTF_RenderText_Solid(font, output_str.c_str(), SDL_Color{255,255,255,255});
@@ -258,8 +257,8 @@ void Debug_Window::select(Ivec pos)
 			inner_selection = i;
 			std::string x_str = std::to_string(to_render[outer_selection].values[inner_selection]->x);
 			std::string y_str = std::to_string(to_render[outer_selection].values[inner_selection]->y);
-			x_str.erase(x_str.find_last_not_of('0') + FLOAT_ACCURACY, std::string::npos);
-			y_str.erase(y_str.find_last_not_of('0') + FLOAT_ACCURACY, std::string::npos);
+			remove_zeros(x_str);
+			remove_zeros(y_str);
 			x_text_input.set_string(x_str);
 			y_text_input.set_string(y_str);
 			return;
@@ -270,4 +269,19 @@ void Debug_Window::select(Ivec pos)
 
 	x_text_input.set_string("");
 	y_text_input.set_string("");
+}
+
+void Debug_Window::remove_zeros(std::string& input)
+{
+	char* c = &input.back();
+	while(*c == '0')
+	{
+		input.pop_back();
+		c--;
+	}
+	// remove decimal point
+	if(*c == '.')
+	{
+		input.pop_back();
+	}
 }
