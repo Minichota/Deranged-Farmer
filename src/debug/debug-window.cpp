@@ -189,6 +189,7 @@ void Debug_Window::handle_event(SDL_Event event)
 								outer_selection = 0;
 							}
 							inner_selection = -1;
+							set_string("");
 						}
 						else if(outer_selection >= 0)
 						{
@@ -211,6 +212,7 @@ void Debug_Window::handle_event(SDL_Event event)
 								outer_selection = to_render.size() - 1;
 							}
 							inner_selection = -1;
+							set_string("");
 						}
 						else if(outer_selection >= 0)
 						{
