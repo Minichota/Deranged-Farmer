@@ -1,8 +1,10 @@
 #include <iostream>
 #include <algorithm>
+#include <cctype>
 
 #include "debug-window.hpp"
 #include "error.hpp"
+#include "util.hpp"
 
 #define MAX_SCROLL 1600
 
@@ -92,14 +94,18 @@ void Debug_Window::render()
 		Ivec tex_size;
 		SDL_QueryTexture(to_render[outer_selection].texture, NULL, NULL, &tex_size.x, &tex_size.y);
 		SDL_Rect selected_outline = {pos.x, pos.y + (-scroll_pos + 19 * outer_selection), tex_size.x, tex_size.y};
+		if(selected_outline.y >= 608)
+		{
+			scroll_pos += selected_outline.y;
+		}
+		while(pos.y + (-scroll_pos + 19 * outer_selection) < 0)
+		{
+			scroll_pos -= 19;
+		}
 		SDL_RenderDrawRect(renderer, &selected_outline);
 	}
 	if(inner_selection >= 0)
 	{
-		// selected drawing
-		//SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		//SDL_Rect selected_box = {400, curr_input ? 470 : 400,5,5};
-		//SDL_RenderFillRect(renderer, &selected_box);
 		Ivec tex_size;
 		SDL_Rect selected_box_2 = {pos.x + 50, pos.y + 19 * inner_selection, 5, 5};
 		SDL_RenderDrawRect(renderer, &selected_box_2);
@@ -160,20 +166,72 @@ void Debug_Window::handle_event(SDL_Event event)
 			{
 				switch(event.key.keysym.sym)
 				{
+					case SDLK_BACKSPACE:
+					{
+						text_input.handle_event(event);
+					} break;
 					case SDLK_RETURN:
 					{
-						*to_render[outer_selection].values[inner_selection] = atof(text_input.get_string().c_str());
-						inner_selection = -1;
-						text_input.set_string("");
-						return;
+						if(text_input.get_string().size() > 0)
+						{
+							*to_render[outer_selection].values[inner_selection] = atof(text_input.get_string().c_str());
+							set_string(*to_render[outer_selection].values[inner_selection]);
+						}
+					} break;
+					case SDLK_j:
+					{
+						// down
+						if(keys[SDL_SCANCODE_LCTRL])
+						{
+							outer_selection++;
+							if((size_t)outer_selection > to_render.size() - 1)
+							{
+								outer_selection = 0;
+							}
+							inner_selection = -1;
+						}
+						else if(outer_selection >= 0)
+						{
+							inner_selection++;
+							if((size_t)inner_selection > to_render[outer_selection].values.size() - 1)
+							{
+								inner_selection = 0;
+							}
+							set_string(*to_render[outer_selection].values[inner_selection]);
+						}
+					} break;
+					case SDLK_k:
+					{
+						// up
+						if(keys[SDL_SCANCODE_LCTRL])
+						{
+							outer_selection--;
+							if(outer_selection < 0)
+							{
+								outer_selection = to_render.size() - 1;
+							}
+							inner_selection = -1;
+						}
+						else if(outer_selection >= 0)
+						{
+							inner_selection--;
+							if(inner_selection < 0)
+							{
+								inner_selection = to_render[outer_selection].values.size() - 1;
+							}
+							set_string(*to_render[outer_selection].values[inner_selection]);
+						}
 					} break;
 				}
 			} break;
+			case SDL_TEXTINPUT:
+			{
+				if((isdigit(event.text.text[0]) || event.text.text[0] == '.') && inner_selection >= 0)
+				{
+					text_input.handle_event(event);
+				}
+			} break;
 		}
-	}
-	if(inner_selection >= 0)
-	{
-		text_input.handle_event(event);
 	}
 }
 
@@ -216,9 +274,7 @@ void Debug_Window::select(Ivec pos)
 		   pos.y < inner_rects[i].y + inner_rects[i].h)
 		{
 			inner_selection = i;
-			std::string str = std::to_string(*to_render[outer_selection].values[inner_selection]);
-			remove_zeros(str);
-			text_input.set_string(str);
+			set_string(*to_render[outer_selection].values[inner_selection]);
 			return;
 		}
 	}
@@ -226,6 +282,19 @@ void Debug_Window::select(Ivec pos)
 	outer_selection = -1;
 
 	text_input.set_string("");
+}
+
+void Debug_Window::set_string(std::string input)
+{
+	remove_zeros(input);
+	text_input.set_string(input);
+}
+
+void Debug_Window::set_string(float input)
+{
+	std::string str = std::to_string(input);
+	remove_zeros(str);
+	text_input.set_string(str);
 }
 
 void Debug_Window::remove_zeros(std::string& input)

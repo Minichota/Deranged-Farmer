@@ -38,6 +38,8 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	private:
 	void select(Ivec pos);
+	void set_string(std::string input);
+	void set_string(float input);
 	void remove_zeros(std::string& input);
 
 	private:
