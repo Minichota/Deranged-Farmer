@@ -3,16 +3,15 @@
 #include "game.hpp"
 
 Tile::Tile(SDL_Renderer* renderer, Fvec pos, Fvec size):
-Renderable(renderer)
+Renderable(renderer),
+Sized(pos, size)
 {
-	this->pos = pos;
-	this->size = size;
 }
 
 Tile::Tile():
-Renderable(nullptr)
+Renderable(nullptr),
+Sized(-1, -1, -1, -1)
 {
-	this->pos = Fvec(-1, -1);
 }
 
 Tile::~Tile()
