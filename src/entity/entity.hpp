@@ -29,6 +29,7 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	int& get_max_health();
 
 	void set_texture(SDL_Texture* texture);
+	void load_texture(std::string texture_path);
 	SDL_Texture* get_texture();
 
 	void set_vel(Fvec vel);

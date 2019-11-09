@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include "entity.hpp"
+#include "error.hpp"
 
 Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size):
 Renderable(renderer),
@@ -22,12 +23,6 @@ Entity::~Entity()
 
 void Entity::handle_event(SDL_Event e)
 {
-}
-
-void Entity::set_texture(SDL_Texture* texture)
-{
-	assert(texture != nullptr);
-	this->texture = texture;
 }
 
 void Entity::accelerate(Fvec vel)
@@ -130,6 +125,18 @@ int& Entity::get_health()
 int& Entity::get_max_health()
 {
 	return this->max_health;
+}
+
+void Entity::load_texture(std::string texture_path)
+{
+	this->texture = IMG_LoadTexture(renderer, texture_path.c_str());
+	Error(!texture, {"failed to load texture from: ", texture_path.c_str()});
+}
+
+void Entity::set_texture(SDL_Texture* texture)
+{
+	Error(!texture, {"failed to copy texture, it is null: "});
+	this->texture = texture;
 }
 
 SDL_Texture* Entity::get_texture()
