@@ -11,11 +11,12 @@
 std::string read(const char* file_path);
 
 template <class T>
-static void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>*>& values)
+static void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>*>& values, int start_pos = 0, int count = 1000)
 {
 	std::string curr_name;
 	std::string curr_data;
 	bool start_parsing = false;
+	int iter_count = 0;
 	// iterate through to find data
 	for(size_t i = 0; i < data.size(); i++)
 	{
@@ -35,8 +36,16 @@ static void parse(std::string data, const char delimiter, std::vector<Settings::
 				}
 				if(start_parsing)
 				{
-					values.push_back(new Settings::Data<T>{curr_name, std::stoi(curr_data)});
+					if(iter_count - start_pos >= count)
+					{
+						return;
+					}
+					if(iter_count >= start_pos)
+					{
+						values.push_back(new Settings::Data<T>{curr_name, std::stoi(curr_data)});
+					}
 					start_parsing = false;
+					iter_count++;
 				}
 				curr_data.clear();
 				curr_name.clear();
@@ -57,10 +66,10 @@ static void parse(std::string data, const char delimiter, std::vector<Settings::
 }
 
 template <class T>
-static void parse_csv(std::string data, std::vector<std::vector<T>>& values, size_t start_pos = 0, size_t count = 1000)
+static void parse_csv(std::string data, std::vector<std::vector<T>>& values, int start_pos = 0, int count = 1000)
 {
 	std::string curr_data;
-	size_t value_pos = 0;
+	int value_pos = 0;
 	for(size_t i = 0; i < data.size(); i++)
 	{
 		switch(data[i])
@@ -71,7 +80,7 @@ static void parse_csv(std::string data, std::vector<std::vector<T>>& values, siz
 				{
 					return;
 				}
-				if(value_pos + 1 > values.size())
+				if(value_pos >= (int)values.size())
 				{
 					values.push_back(std::vector<int>());
 				}

@@ -38,12 +38,11 @@ void Map::init()
 	// load file
 	std::string data = read(data_path);
 	std::vector<Settings::Data<int>*> size;
-	parse(data, '=', size);
+	parse(data, '=', size, 0, 2);
 	tile_count = Ivec(size[0]->data, size[1]->data);
 
 	std::vector<std::vector<int>> map_data;
 	parse_csv(data, map_data);
-
 
 	for(int y = 0; y < tile_count.y; y++)
 	{
