@@ -45,6 +45,7 @@ void Map::init()
 	std::vector<std::vector<int>> map_data;
 	parse_csv(data, map_data, 0, tile_count.y);
 
+	SDL_Texture* image_texture = IMG_LoadTexture(renderer, image_path);
 	for(int y = 0; y < tile_count.y; y++)
 	{
 		for(int x = 0; x < tile_count.x; x++)
