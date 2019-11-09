@@ -110,12 +110,14 @@ void Debug_Window::render()
 		{
 			SDL_Rect entity_outline =
 			{
-				(int)std::round(entity_dimensions->get_pos().x),
-				(int)std::round(entity_dimensions->get_pos().y),
-				(int)std::round(entity_dimensions->get_size().x),
-				(int)std::round(entity_dimensions->get_size().y)
+				(int)std::round(entity_dimensions->get_pos().x/3),
+				(int)std::round(entity_dimensions->get_pos().y/3),
+				(int)std::round(entity_dimensions->get_size().x/3),
+				(int)std::round(entity_dimensions->get_size().y/3)
 			};
+			SDL_RenderSetScale(renderer, 3.0f, 3.0f);
 			SDL_RenderDrawRect(renderer, &entity_outline);
+			SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 		}
 	}
 	if(inner_selection >= 0)

@@ -93,8 +93,8 @@ void Entity::handle_physics()
 
 void Entity::move()
 {
-	this->pos.x = this->pos.x + this->vel.x;
-	this->pos.y = this->pos.y + this->vel.y;
+	this->pos.x = std::round(this->pos.x + this->vel.x);
+	this->pos.y = std::round(this->pos.y + this->vel.y);
 }
 
 void Entity::set_health(int health)
