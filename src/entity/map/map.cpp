@@ -59,7 +59,6 @@ void Map::init()
 			}
 			int tile_type = map_data[y][x] - 1;
 			Tile* tile = new Tile(renderer, Ivec(x * tile_size.x, y * tile_size.y), tile_size);
-			SDL_Texture* image_texture = IMG_LoadTexture(renderer, image_path);
 			tile->set_texture(image_texture, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
 			tiles.push_back(tile);
 		}
@@ -68,13 +67,22 @@ void Map::init()
 	variables.clear();
 	map_data.clear();
 	parse(data, '=', variables, 2);
-	parse_csv(data, map_data, 19);
+	parse_csv(data, map_data, tile_count.y);
 	assert(variables.size() == map_data.size());
 	for(size_t y = 0; y < variables.size(); y++)
 	{
-		//std::cout << variables[y]->name << "=" << variables[y]->data << std::endl;
 		if(variables[y]->name == "type")
 		{
+			switch(variables[y]->data)
+			{
+				case 0:
+				{
+					// TODO Make this an actual entity
+					Tile* tile = new Tile(renderer, Fvec(map_data[y][0], map_data[y][1]), Fvec(map_data[y][2], map_data[y][3]));
+					tile->set_texture(image_texture, Ivec(0, 0));
+					tiles.push_back(tile);
+				}
+			}
 		}
 	}
 }
