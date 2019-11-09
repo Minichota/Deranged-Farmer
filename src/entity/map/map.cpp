@@ -80,10 +80,10 @@ void Map::handle_collision(Entity* entity)
 	{
 		tile->update();
 		if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-								   tile->get_pos(), tile_size))
+								   tile->get_pos(), tile->get_size()))
 		{
 			handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-									  tile->get_pos(), tile_size);
+									  tile->get_pos(), tile->get_size());
 		}
 	}
 }
