@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 #include "map.hpp"
 #include "io.hpp"
@@ -37,12 +38,12 @@ void Map::init()
 {
 	// load file
 	std::string data = read(data_path);
-	std::vector<Settings::Data<int>*> size;
-	parse(data, '=', size, 0, 2);
-	tile_count = Ivec(size[0]->data, size[1]->data);
+	std::vector<Settings::Data<int>*> variables;
+	parse(data, '=', variables, 0, 2);
+	tile_count = Ivec(variables[0]->data, variables[1]->data);
 
 	std::vector<std::vector<int>> map_data;
-	parse_csv(data, map_data);
+	parse_csv(data, map_data, 0, tile_count.y);
 
 	for(int y = 0; y < tile_count.y; y++)
 	{
@@ -60,6 +61,19 @@ void Map::init()
 			SDL_Texture* image_texture = IMG_LoadTexture(renderer, image_path);
 			tile->set_texture(image_texture, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
 			tiles.push_back(tile);
+		}
+	}
+
+	variables.clear();
+	map_data.clear();
+	parse(data, '=', variables, 2);
+	parse_csv(data, map_data, 19);
+	assert(variables.size() == map_data.size());
+	for(size_t y = 0; y < variables.size(); y++)
+	{
+		//std::cout << variables[y]->name << "=" << variables[y]->data << std::endl;
+		if(variables[y]->name == "type")
+		{
 		}
 	}
 }

@@ -80,13 +80,13 @@ static void parse_csv(std::string data, std::vector<std::vector<T>>& values, int
 				{
 					return;
 				}
-				if(value_pos >= (int)values.size())
+				if(value_pos - start_pos >= (int)values.size())
 				{
 					values.push_back(std::vector<int>());
 				}
 				if(value_pos >= start_pos)
 				{
-					values[value_pos].push_back(std::stoi(curr_data));
+					values[value_pos - start_pos].push_back(std::stoi(curr_data));
 				}
 				curr_data.clear();
 			} break;
@@ -94,7 +94,7 @@ static void parse_csv(std::string data, std::vector<std::vector<T>>& values, int
 			{
 				if(value_pos >= start_pos)
 				{
-					values[value_pos].push_back(std::stoi(curr_data));
+					values[value_pos - start_pos].push_back(std::stoi(curr_data));
 				}
 				value_pos++;
 				curr_data.clear();
