@@ -5,16 +5,14 @@
 
 Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size):
 Renderable(renderer),
-Sized(pos, size)
+Sized(pos, size, Fvec(1.0f, 1.0f))
 {
-	this->scale = Fvec(1.0f, 1.0f);
 }
 
 Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
 Renderable(renderer),
-Sized(pos, size)
+Sized(pos, size, scale)
 {
-	this->scale = scale;
 }
 
 Entity::~Entity()
@@ -147,14 +145,4 @@ void Entity::set_vel(Fvec vel)
 Fvec& Entity::get_vel()
 {
 	return this->vel;
-}
-
-void Entity::set_scale(Fvec scale)
-{
-	this->scale = scale;
-}
-
-Fvec& Entity::get_scale()
-{
-	return this->scale;
 }

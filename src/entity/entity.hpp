@@ -34,12 +34,8 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	void set_vel(Fvec vel);
 	Fvec& get_vel();
 
-	void set_scale(Fvec size);
-	Fvec& get_scale();
-
 	protected:
 	Fvec vel;
-	Fvec scale;
 
 	Fvec max_vel;
 
