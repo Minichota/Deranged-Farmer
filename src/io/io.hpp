@@ -57,7 +57,7 @@ static void parse(std::string data, const char delimiter, std::vector<Settings::
 }
 
 template <class T>
-static void parse_csv(std::string data, std::vector<std::vector<T>>& values)
+static void parse_csv(std::string data, std::vector<std::vector<T>>& values, size_t start_pos = 0, size_t count = 1000)
 {
 	std::string curr_data;
 	size_t value_pos = 0;
@@ -67,16 +67,26 @@ static void parse_csv(std::string data, std::vector<std::vector<T>>& values)
 		{
 			case ',':
 			{
+				if(value_pos - start_pos >= count)
+				{
+					return;
+				}
 				if(value_pos + 1 > values.size())
 				{
 					values.push_back(std::vector<int>());
 				}
-				values[value_pos].push_back(std::stoi(curr_data));
+				if(value_pos >= start_pos)
+				{
+					values[value_pos].push_back(std::stoi(curr_data));
+				}
 				curr_data.clear();
 			} break;
 			case '\n':
 			{
-				values[value_pos].push_back(std::stoi(curr_data));
+				if(value_pos >= start_pos)
+				{
+					values[value_pos].push_back(std::stoi(curr_data));
+				}
 				value_pos++;
 				curr_data.clear();
 			} break;
