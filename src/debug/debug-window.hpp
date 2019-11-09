@@ -8,10 +8,11 @@
 #include "vectors.hpp"
 #include "event-handler.hpp"
 #include "ui-text-input.hpp"
+#include "sized.hpp"
 
 typedef struct
 {
-	void* address;
+	Sized<float>* address;
 	std::string name;
 	std::vector<float*> values;
 	SDL_Texture* texture;
@@ -30,7 +31,7 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	void handle_event(SDL_Event event);
 
-	void push_render(void* address, std::string name_repr, std::vector<float*> values);
+	void push_render(Sized<float>* address, std::string name_repr, std::vector<float*> values);
 
 	void toggle();
 

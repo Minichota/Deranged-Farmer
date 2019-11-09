@@ -5,6 +5,7 @@
 #include "debug-window.hpp"
 #include "error.hpp"
 #include "util.hpp"
+#include "sized.hpp"
 
 #define MAX_SCROLL 1600
 
@@ -103,6 +104,19 @@ void Debug_Window::render()
 			scroll_pos -= 19;
 		}
 		SDL_RenderDrawRect(renderer, &selected_outline);
+
+		Sized<float>* entity_dimensions = to_render[outer_selection].address;
+		if(entity_dimensions != nullptr)
+		{
+			SDL_Rect entity_outline =
+			{
+				(int)std::round(entity_dimensions->get_pos().x),
+				(int)std::round(entity_dimensions->get_pos().y),
+				(int)std::round(entity_dimensions->get_size().x),
+				(int)std::round(entity_dimensions->get_size().y)
+			};
+			SDL_RenderDrawRect(renderer, &entity_outline);
+		}
 	}
 	if(inner_selection >= 0)
 	{
@@ -237,7 +251,7 @@ void Debug_Window::handle_event(SDL_Event event)
 	}
 }
 
-void Debug_Window::push_render(void* address, std::string name_repr, std::vector<float*> values)
+void Debug_Window::push_render(Sized<float>* address, std::string name_repr, std::vector<float*> values)
 {
 	Debug_Element maybe{address, name_repr, values};
 	if(!(std::find_if(to_render.begin(), to_render.end(), [&cr = maybe](const Debug_Element& cr2) -> bool {return cr2.address == cr.address;}) != to_render.end()))

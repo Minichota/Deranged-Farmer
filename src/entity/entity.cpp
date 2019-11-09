@@ -4,18 +4,16 @@
 #include "entity.hpp"
 
 Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size):
-Renderable(renderer)
+Renderable(renderer),
+Sized(pos, size)
 {
-	this->pos = pos;
-	this->size = size;
 	this->scale = Fvec(1.0f, 1.0f);
 }
 
 Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
-Renderable(renderer)
+Renderable(renderer),
+Sized(pos, size)
 {
-	this->pos = pos;
-	this->size = size;
 	this->scale = scale;
 }
 
@@ -141,16 +139,6 @@ SDL_Texture* Entity::get_texture()
 	return this->texture;
 }
 
-void Entity::set_pos(Fvec pos)
-{
-	this->pos = pos;
-}
-
-Fvec& Entity::get_pos()
-{
-	return this->pos;
-}
-
 void Entity::set_vel(Fvec vel)
 {
 	this->vel = vel;
@@ -159,16 +147,6 @@ void Entity::set_vel(Fvec vel)
 Fvec& Entity::get_vel()
 {
 	return this->vel;
-}
-
-void Entity::set_size(Fvec size)
-{
-	this->size = size;
-}
-
-Fvec& Entity::get_size()
-{
-	return this->size;
 }
 
 void Entity::set_scale(Fvec scale)

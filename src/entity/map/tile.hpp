@@ -3,8 +3,9 @@
 
 #include "vectors.hpp"
 #include "renderable.hpp"
+#include "sized.hpp"
 
-class Tile : public Renderable
+class Tile : public Renderable, public Sized<float>
 {
 	public:
 	Tile(SDL_Renderer* renderer, Fvec pos, Fvec size);
@@ -21,9 +22,6 @@ class Tile : public Renderable
 	Fvec& get_pos();
 
 	private:
-	Fvec pos;
-	Fvec size;
-
 	SDL_Texture* full_texture;
 	Ivec relative_pos;
 

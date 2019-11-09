@@ -4,8 +4,9 @@
 #include "renderable.hpp"
 #include "vectors.hpp"
 #include "event-handler.hpp"
+#include "sized.hpp"
 
-class Entity : public Renderable, public Event_Handler
+class Entity : public Renderable, public Event_Handler, public Sized<float>
 {
 	public:
 	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size);
@@ -30,23 +31,14 @@ class Entity : public Renderable, public Event_Handler
 	void set_texture(SDL_Texture* texture);
 	SDL_Texture* get_texture();
 
-	void set_pos(Fvec pos);
-	Fvec& get_pos();
-	Fvec& get_abs_pos();
-
 	void set_vel(Fvec vel);
 	Fvec& get_vel();
-
-	void set_size(Fvec size);
-	Fvec& get_size();
 
 	void set_scale(Fvec size);
 	Fvec& get_scale();
 
 	protected:
-	Fvec pos;
 	Fvec vel;
-	Fvec size;
 	Fvec scale;
 
 	Fvec max_vel;
