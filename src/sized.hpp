@@ -7,15 +7,17 @@ template <class T>
 class Sized
 {
 	public:
-	Sized(Vector<T> pos, Vector<T> size)
+	Sized(Vector<T> pos, Vector<T> size, Vector<T> scale)
 	{
 		this->pos = pos;
 		this->size = size;
+		this->scale = scale;
 	};
-	Sized<T>(T pos_x, T pos_y, T size_x, T size_y)
+	Sized<T>(T pos_x, T pos_y, T size_x, T size_y, T scale_x, T scale_y)
 	{
 		this->pos = Vector<T>(pos_x, pos_y);
 		this->size = Vector<T>(size_x, size_y);
+		this->scale = Vector<T>(scale_x, scale_y);
 	};
 	~Sized()
 	{
@@ -47,8 +49,22 @@ class Sized
 		this->size = Vector<T>(size_x, size_y);
 	};
 
+	virtual Vector<T>& get_scale()
+	{
+		return this->scale;
+	};
+	virtual void set_scale(Vector<T> scale)
+	{
+		this->scale = scale;
+	};
+	virtual void set_scale(T scale_x, T scale_y)
+	{
+		this->size = Vector<T>(scale_x, scale_y);
+	};
+
 	protected:
 	Vector<T> pos;
 	Vector<T> size;
+	Vector<T> scale;
 };
 #endif

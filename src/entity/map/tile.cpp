@@ -4,13 +4,13 @@
 
 Tile::Tile(SDL_Renderer* renderer, Fvec pos, Fvec size):
 Renderable(renderer),
-Sized(pos, size)
+Sized(pos, size, Fvec(1.0f, 1.0f))
 {
 }
 
 Tile::Tile():
 Renderable(nullptr),
-Sized(-1, -1, -1, -1)
+Sized(-1, -1, -1, -1, 1.0f, 1.0f)
 {
 }
 
