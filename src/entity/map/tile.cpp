@@ -68,8 +68,3 @@ SDL_Texture* Tile::get_texture()
 {
 	return this->full_texture;
 }
-
-Fvec& Tile::get_pos()
-{
-	return this->pos;
-}
