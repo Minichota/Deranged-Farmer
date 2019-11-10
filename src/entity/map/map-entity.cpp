@@ -45,7 +45,7 @@ Fvec Map_Entity::get_pos_copy()
 	assert(rotation >= 0);
 	float p = pos.x + size.x/2;
 	float q = pos.y + size.y/2;
-	Fvec pos_prime = Fvec((-size.x/2) * cosf(rad_rotation) - (-size.y/2) * sinf(rad_rotation) + p,
+	Fvec pos_prime = Fvec((-size.x/2) * cosf(rad_rotation) + (size.y/2) * sinf(rad_rotation) + p,
 						  (size.x/2) * sinf(rad_rotation) + (-size.y/2) * cosf(rad_rotation) + q);
 	return pos_prime;
 }
