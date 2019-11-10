@@ -2,6 +2,7 @@
 
 #include "ui-image.hpp"
 #include "error.hpp"
+#include "util.hpp"
 
 UI_Image::UI_Image(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, Fill_Type fill_type, std::string file_path):
 UI_Base(renderer, pos, size, scale, SDL_Color{})
@@ -40,5 +41,5 @@ void UI_Image::render()
 {
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, texture, NULL, &output_rect);
-	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+	clear_render_settings(renderer);
 }

@@ -3,6 +3,7 @@
 #include "tile.hpp"
 #include "renderable.hpp"
 #include "entity.hpp"
+#include "map-entity.hpp"
 
 class Map : public Renderable
 {
@@ -27,4 +28,5 @@ class Map : public Renderable
 	const char* data_path;
 	const char* image_path;
 	std::vector<Tile*> tiles;
+	std::vector<Map_Entity*> map_entities;
 };

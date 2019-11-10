@@ -38,10 +38,10 @@ void Tile::update()
 
 void Tile::render()
 {
-	SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
-	if(Game::debug->active)
+	if(renderer!=nullptr)
 	{
-		if(renderer != nullptr)
+		SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
+		if(Game::debug->active)
 		{
 			Game::debug->push_render(this, "Tile", { &this->pos.x, &this->pos.y,
 													 &this->size.x, &this->size.y });
@@ -52,7 +52,9 @@ void Tile::render()
 void Tile::load_texture(const char* file_path, Ivec relative_pos)
 {
 	this->relative_pos = relative_pos;
+	if(renderer!=nullptr)
 	{
+		// don't copy texture if tile is NULL
 		this->full_texture = IMG_LoadTexture(renderer, file_path);
 		Error(full_texture == nullptr, {"Failed to load image: ", file_path});
 	}
@@ -60,8 +62,12 @@ void Tile::load_texture(const char* file_path, Ivec relative_pos)
 
 void Tile::set_texture(SDL_Texture* texture, Ivec relative_pos)
 {
-	this->full_texture = texture;
-	this->relative_pos = relative_pos;
+	if(renderer!=nullptr)
+	{
+		// don't set texture if tile is NULL
+		this->full_texture = texture;
+	   	this->relative_pos = relative_pos;
+	}
 }
 
 SDL_Texture* Tile::get_texture()

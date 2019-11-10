@@ -37,13 +37,7 @@ void Player::update()
 
 void Player::render()
 {
-	SDL_Rect box =
-	{
-		(int)std::round(pos.x / scale.x),
-		(int)std::round(pos.y / scale.y),
-		(int)std::round(size.x),
-		(int)std::round(size.y)
-	};
+	SDL_Rect box = get_simple_rect();
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;
@@ -56,7 +50,7 @@ void Player::render()
 												  &this->scale.x, &this->scale.y,
 												  &this->max_vel.x, &this->max_vel.y});
 	}
-	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+	clear_render_settings(renderer);
 }
 
 void Player::handle_input()
