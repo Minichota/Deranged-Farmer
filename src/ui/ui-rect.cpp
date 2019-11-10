@@ -36,6 +36,9 @@ void UI_Rect::render()
 		{
 			SDL_RenderDrawRect(renderer, &sprite);
 		} break;
+		case WRAPPED:
+		{
+		} break;
 	}
 	clear_render_settings(renderer);
 }

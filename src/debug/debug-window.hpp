@@ -7,6 +7,7 @@
 #include "renderable.hpp"
 #include "vectors.hpp"
 #include "event-handler.hpp"
+#include "ui-text.hpp"
 #include "ui-text-input.hpp"
 #include "sized.hpp"
 
@@ -32,6 +33,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	void handle_event(SDL_Event event);
 
 	void push_render(Sized<float>* address, std::string name_repr, std::vector<float*> values);
+	void push_console(float text);
 
 	void toggle();
 
@@ -42,6 +44,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	void set_string(std::string input);
 	void set_string(float input);
 	void remove_zeros(std::string& input);
+	void handle_keyboard_scrolling();
 
 	private:
 	TTF_Font* font;
@@ -58,5 +61,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	int inner_selection;
 
 	UI_Text_Input text_input;
+
+	UI_Text console;
 };
 #endif

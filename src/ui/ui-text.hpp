@@ -18,6 +18,7 @@ class UI_Text : public UI_Base
 
 	void set_text(std::string text);
 	void append_text(std::string text);
+	void clear();
 
 	std::string get_text();
 	Ivec& get_size();
@@ -37,6 +38,7 @@ class UI_Text : public UI_Base
 	TTF_Font* font;
 	std::string font_path;
 	SDL_Color font_color;
+	int font_height;
 
 	SDL_Texture* output;
 };

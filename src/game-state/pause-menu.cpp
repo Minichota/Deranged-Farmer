@@ -7,6 +7,7 @@
 #include "ui-rect.hpp"
 #include "interpolators.hpp"
 #include "settings.hpp"
+#include "error.hpp"
 
 Pause_Menu::Pause_Menu(SDL_Renderer* renderer):
 Game_State(renderer)
@@ -24,7 +25,7 @@ void Pause_Menu::init()
 	elements =
 	{
 		new UI_Text(renderer, Ivec(400,200), Ivec(300,150), Fvec(1.0f,1.0f), "PAUSED", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, FILL),
-		new UI_Text(renderer, Ivec(400,500), Ivec(0,0), Fvec(1.0f,1.0f), "Press enter to continue", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
+		new UI_Text(renderer, Ivec(400,500), Ivec(300,0), Fvec(1.0f,1.0f), "Press enter to continue", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
 		new UI_Button(renderer, Ivec(0,0), Ivec(0,0), Fvec(2.0f,2.0f), &quit, SDL_Color{255,255,255,255}),
 		new UI_Text(renderer, Ivec(0,0), Ivec(0,0), Fvec(1.0f,1.0f), "Main Menu", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
 		new UI_Image(renderer, Ivec(735,560), Ivec(50,50), Fvec(1.0f,1.0f), FILL, "res/graphics/volume.png"),
