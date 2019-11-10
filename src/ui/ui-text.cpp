@@ -3,6 +3,7 @@
 
 #include "ui-text.hpp"
 #include "error.hpp"
+#include "util.hpp"
 
 UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color, Fill_Type type):
 UI_Base(renderer, pos, size, scale, font_color)
@@ -50,7 +51,6 @@ void UI_Text::render()
 			SDL_RenderSetScale(renderer, scale.x, scale.y);
 			SDL_Rect position = {get_pos().x, get_pos().y, tex_size.x, tex_size.y};
 			SDL_RenderCopy(renderer, output, NULL, &position);
-			SDL_RenderSetScale(renderer, 1.0f,1.0f);
 		} break;
 		case FILL:
 		{
@@ -61,7 +61,7 @@ void UI_Text::render()
 			SDL_RenderCopy(renderer, output, NULL, &position);
 		} break;
 	}
-	SDL_SetRenderDrawColor(renderer,0,0,0,255);
+	clear_render_settings(renderer);
 }
 
 void UI_Text::reload_texture()

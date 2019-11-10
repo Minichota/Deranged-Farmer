@@ -1,6 +1,5 @@
-#include <iostream>
-
 #include "ui-rect.hpp"
+#include "util.hpp"
 
 UI_Rect::UI_Rect(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color color, Fill_Type type):
 UI_Base(renderer, pos, size, scale, color)
@@ -38,6 +37,5 @@ void UI_Rect::render()
 			SDL_RenderDrawRect(renderer, &sprite);
 		} break;
 	}
-	SDL_SetRenderDrawColor(renderer, 0,0,0,255);
-	SDL_RenderSetScale(renderer, 1.0f,1.0f);
+	clear_render_settings(renderer);
 }

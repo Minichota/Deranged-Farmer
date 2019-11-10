@@ -18,10 +18,14 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 
 	virtual void handle_event(SDL_Event event);
 
+	// physics
 	void accelerate(Fvec vel);
 	void handle_physics();
 	void move();
 
+	SDL_Rect get_simple_rect();
+
+	// attributed
 	void set_health(int health);
 	void heal(int health);
 	void damage(int health);
@@ -37,7 +41,6 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 
 	protected:
 	Fvec vel;
-
 	Fvec max_vel;
 
 	int health;

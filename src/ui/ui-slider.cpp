@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "ui-slider.hpp"
+#include "util.hpp"
 
 UI_Slider::UI_Slider(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, int min_value, int max_value, int pos_count, SDL_Color bar_color, SDL_Color slider_color):
 UI_Base(renderer, pos, size, scale, bar_color),
@@ -44,8 +45,7 @@ void UI_Slider::render()
 	SDL_RenderFillRect(renderer, &full_bar);
 	SDL_SetRenderDrawColor(renderer, slider_color.r, slider_color.g, slider_color.b, slider_color.a);
 	SDL_RenderFillRect(renderer, &pos_bar);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+	clear_render_settings(renderer);
 }
 
 void UI_Slider::handle_event(SDL_Event event)

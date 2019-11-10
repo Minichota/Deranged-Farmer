@@ -1,4 +1,5 @@
 #include "ui-switch.hpp"
+#include "util.hpp"
 
 UI_Switch::UI_Switch(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color color):
 UI_Base(renderer, pos, size, scale, color)
@@ -37,8 +38,7 @@ void UI_Switch::render()
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawRect(renderer, &border);
 	SDL_RenderFillRect(renderer, &fill);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+	clear_render_settings(renderer);
 }
 
 void UI_Switch::handle_event(SDL_Event event)

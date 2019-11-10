@@ -26,7 +26,7 @@ void Map_Entity::render()
 	if(Game::debug->active)
 	{
 		Game::debug->push_render(this, "Entity", {&pos.x, &pos.x,
-													  &size.x, &size.y});
+												  &size.x, &size.y});
 	}
 	SDL_RenderCopy(renderer, texture, NULL, &output_rect);
 }

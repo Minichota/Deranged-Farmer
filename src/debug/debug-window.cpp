@@ -127,7 +127,7 @@ void Debug_Window::render()
 		SDL_RenderDrawRect(renderer, &selected_box_2);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	}
-
+	clear_render_settings(renderer);
 	text_input.render();
 }
 
