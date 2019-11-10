@@ -42,6 +42,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	void set_string(std::string input);
 	void set_string(float input);
 	void remove_zeros(std::string& input);
+	void handle_keyboard_scrolling();
 
 	private:
 	TTF_Font* font;

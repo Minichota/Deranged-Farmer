@@ -28,6 +28,8 @@ Debug_Window::~Debug_Window()
 
 void Debug_Window::update()
 {
+	inner_rects.clear();
+	outer_rects.clear();
 	text_input.update();
 }
 
@@ -38,11 +40,10 @@ void Debug_Window::render()
 	SDL_Rect x = {pos.x,pos.y,200,608};
 	SDL_RenderFillRect(renderer, &x);
 
-	inner_rects.clear();
-	outer_rects.clear();
 	Ivec draw_pos = {this->pos.x, this->pos.y - scroll_pos};
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	// outer layer
+
+	// rendering of outer layer
 	SDL_Surface* surface;
 	for(size_t i = 0; i < to_render.size(); i++)
 	{
@@ -66,10 +67,48 @@ void Debug_Window::render()
 		draw_pos.y += tex_size.y;
 	}
 
-	// inner layer
+	if(outer_selection >= 0)
+	{
+		// rendering of outline of outer text
+		Ivec tex_size;
+		SDL_QueryTexture(to_render[outer_selection].texture, NULL, NULL, &tex_size.x, &tex_size.y);
+		SDL_Rect selected_outline = {pos.x, pos.y + (-scroll_pos + 19 * outer_selection), tex_size.x, tex_size.y};
+		SDL_RenderDrawRect(renderer, &selected_outline);
+
+
+		// rendering entity's outline
+		Sized<float>* entity = to_render[outer_selection].address;
+		if(entity != nullptr)
+		{
+			Ivec pos = entity->get_pos_copy();
+			Ivec size = entity->get_size_copy();
+			Ivec scale = entity->get_scale();
+			SDL_Rect entity_outline =
+			{
+				(int)std::round(pos.x/3.0f),
+				(int)std::round(pos.y/3.0f),
+				(int)std::round(size.x/3.0f * scale.x),
+				(int)std::round(size.y/3.0f * scale.y)
+			};
+			SDL_RenderSetScale(renderer, 3.0f, 3.0f);
+			SDL_RenderDrawRect(renderer, &entity_outline);
+			SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+		}
+		if(inner_selection >= 0)
+		{
+			// rendering of inner selection mini-rectangle
+			Ivec tex_size;
+			SDL_Rect selected_box_2 = {pos.x + 50, pos.y + 19 * inner_selection, 5, 5};
+			SDL_RenderDrawRect(renderer, &selected_box_2);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		}
+	}
+
+	// rendering of inner layer
 	draw_pos = pos;
 	if(outer_selection >= 0)
 	{
+		// rendering of inner text
 		for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
 		{
 			std::string x = std::to_string(*to_render[outer_selection].values[i]);
@@ -92,43 +131,9 @@ void Debug_Window::render()
 			SDL_DestroyTexture(texture);
 			draw_pos.y += tex_size.y;
 		}
-		Ivec tex_size;
-		SDL_QueryTexture(to_render[outer_selection].texture, NULL, NULL, &tex_size.x, &tex_size.y);
-		SDL_Rect selected_outline = {pos.x, pos.y + (-scroll_pos + 19 * outer_selection), tex_size.x, tex_size.y};
-		if(selected_outline.y >= 608)
-		{
-			scroll_pos += selected_outline.y;
-		}
-		while(pos.y + (-scroll_pos + 19 * outer_selection) < 0)
-		{
-			scroll_pos -= 19;
-		}
-		SDL_RenderDrawRect(renderer, &selected_outline);
-
-		Sized<float>* entity_dimensions = to_render[outer_selection].address;
-		if(entity_dimensions != nullptr)
-		{
-			SDL_Rect entity_outline =
-			{
-				(int)std::round(entity_dimensions->get_pos_copy().x/3),
-				(int)std::round(entity_dimensions->get_pos_copy().y/3),
-				(int)std::round(entity_dimensions->get_size_copy().x/3 * entity_dimensions->get_scale().x),
-				(int)std::round(entity_dimensions->get_size_copy().y/3 * entity_dimensions->get_scale().y)
-			};
-			SDL_RenderSetScale(renderer, 3.0f, 3.0f);
-			SDL_RenderDrawRect(renderer, &entity_outline);
-			SDL_RenderSetScale(renderer, 1.0f, 1.0f);
-		}
 	}
-	if(inner_selection >= 0)
-	{
-		Ivec tex_size;
-		SDL_Rect selected_box_2 = {pos.x + 50, pos.y + 19 * inner_selection, 5, 5};
-		SDL_RenderDrawRect(renderer, &selected_box_2);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	}
-	clear_render_settings(renderer);
 	text_input.render();
+	clear_render_settings(renderer);
 }
 
 void Debug_Window::clear()
@@ -216,6 +221,7 @@ void Debug_Window::handle_event(SDL_Event event)
 							}
 							set_string(*to_render[outer_selection].values[inner_selection]);
 						}
+						handle_keyboard_scrolling();
 					} break;
 					case SDLK_k:
 					{
@@ -239,6 +245,7 @@ void Debug_Window::handle_event(SDL_Event event)
 							}
 							set_string(*to_render[outer_selection].values[inner_selection]);
 						}
+						handle_keyboard_scrolling();
 					} break;
 				}
 			} break;
@@ -327,5 +334,19 @@ void Debug_Window::remove_zeros(std::string& input)
 	if(*c == '.')
 	{
 		input.pop_back();
+	}
+}
+
+void Debug_Window::handle_keyboard_scrolling()
+{
+	int rect_pos = pos.y + (-scroll_pos + 19 * outer_selection);
+	if(rect_pos >= 608)
+	{
+		scroll_pos += rect_pos;
+	}
+	while(rect_pos < 0)
+	{
+		scroll_pos -= 19;
+		rect_pos = pos.y + (-scroll_pos + 19 * outer_selection);
 	}
 }
