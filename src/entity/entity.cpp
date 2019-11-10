@@ -94,10 +94,10 @@ SDL_Rect Entity::get_simple_rect()
 {
 	return SDL_Rect
 	{
-		(int)std::round(pos.x/scale.x),
-		(int)std::round(pos.y/scale.y),
-		(int)std::round(size.x/scale.x),
-		(int)std::round(size.y/scale.y)
+		(int)std::round(get_pos_copy().x/scale.x),
+		(int)std::round(get_pos_copy().y/scale.y),
+		(int)std::round(get_size_copy().x),
+		(int)std::round(get_size_copy().y)
 	};
 }
 
