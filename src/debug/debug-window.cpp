@@ -11,7 +11,8 @@
 
 Debug_Window::Debug_Window(SDL_Renderer* renderer):
 Renderable(renderer),
-text_input(renderer, Ivec(400,400), Ivec(100,100), Fvec(1.0f, 1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL)
+text_input(renderer, Ivec(400,350), Ivec(100,100), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
+console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, WRAPPED)
 {
 	this->inner_selection = -1;
 	this->outer_selection = -1;
@@ -30,6 +31,7 @@ void Debug_Window::update()
 {
 	inner_rects.clear();
 	outer_rects.clear();
+	console.clear();
 	text_input.update();
 }
 
@@ -38,6 +40,8 @@ void Debug_Window::render()
 	// background blending
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 127);
 	SDL_Rect x = {pos.x,pos.y,200,608};
+	SDL_RenderFillRect(renderer, &x);
+	x = {0,400,800,208};
 	SDL_RenderFillRect(renderer, &x);
 
 	Ivec draw_pos = {this->pos.x, this->pos.y - scroll_pos};
@@ -133,6 +137,7 @@ void Debug_Window::render()
 		}
 	}
 	text_input.render();
+	console.render();
 	clear_render_settings(renderer);
 }
 
@@ -267,6 +272,14 @@ void Debug_Window::push_render(Sized<float>* address, std::string name_repr, std
 	{
 		to_render.push_back(Debug_Element{address, name_repr, values});
 	}
+}
+
+void Debug_Window::push_console(float text)
+{
+	std::string str = std::to_string(text);
+	remove_zeros(str);
+	str.push_back(' ');
+	this->console.append_text(str);
 }
 
 void Debug_Window::toggle()

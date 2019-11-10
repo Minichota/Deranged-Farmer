@@ -21,6 +21,9 @@ UI_Base(renderer, pos, size, scale, SDL_Color{})
 		{
 			SDL_QueryTexture(texture, NULL, NULL, &size.x, &size.y);
 		} break;
+		case WRAPPED:
+		{
+		} break;
 	}
 
 }

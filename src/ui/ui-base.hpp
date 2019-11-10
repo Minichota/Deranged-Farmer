@@ -7,7 +7,8 @@
 typedef enum
 {
 	FILL,
-	NORMAL
+	NORMAL,
+	WRAPPED
 } Fill_Type;
 
 class UI_Base : public Renderable

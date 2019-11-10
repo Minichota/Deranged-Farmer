@@ -22,6 +22,7 @@ UI_Base(renderer, pos, size, scale, font_color)
 	this->font_color = font_color;
 	this->output = nullptr;
 	reload_texture();
+	this->font_height = TTF_FontHeight(font);
 }
 
 UI_Text::~UI_Text()
@@ -46,6 +47,7 @@ void UI_Text::render()
 	SDL_SetTextureAlphaMod(output, color.a);
 	switch(type)
 	{
+		case WRAPPED:
 		case NORMAL:
 		{
 			SDL_RenderSetScale(renderer, scale.x, scale.y);
@@ -66,7 +68,23 @@ void UI_Text::render()
 
 void UI_Text::reload_texture()
 {
-	SDL_Surface* new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
+	SDL_Surface* new_surface = nullptr;
+	switch(type)
+	{
+		case NORMAL:
+		case FILL:
+		{
+			new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
+		} break;
+		case WRAPPED:
+		{
+			new_surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), font_color, size.x);
+		} break;
+		default:
+		{
+			Error(true, {"You somehow set the surface to a non-existant type?"});
+		} break;
+	}
 	if(output != nullptr)
 	{
 		SDL_DestroyTexture(output);
@@ -88,6 +106,11 @@ void UI_Text::append_text(std::string text)
 	this->text.append(text);
 }
 
+void UI_Text::clear()
+{
+	this->text.clear();
+}
+
 std::string UI_Text::get_text()
 {
 	return this->text;
@@ -103,4 +126,5 @@ void UI_Text::set_font_size(int font_size)
 	TTF_CloseFont(font);
 	font = TTF_OpenFont(font_path.c_str(), font_size);
 	reload_texture();
+	this->font_height = TTF_FontHeight(font);
 }
