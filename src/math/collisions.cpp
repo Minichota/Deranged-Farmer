@@ -27,7 +27,7 @@ bool test_collision_movingAABB(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec
 	return true;
 }
 
-void handle_collision_movingAA(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec& rhs_pos, Fvec rhs_size)
+void handle_collision_movingAA(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec rhs_pos, Fvec rhs_size)
 {
 	float lhs_bottom = lhs_pos.y + lhs_size.y;
 	float rhs_bottom = rhs_pos.y + rhs_size.y;

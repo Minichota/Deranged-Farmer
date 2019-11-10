@@ -110,10 +110,10 @@ void Debug_Window::render()
 		{
 			SDL_Rect entity_outline =
 			{
-				(int)std::round(entity_dimensions->get_pos().x/3),
-				(int)std::round(entity_dimensions->get_pos().y/3),
-				(int)std::round(entity_dimensions->get_size().x/3 * entity_dimensions->get_scale().x),
-				(int)std::round(entity_dimensions->get_size().y/3 * entity_dimensions->get_scale().y)
+				(int)std::round(entity_dimensions->get_pos_copy().x/3),
+				(int)std::round(entity_dimensions->get_pos_copy().y/3),
+				(int)std::round(entity_dimensions->get_size_copy().x/3 * entity_dimensions->get_scale().x),
+				(int)std::round(entity_dimensions->get_size_copy().y/3 * entity_dimensions->get_scale().y)
 			};
 			SDL_RenderSetScale(renderer, 3.0f, 3.0f);
 			SDL_RenderDrawRect(renderer, &entity_outline);
