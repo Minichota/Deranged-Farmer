@@ -27,6 +27,10 @@ class Sized
 	{
 		return this->pos;
 	};
+	virtual Vector<T> get_pos_copy()
+	{
+		return this->pos;
+	};
 	virtual void set_pos(Vector<T> pos)
 	{
 		this->pos = pos;
@@ -37,6 +41,10 @@ class Sized
 	};
 
 	virtual Vector<T>& get_size()
+	{
+		return this->size;
+	};
+	virtual Vector<T> get_size_copy()
 	{
 		return this->size;
 	};

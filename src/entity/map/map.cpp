@@ -108,19 +108,19 @@ void Map::handle_collision(Entity* entity)
 	for(Tile* tile : tiles)
 	{
 		if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-								   tile->get_pos(), tile->get_size()))
+								   tile->get_pos_copy(), tile->get_size_copy()))
 		{
 			handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-									  tile->get_pos(), tile->get_size());
+									  tile->get_pos_copy(), tile->get_size_copy());
 		}
 	}
 	for(Map_Entity* map_e : map_entities)
 	{
 		if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-								   map_e->get_pos(), map_e->get_size()))
+								   map_e->get_pos_copy(), map_e->get_size_copy()))
 		{
 			handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-									  map_e->get_pos(), map_e->get_size());
+									  map_e->get_pos_copy(), map_e->get_size_copy());
 		}
 	}
 }
