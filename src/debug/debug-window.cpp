@@ -216,6 +216,11 @@ void Debug_Window::handle_event(SDL_Event event)
 							}
 							inner_selection = -1;
 							set_string("");
+							handle_keyboard_scrolling();
+						}
+						else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
+						{
+							set_string(--(*to_render[outer_selection].values[inner_selection]));
 						}
 						else if(outer_selection >= 0)
 						{
@@ -226,7 +231,6 @@ void Debug_Window::handle_event(SDL_Event event)
 							}
 							set_string(*to_render[outer_selection].values[inner_selection]);
 						}
-						handle_keyboard_scrolling();
 					} break;
 					case SDLK_k:
 					{
@@ -240,6 +244,11 @@ void Debug_Window::handle_event(SDL_Event event)
 							}
 							inner_selection = -1;
 							set_string("");
+							handle_keyboard_scrolling();
+						}
+						else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
+						{
+							set_string(++(*to_render[outer_selection].values[inner_selection]));
 						}
 						else if(outer_selection >= 0)
 						{
@@ -250,7 +259,6 @@ void Debug_Window::handle_event(SDL_Event event)
 							}
 							set_string(*to_render[outer_selection].values[inner_selection]);
 						}
-						handle_keyboard_scrolling();
 					} break;
 				}
 			} break;

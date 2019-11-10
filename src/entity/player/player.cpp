@@ -49,7 +49,6 @@ void Player::render()
 												  &this->size.x, &this->size.y,
 												  &this->scale.x, &this->scale.y,
 												  &this->max_vel.x, &this->max_vel.y});
-		Game::debug->push_console(mouse_angle);
 	}
 	clear_render_settings(renderer);
 }
