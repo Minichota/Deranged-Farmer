@@ -16,8 +16,5 @@ class Map_Entity : public Entity
 
 	Fvec get_pos_copy();
 	Fvec get_size_copy();
-
-	private:
-	int rotation;
 };
 #endif

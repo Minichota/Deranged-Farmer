@@ -52,7 +52,7 @@ Fvec Map_Entity::get_pos_copy()
 
 Fvec Map_Entity::get_size_copy()
 {
-	switch(rotation)
+	switch((int)rotation)
 	{
 		case 90:
 		case 270:

@@ -264,7 +264,7 @@ void Debug_Window::handle_event(SDL_Event event)
 			} break;
 			case SDL_TEXTINPUT:
 			{
-				if((isdigit(event.text.text[0]) || event.text.text[0] == '.') && inner_selection >= 0)
+				if((isdigit(event.text.text[0]) || event.text.text[0] == '.' || event.text.text[0] == '-') && inner_selection >= 0)
 				{
 					text_input.handle_event(event);
 				}

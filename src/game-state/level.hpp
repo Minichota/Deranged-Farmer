@@ -26,6 +26,7 @@ class Level : public Game_State
 	void load_entities();
 
 	private:
+	SDL_Texture* background;
 	std::vector<Entity*> entities;
 	const std::string entity_file_path;
 	Map map;
