@@ -29,9 +29,6 @@ Debug_Window::~Debug_Window()
 
 void Debug_Window::update()
 {
-	inner_rects.clear();
-	outer_rects.clear();
-	console.clear();
 	text_input.update();
 }
 
@@ -138,6 +135,9 @@ void Debug_Window::render()
 	}
 	text_input.render();
 	console.render();
+	inner_rects.clear();
+	outer_rects.clear();
+	console.clear();
 	clear_render_settings(renderer);
 }
 
@@ -284,7 +284,7 @@ void Debug_Window::push_render(Sized<float>* address, std::string name_repr, std
 
 void Debug_Window::push_console(float text)
 {
-	std::string str = std::to_string(text);
+	std::string str = std::to_string(std::round(text));
 	remove_zeros(str);
 	str.push_back(' ');
 	this->console.append_text(str);

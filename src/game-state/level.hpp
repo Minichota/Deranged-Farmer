@@ -7,6 +7,7 @@
 #include "ui-base.hpp"
 #include "entity.hpp"
 #include "map.hpp"
+#include "ai.hpp"
 
 class Level : public Game_State
 {
@@ -28,6 +29,7 @@ class Level : public Game_State
 	private:
 	SDL_Texture* background;
 	std::vector<Entity*> entities;
+	std::vector<AI*> AIs;
 	const std::string entity_file_path;
 	Map map;
 	const std::string map_data_file_path;

@@ -125,6 +125,16 @@ void Map::handle_collision(Entity* entity)
 	}
 }
 
+void Map::validate_pos(Fvec& pos)
+{
+	// TODO implement validate_pos
+}
+
+std::vector<Fvec> Map::get_empty_tiles()
+{
+	// TODO implement get_empty_tiles
+}
+
 Tile* Map::get_tile(size_t x, size_t y)
 {
 	return tiles[y * tile_count.x + x];
