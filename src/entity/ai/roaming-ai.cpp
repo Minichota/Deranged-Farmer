@@ -40,5 +40,5 @@ void Roaming_AI::update()
 void Roaming_AI::calculate_path()
 {
 	// TODO implement calculate_path
-	std::vector<Fvec> candidates = map->get_empty_tiles();
+	//std::vector<Fvec> candidates = map->get_empty_tiles();
 }

@@ -33,7 +33,7 @@ class Map : public Renderable
 	Ivec tile_count;
 	const char* data_path;
 	const char* image_path;
-	std::vector<Tile*> tiles;
+	std::vector<std::vector<Tile*>> tiles;
 	std::vector<Map_Entity*> map_entities;
 };
 #endif
