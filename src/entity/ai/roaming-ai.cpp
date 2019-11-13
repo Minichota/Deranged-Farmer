@@ -34,10 +34,11 @@ void Roaming_AI::update()
 		Game::debug->push_console(end_pos.x);
 		Game::debug->push_console(end_pos.y);
 	}
+	// TODO implement moving to positions
 }
 
 void Roaming_AI::calculate_path()
 {
 	// TODO implement calculate_path
-	//std::vector<Fvec> candidates = map->get_empty_tiles();
+	std::vector<Fvec> candidates = map->get_empty_tiles();
 }
