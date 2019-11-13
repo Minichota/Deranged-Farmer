@@ -21,11 +21,14 @@ Map::~Map()
 
 void Map::update()
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		if(tile->get_size() != Fvec(-1, -1))
+		for(Tile* x_tile : y_tiles)
 		{
-			tile->update();
+			if(x_tile->get_size() != Fvec(-1, -1))
+			{
+				x_tile->update();
+			}
 		}
 	}
 	for(Map_Entity* e : map_entities)
@@ -36,11 +39,14 @@ void Map::update()
 
 void Map::render()
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		if(tile->get_size() != Fvec(-1, -1))
+		for(Tile* x_tile : y_tiles)
 		{
-		  tile->render();
+			if(x_tile->get_size() != Fvec(-1, -1))
+			{
+				x_tile->render();
+			}
 		}
 	}
 	for(Map_Entity* e : map_entities)
@@ -69,13 +75,21 @@ void Map::init()
 			{
 				// null tile
 				Tile* tile = new Tile(nullptr, Fvec(x * tile_size.x, y * tile_size.y), Fvec(-1,-1));
-				tiles.push_back(tile);
+				if(tiles.size() <= y)
+				{
+					tiles.push_back(std::vector<Tile*>());
+				}
+				tiles[y].push_back(tile);
 				continue;
 			}
 			int tile_type = map_data[y][x] - 1;
 			Tile* tile = new Tile(renderer, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
 			tile->set_texture(image_texture, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
-			tiles.push_back(tile);
+			if(tiles.size() <= y)
+			{
+				tiles.push_back(std::vector<Tile*>());
+			}
+			tiles[y].push_back(tile);
 		}
 	}
 
@@ -103,24 +117,30 @@ void Map::init()
 
 void Map::clear()
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		delete tile;
+		for(Tile* x_tile : y_tiles)
+		{
+			delete x_tile;
+		}
 	}
 	tiles.clear();
 }
 
 void Map::handle_collision(Entity* entity)
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		if(tile->get_size() != Fvec(-1, -1))
+		for(Tile* x_tile : y_tiles)
 		{
-			if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-									   tile->get_pos_copy(), tile->get_size_copy()))
+			if(x_tile->get_size() != Fvec(-1, -1))
 			{
-				handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-										  tile->get_pos_copy(), tile->get_size_copy());
+				if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
+										   x_tile->get_pos_copy(), x_tile->get_size_copy()))
+				{
+					handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
+											  x_tile->get_pos_copy(), x_tile->get_size_copy());
+				}
 			}
 		}
 	}
@@ -137,57 +157,12 @@ void Map::handle_collision(Entity* entity)
 
 void Map::validate_pos(Fvec& pos)
 {
-	// TODO implement validate_pos
-}
-
-std::vector<Fvec> Map::get_empty_tiles()
-{
-	std::vector<Fvec> tile_pos;
-	for(Tile* tile : tiles)
-	{
-		// filling
-		if(tile->get_size() == Fvec(-1, -1))
-		{
-			tile_pos.push_back(tile->get_pos());
-		}
-	}
-	for(size_t i = 0; i < map_entities.size(); i++)
-	{
-		// removing garbage values
-		Fvec top_left = map_entities[i]->get_pos();
-		Fvec top_right = Fvec(map_entities[i]->get_pos().x + map_entities[i]->get_size().x,
-							  map_entities[i]->get_pos().y);
-		Fvec bot_left = Fvec(map_entities[i]->get_pos().x,
-							  map_entities[i]->get_pos().y + map_entities[i]->get_size().y);
-		Fvec bot_right = Fvec(map_entities[i]->get_pos().x + map_entities[i]->get_size().x,
-							  map_entities[i]->get_pos().y + map_entities[i]->get_size().y);
-
-		const auto normalize = [](const Fvec& x, const Ivec tile_size)
-		{
-			// basically floors the value
-			return Fvec(x.x - (int)(x.x)%tile_size.x, x.y - (int)(x.y)%tile_size.y);
-		};
-		top_left = normalize(top_left, tile_size);
-		top_right = normalize(top_right, tile_size);
-		bot_left = normalize(bot_left, tile_size);
-		bot_right = normalize(bot_right, tile_size);
-		for(size_t j = 0; j < tile_pos.size(); j++)
-		{
-			if(tile_pos[j] == top_left ||
-			   tile_pos[j] == top_right ||
-			   tile_pos[j] == bot_left ||
-			   tile_pos[j] == bot_right)
-			{
-				tile_pos.erase(tile_pos.begin() + j);
-			}
-		}
-	}
-	return tile_pos;
+	pos = Fvec(pos.x - (int)pos.x % tile_size.x, pos.y - (int)pos.y % tile_size.y);
 }
 
 Tile* Map::get_tile(size_t x, size_t y)
 {
-	return tiles[y * tile_count.x + x];
+	return tiles[y][x];
 }
 
 Ivec& Map::get_tile_size()
