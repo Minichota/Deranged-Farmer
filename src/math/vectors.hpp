@@ -101,6 +101,12 @@ class Vector
 		return this->x != other.x || this->y != other.y;
 	}
 
+	template <class other_type>
+	bool operator==(const Vector<other_type>& other)
+	{
+		return this->x == other.x && this->y == other.y;
+	}
+
 	T x;
 	T y;
 };

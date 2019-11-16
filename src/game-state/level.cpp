@@ -9,6 +9,7 @@
 #include "error.hpp"
 #include "collisions.hpp"
 #include "io.hpp"
+#include "bison.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path):
 Game_State(renderer),
@@ -17,6 +18,8 @@ map(renderer, map_data_file_path, map_image_file_path, Ivec(32,32)),
 map_data_file_path(map_data_file_path),
 map_image_file_path(map_image_file_path)
 {
+	background = IMG_LoadTexture(renderer, "res/graphics/background.png");
+	Error(!background, {"Failed to load background", SDL_GetError()});
 }
 
 Level::~Level()
@@ -38,6 +41,7 @@ void Level::update()
 
 void Level::render()
 {
+	SDL_RenderCopy(renderer, background, NULL, NULL);
 	map.render();
 	for(Entity* entity : entities)
 	{
@@ -120,8 +124,10 @@ void Level::load_entities()
 			{
 				// some weird entity
 				// TODO implement some entity classes
-				Tile* tile = new Tile(renderer, Ivec(properties[i][0], properties[i][1]), Ivec(properties[i][2], properties[i][3]));
-				(void)tile;
+				// TODO implement reading of delay and radius
+				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
+				bison->load_texture("res/graphics/bison.png");
+				entities.push_back(bison);
 			} break;
 		}
 	}

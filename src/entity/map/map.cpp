@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 
+#include "game.hpp"
 #include "map.hpp"
 #include "io.hpp"
 #include "settings.hpp"
@@ -20,9 +21,15 @@ Map::~Map()
 
 void Map::update()
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		tile->update();
+		for(Tile* x_tile : y_tiles)
+		{
+			if(x_tile->get_size() != Fvec(-1, -1))
+			{
+				x_tile->update();
+			}
+		}
 	}
 	for(Map_Entity* e : map_entities)
 	{
@@ -32,9 +39,15 @@ void Map::update()
 
 void Map::render()
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		tile->render();
+		for(Tile* x_tile : y_tiles)
+		{
+			if(x_tile->get_size() != Fvec(-1, -1))
+			{
+				x_tile->render();
+			}
+		}
 	}
 	for(Map_Entity* e : map_entities)
 	{
@@ -61,14 +74,22 @@ void Map::init()
 			if(map_data[y][x] == 0)
 			{
 				// null tile
-				Tile* tile = new Tile();
-				tiles.push_back(tile);
+				Tile* tile = new Tile(nullptr, Fvec(x * tile_size.x, y * tile_size.y), Fvec(-1,-1));
+				if((int)tiles.size() <= y)
+				{
+					tiles.push_back(std::vector<Tile*>());
+				}
+				tiles[y].push_back(tile);
 				continue;
 			}
 			int tile_type = map_data[y][x] - 1;
-			Tile* tile = new Tile(renderer, Ivec(x * tile_size.x, y * tile_size.y), tile_size);
+			Tile* tile = new Tile(renderer, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
 			tile->set_texture(image_texture, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
-			tiles.push_back(tile);
+			if((int)tiles.size() <= y)
+			{
+				tiles.push_back(std::vector<Tile*>());
+			}
+			tiles[y].push_back(tile);
 		}
 	}
 
@@ -96,22 +117,31 @@ void Map::init()
 
 void Map::clear()
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		delete tile;
+		for(Tile* x_tile : y_tiles)
+		{
+			delete x_tile;
+		}
 	}
 	tiles.clear();
 }
 
 void Map::handle_collision(Entity* entity)
 {
-	for(Tile* tile : tiles)
+	for(std::vector<Tile*> y_tiles : tiles)
 	{
-		if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-								   tile->get_pos_copy(), tile->get_size_copy()))
+		for(Tile* x_tile : y_tiles)
 		{
-			handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-									  tile->get_pos_copy(), tile->get_size_copy());
+			if(x_tile->get_size() != Fvec(-1, -1))
+			{
+				if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
+										   x_tile->get_pos_copy(), x_tile->get_size_copy()))
+				{
+					handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
+											  x_tile->get_pos_copy(), x_tile->get_size_copy());
+				}
+			}
 		}
 	}
 	for(Map_Entity* map_e : map_entities)
@@ -125,9 +155,25 @@ void Map::handle_collision(Entity* entity)
 	}
 }
 
+void Map::validate_pos(Fvec& pos)
+{
+	pos = Fvec((int)std::round(pos.x) - (int)std::round(pos.x) % tile_size.x,
+			   (int)std::round(pos.y) - (int)std::round(pos.y) % tile_size.y);
+}
+
+std::vector<std::vector<Tile*>> Map::get_tiles()
+{
+	return this->tiles;
+}
+
+Ivec& Map::get_tile_count()
+{
+	return tile_count;
+}
+
 Tile* Map::get_tile(size_t x, size_t y)
 {
-	return tiles[y * tile_count.x + x];
+	return tiles[y][x];
 }
 
 Ivec& Map::get_tile_size()

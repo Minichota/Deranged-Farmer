@@ -1,3 +1,6 @@
+#ifndef MAP_HPP
+#define MAP_HPP
+
 #include <vector>
 
 #include "tile.hpp"
@@ -19,6 +22,10 @@ class Map : public Renderable
 
 	void handle_collision(Entity* entity);
 
+	void validate_pos(Fvec& pos);
+
+	std::vector<std::vector<Tile*>> get_tiles();
+	Ivec& get_tile_count();
 	Tile* get_tile(size_t x, size_t y);
 	Ivec& get_tile_size();
 
@@ -27,6 +34,7 @@ class Map : public Renderable
 	Ivec tile_count;
 	const char* data_path;
 	const char* image_path;
-	std::vector<Tile*> tiles;
+	std::vector<std::vector<Tile*>> tiles;
 	std::vector<Map_Entity*> map_entities;
 };
+#endif

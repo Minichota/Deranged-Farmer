@@ -43,6 +43,8 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	Fvec vel;
 	Fvec max_vel;
 
+	float rotation;
+
 	int health;
 	int max_health;
 
