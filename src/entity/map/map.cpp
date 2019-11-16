@@ -75,7 +75,7 @@ void Map::init()
 			{
 				// null tile
 				Tile* tile = new Tile(nullptr, Fvec(x * tile_size.x, y * tile_size.y), Fvec(-1,-1));
-				if(tiles.size() <= y)
+				if((int)tiles.size() <= y)
 				{
 					tiles.push_back(std::vector<Tile*>());
 				}
@@ -85,7 +85,7 @@ void Map::init()
 			int tile_type = map_data[y][x] - 1;
 			Tile* tile = new Tile(renderer, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
 			tile->set_texture(image_texture, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
-			if(tiles.size() <= y)
+			if((int)tiles.size() <= y)
 			{
 				tiles.push_back(std::vector<Tile*>());
 			}
@@ -157,7 +157,18 @@ void Map::handle_collision(Entity* entity)
 
 void Map::validate_pos(Fvec& pos)
 {
-	pos = Fvec(pos.x - (int)pos.x % tile_size.x, pos.y - (int)pos.y % tile_size.y);
+	pos = Fvec((int)std::round(pos.x) - (int)std::round(pos.x) % tile_size.x,
+			   (int)std::round(pos.y) - (int)std::round(pos.y) % tile_size.y);
+}
+
+std::vector<std::vector<Tile*>> Map::get_tiles()
+{
+	return this->tiles;
+}
+
+Ivec& Map::get_tile_count()
+{
+	return tile_count;
 }
 
 Tile* Map::get_tile(size_t x, size_t y)

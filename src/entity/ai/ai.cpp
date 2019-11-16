@@ -19,15 +19,3 @@ void AI::calculate_path()
 {
 	// runs until path is found
 }
-
-void AI::push_node(Fvec node)
-{
-	this->nodes.push(node);
-}
-
-Fvec AI::pop_node()
-{
-	Fvec top = nodes.top();
-	nodes.pop();
-	return top;
-}

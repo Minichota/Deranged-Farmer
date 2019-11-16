@@ -23,8 +23,9 @@ class Map : public Renderable
 	void handle_collision(Entity* entity);
 
 	void validate_pos(Fvec& pos);
-	std::vector<Fvec> get_empty_tiles();
 
+	std::vector<std::vector<Tile*>> get_tiles();
+	Ivec& get_tile_count();
 	Tile* get_tile(size_t x, size_t y);
 	Ivec& get_tile_size();
 

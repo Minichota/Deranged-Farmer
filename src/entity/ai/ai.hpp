@@ -6,6 +6,15 @@
 #include "entity.hpp"
 #include "map.hpp"
 
+struct Candidate
+{
+	Tile* tile;
+	size_t x_pos;
+	size_t y_pos;
+	bool checked = false;
+	Candidate* parent;
+};
+
 class AI
 {
 	public:
@@ -17,10 +26,6 @@ class AI
 	protected:
 	virtual void calculate_path();
 
-	private:
-	void push_node(Fvec node);
-	Fvec pop_node();
-
 	protected:
 	Entity* parent;
 	Map* map;
@@ -30,7 +35,6 @@ class AI
 
 	bool completed_movement;
 
-	private:
-	std::stack<Fvec> nodes;
+	std::stack<Candidate> nodes;
 };
 #endif
