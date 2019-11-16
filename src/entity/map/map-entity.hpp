@@ -13,8 +13,5 @@ class Map_Entity : public Entity
 	void render();
 
 	void handle_event(SDL_Event event);
-
-	Fvec get_pos_copy();
-	Fvec get_size_copy();
 };
 #endif

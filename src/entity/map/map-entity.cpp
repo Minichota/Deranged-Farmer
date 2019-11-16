@@ -19,13 +19,7 @@ void Map_Entity::update()
 
 void Map_Entity::render()
 {
-	SDL_Rect output_rect =
-	{
-		(int)std::round(pos.x),
-		(int)std::round(pos.y),
-		(int)std::round(size.x),
-		(int)std::round(size.y)
-	};
+	SDL_Rect output_rect = get_simple_rect();
 	if(Game::debug->active)
 	{
 		Game::debug->push_render(this, "Entity", {&pos.x, &pos.y,
@@ -37,31 +31,4 @@ void Map_Entity::render()
 
 void Map_Entity::handle_event(SDL_Event event)
 {
-}
-
-Fvec Map_Entity::get_pos_copy()
-{
-	float rad_rotation = -rotation * 3.1415926535f / 180;
-	assert(rotation >= 0);
-	float p = pos.x + size.x/2;
-	float q = pos.y + size.y/2;
-	Fvec pos_prime = Fvec((-size.x/2) * cosf(rad_rotation) + (size.y/2) * sinf(rad_rotation) + p,
-						  (size.x/2) * sinf(rad_rotation) + (-size.y/2) * cosf(rad_rotation) + q);
-	return pos_prime;
-}
-
-Fvec Map_Entity::get_size_copy()
-{
-	switch((int)rotation)
-	{
-		case 90:
-		case 270:
-		{
-			return Fvec(size.y, size.x);
-		} break;
-		default:
-		{
-			return this->size;
-		} break;
-	}
 }

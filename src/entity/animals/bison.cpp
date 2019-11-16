@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "bison.hpp"
 #include "game.hpp"
 

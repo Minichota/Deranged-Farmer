@@ -10,7 +10,6 @@
 #include "collisions.hpp"
 #include "io.hpp"
 #include "bison.hpp"
-#include "roaming-ai.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path):
 Game_State(renderer),
@@ -32,10 +31,6 @@ void Level::update()
 {
 	Game_State::update();
 	map.update();
-	for(AI* ai : AIs)
-	{
-		ai->update();
-	}
 	for(Entity* entity : entities)
 	{
 		entity->update();
@@ -132,8 +127,6 @@ void Level::load_entities()
 				// TODO implement reading of delay and radius
 				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
 				bison->load_texture("res/graphics/bison.png");
-				Roaming_AI* bison_ai = new Roaming_AI(bison, &map, 100, 10000);
-				AIs.push_back(bison_ai);
 				entities.push_back(bison);
 			} break;
 		}

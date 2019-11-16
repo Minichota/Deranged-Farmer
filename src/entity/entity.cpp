@@ -70,7 +70,7 @@ void Entity::handle_physics()
 		final_application.y = -0.2f;
 		if(vel.y + final_application.y < 0)
 		{
-			final_application.x = -vel.x;
+			final_application.y = -vel.y;
 		}
 	}
 	else if(this->vel.y < 0)
@@ -88,16 +88,33 @@ void Entity::move()
 {
 	this->pos.x = std::round(this->pos.x + this->vel.x);
 	this->pos.y = std::round(this->pos.y + this->vel.y);
+	// handing rotation
+	if(vel.x > 0.0f)
+	{
+		this->rotation = 180;
+	}
+	else if(vel.x < 0.0f)
+	{
+		this->rotation = 0;
+	}
+	if(vel.y > 0.0f)
+	{
+		this->rotation = 270;
+	}
+	else if(vel.y < 0.0f)
+	{
+		this->rotation = 90;
+	}
 }
 
 SDL_Rect Entity::get_simple_rect()
 {
 	return SDL_Rect
 	{
-		(int)std::round(get_pos_copy().x/scale.x),
-		(int)std::round(get_pos_copy().y/scale.y),
-		(int)std::round(get_size_copy().x),
-		(int)std::round(get_size_copy().y)
+		(int)std::round(pos.x/scale.x),
+		(int)std::round(pos.y/scale.y),
+		(int)std::round(size.x),
+		(int)std::round(size.y)
 	};
 }
 
