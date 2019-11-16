@@ -5,7 +5,7 @@ std::vector<Interpolator<unsigned char>> uchar_interpolaters;
 std::vector<Interpolator<int>> int_interpolaters;
 std::vector<Interpolator<Ivec>> ivec_interpolaters;
 
-extern void update_interpolators()
+void update_interpolators()
 {
 	for(Interpolator<float> i : float_interpolaters)
 	{

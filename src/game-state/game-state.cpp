@@ -12,25 +12,25 @@ Game_State::~Game_State()
 
 void Game_State::update()
 {
-	for(size_t i = 0; i < elements.size(); i++)
+	for(UI_Base* x : elements)
 	{
-		elements[i]->update();
+		x->update();
 	}
 }
 
 void Game_State::render()
 {
-	for(size_t i = 0; i < elements.size(); i++)
+	for(UI_Base* x : elements)
 	{
-		elements[i]->render();
+		x->render();
 	}
 }
 
 void Game_State::clear()
 {
-	for(size_t i = 0; i < elements.size(); i++)
+	for(UI_Base* x : elements)
 	{
-		delete elements[i];
+		delete x;
 	}
 	elements.clear();
 }

@@ -21,10 +21,10 @@ void UI_Button::render()
 {
 	SDL_Rect box = {get_pos().x,
 					get_pos().y,
-					this->size.x,
-					this->size.y};
+					size.x,
+					size.y};
 	SDL_RenderSetScale(renderer, this->scale.x, this->scale.y);
-	SDL_SetRenderDrawColor(renderer, color.r, color.b, color.b, color.a);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawRect(renderer, &box);
 	clear_render_settings(renderer);
 }

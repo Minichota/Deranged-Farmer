@@ -115,10 +115,11 @@ void Game::increment_state()
 {
 	// clear previous state
 	game_states[Game::state]->clear();
+	pause->clear(); paused = false;
+	debug->clear();
 	Game::state++;
 	assert(state < STATE_COUNT);
 	// initialize new state
-	debug->clear();
 	clear_interpolators();
 	game_states[Game::state]->init();
 }
@@ -127,10 +128,8 @@ void Game::set_state(int state)
 {
 	assert(state >= 0 && state < STATE_COUNT);
 	// clear previous state
-	if(game_states.size() > 1)
-	{
-		game_states[Game::state]->clear();
-	}
+	game_states[Game::state]->clear();
+	pause->clear(); paused = false;
 	debug->clear();
 	Game::state = state;
 	// initialize new state
@@ -144,6 +143,10 @@ void Game::toggle_pause()
 	if((paused = !paused))
 	{
 		pause->init();
+	}
+	else
+	{
+		pause->clear();
 	}
 }
 
@@ -168,7 +171,10 @@ void Game::handle_event(SDL_Event event)
 			{
 				case SDLK_F12:
 				{
-					debug->toggle();
+					if(this->state != 0)
+					{
+						debug->toggle();
+					}
 				} break;
 			}
 		}

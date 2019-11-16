@@ -17,6 +17,7 @@ Renderable(renderer)
 
 Map::~Map()
 {
+	clear();
 }
 
 void Map::update()
@@ -62,6 +63,10 @@ void Map::init()
 	std::vector<Settings::Data<int>*> variables;
 	parse(data, '=', variables, 0, 2);
 	tile_count = Ivec(variables[0]->data, variables[1]->data);
+	for(int i = 0; i < 2; i++)
+	{
+		delete variables[i];
+	}
 
 	std::vector<std::vector<int>> map_data;
 	parse_csv(data, map_data, 0, tile_count.y);
@@ -109,10 +114,12 @@ void Map::init()
 					Map_Entity* fence = new Map_Entity(renderer, Fvec(map_data[y][0], map_data[y][1]), Fvec(map_data[y][2], map_data[y][3]), map_data[y][4]);
 					fence->load_texture("res/graphics/fence.png");
 					map_entities.push_back(fence);
+					delete variables[y];
 				}
 			}
 		}
 	}
+	variables.clear();
 }
 
 void Map::clear()
@@ -123,7 +130,13 @@ void Map::clear()
 		{
 			delete x_tile;
 		}
+		y_tiles.clear();
 	}
+	for(Map_Entity* map_entity : map_entities)
+	{
+		delete map_entity;
+	}
+	map_entities.clear();
 	tiles.clear();
 }
 
