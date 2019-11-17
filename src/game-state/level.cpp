@@ -35,6 +35,7 @@ void Level::update()
 		map.handle_collision(entity);
 		entity->move();
 	}
+	handle_entity_collision(entities[0], entities[1]);
 }
 
 void Level::render()
@@ -134,4 +135,13 @@ void Level::load_entities()
 		}
 	}
 	types.clear();
+}
+
+void Level::handle_entity_collision(Entity* e_1, Entity* e_2)
+{
+	if(test_collision(e_1->get_collision_pos(), e_1->get_collision_size(),
+					  e_2->get_collision_pos(), e_2->get_collision_size()))
+	{
+		// player collided with some shite
+	}
 }
