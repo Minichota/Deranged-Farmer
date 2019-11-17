@@ -23,8 +23,6 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	void handle_physics();
 	void move();
 
-	SDL_Rect get_simple_rect();
-
 	// attributed
 	void set_health(int health);
 	void heal(int health);

@@ -107,17 +107,6 @@ void Entity::move()
 	}
 }
 
-SDL_Rect Entity::get_simple_rect()
-{
-	return SDL_Rect
-	{
-		(int)std::round(pos.x/scale.x),
-		(int)std::round(pos.y/scale.y),
-		(int)std::round(size.x),
-		(int)std::round(size.y)
-	};
-}
-
 void Entity::set_health(int health)
 {
 	this->health = health;

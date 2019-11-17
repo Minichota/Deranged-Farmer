@@ -70,9 +70,21 @@ class Sized
 		this->size = Vector<T>(scale_x, scale_y);
 	};
 
+	inline SDL_Rect get_render_rect()
+	{
+		return
+		{
+			(int)std::round(pos.x/scale.x),
+			(int)std::round(pos.y/scale.y),
+			(int)std::round(size.x),
+			(int)std::round(size.y)
+		};
+	}
+
 	protected:
 	Vector<T> pos;
 	Vector<T> size;
 	Vector<T> scale;
+	float rotation;
 };
 #endif

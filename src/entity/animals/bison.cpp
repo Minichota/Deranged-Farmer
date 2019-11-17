@@ -28,7 +28,7 @@ void Bison::update()
 
 void Bison::render()
 {
-	SDL_Rect dest_rect = get_simple_rect();
+	SDL_Rect dest_rect = get_render_rect();
 	SDL_RenderCopyEx(renderer, texture, NULL, &dest_rect, rotation, NULL, SDL_FLIP_NONE);
 	if(Game::debug->active)
 	{

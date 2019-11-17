@@ -19,7 +19,7 @@ void Map_Entity::update()
 
 void Map_Entity::render()
 {
-	SDL_Rect output_rect = get_simple_rect();
+	SDL_Rect output_rect = get_render_rect();
 	if(Game::debug->active)
 	{
 		Game::debug->push_render(this, "Entity", {&pos.x, &pos.y,
