@@ -126,7 +126,6 @@ void Level::load_entities()
 			{
 				// some weird entity
 				// TODO implement some entity classes
-				// TODO implement reading of delay and radius
 				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
 				bison->load_texture("res/graphics/bison.png");
 				entities.push_back(bison);

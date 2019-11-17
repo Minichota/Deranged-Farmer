@@ -95,7 +95,7 @@ class Sized
 			// don't rotate, it's either square or has a dynamic rotation
 			return pos;
 		}
-		float rad_rotation = -rotation * 3.1415926535f/180.0f;
+		float rad_rotation = -(int)rotation % 180 * 3.1415926535f/180.0f;
 		float p = pos.x + size.x/2;
 		float q = pos.y + size.y/2;
 		Fvec pos_prime = Fvec((-size.x/2) * cosf(rad_rotation) + (size.y/2) * sinf(rad_rotation) + p,
@@ -104,18 +104,18 @@ class Sized
 	}
 	Vector<T> get_collision_size()
 	{
-		switch((int)rotation)
+		if(size.x == size.y || (int)rotation % 90 != 0)
 		{
-			case 0:
-			case 180:
-			{
-				return this->size;
-			} break;
-			case 90:
-			case 270:
-			{
-				return Vector<T>(size.y, size.x);
-			} break;
+			// don't rotate, it's either square or has a dynamic rotation
+			return size;
+		}
+		if((int)rotation % 180 == 0)
+		{
+			return size;
+		}
+		if((int)rotation % 90 == 0)
+		{
+			return Fvec(size.y, size.x);
 		}
 		return Vector<T>(-1.0f, -1.0f);
 	}

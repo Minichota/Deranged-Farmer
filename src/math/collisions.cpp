@@ -1,6 +1,6 @@
 #include "collisions.hpp"
 
-bool test_collision_movingAA(Fvec lhs_pos, Fvec lhs_size, Fvec lhs_vel, Fvec rhs_pos, Fvec rhs_size)
+bool test_collision(Fvec lhs_pos, Fvec lhs_size, Fvec rhs_pos, Fvec rhs_size)
 {
 	Fvec lhs_bottom_right = lhs_pos + lhs_size;
 	return (
@@ -20,11 +20,6 @@ bool test_collision_movingAA(Fvec lhs_pos, Fvec lhs_size, Fvec lhs_vel, Fvec rhs
 			   lhs_pos.y <= rhs_pos.y + rhs_size.y
 			)
 		   );
-}
-
-bool test_collision_movingAABB(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec& rhs_pos, Fvec rhs_size, Fvec& rhs_vel)
-{
-	return true;
 }
 
 void handle_collision_movingAA(Fvec& lhs_pos, Fvec lhs_size, Fvec& lhs_vel, Fvec rhs_pos, Fvec rhs_size)
