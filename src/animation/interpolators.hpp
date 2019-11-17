@@ -81,6 +81,6 @@ bool get_direction(Interpolator<T> i)
 extern std::vector<Interpolator<float>> float_interpolaters;
 extern std::vector<Interpolator<int>> int_interpolaters;
 extern std::vector<Interpolator<unsigned char>> uchar_interpolaters;
-//extern std::vector<Interpolator<Ivec>> ivec_interpolaters;
+extern std::vector<Interpolator<Ivec>> ivec_interpolaters;
 
 #endif

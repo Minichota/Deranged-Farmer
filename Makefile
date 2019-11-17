@@ -14,7 +14,7 @@ OBJ_FILES=$(patsubst $(SRC)/%.o,$(O_DIR)/%.o, $(SRC_FILES:.cpp=.o))
 
 VPATH=$(SRC_DIR) $(addprefix $(SRC)/,$(cppdirs))
 
-CXX_FLAGS=$(addprefix -I, $(H_FILES)) `sdl2-config --libs --cflags` -O3 -Wall -lSDL2_image -lm -std=c++17 -lSDL2_ttf -lutil -lSDL2_image -pthread
+CXX_FLAGS=$(addprefix -I, $(H_FILES)) `sdl2-config --libs --cflags` -O0 -Wall -lSDL2_image -lm -std=c++17 -lSDL2_ttf -lutil -lSDL2_image -pthread
 
 all: $(O_DIR)/$(PROGRAM_NAME) | run
 
@@ -33,11 +33,11 @@ endif
 
 $(O_DIR)/%.o: %.cpp | $(addprefix $(O_DIR)/,$(cpp_dirs))
 ifeq ($(DEBUG),true)
+	@echo "compiling: $@"
 	@$(CXX) -D"DEBUG=true" -c -o $@ $< $(CXX_FLAGS)
-	@echo "compiling: $@"
 else
-	@$(CXX) -c -o $@ $< $(CXX_FLAGS)
 	@echo "compiling: $@"
+	@$(CXX) -c -o $@ $< $(CXX_FLAGS)
 endif
 
 
@@ -46,8 +46,8 @@ $(addprefix $(O_DIR)/,$(cpp_dirs)):
 
 .PHONY: clean run
 clean:
-	@echo "cleaned :)"
 	@rm -rf $(O_DIR)
+	@echo "cleaned :)"
 
 run: $(O_DIR)/$(PROGRAM_NAME)
 	@$<
