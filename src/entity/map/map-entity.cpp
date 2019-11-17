@@ -4,9 +4,8 @@
 #include "game.hpp"
 
 Map_Entity::Map_Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation):
-Entity(renderer, pos, size)
+Entity(renderer, pos, size, rotation)
 {
-	this->rotation = rotation % 180;
 }
 
 Map_Entity::~Map_Entity()

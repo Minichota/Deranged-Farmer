@@ -1,23 +1,30 @@
 #ifndef SIZED_HPP
 #define SIZED_HPP
 
+#include <SDL2/SDL.h>
+
 #include "vectors.hpp"
+#include "error.hpp"
 
 template <class T>
 class Sized
 {
 	public:
-	Sized(Vector<T> pos, Vector<T> size, Vector<T> scale)
+	Sized(Vector<T> pos, Vector<T> size, Vector<T> scale, int rotation = 0)
 	{
 		this->pos = pos;
 		this->size = size;
 		this->scale = scale;
+		Error((int)rotation % 90 != 0, {"Object cannot have rotation that isn't divisible by 90"}, true);
+		this->rotation = rotation;
 	};
-	Sized<T>(T pos_x, T pos_y, T size_x, T size_y, T scale_x, T scale_y)
+	Sized<T>(T pos_x, T pos_y, T size_x, T size_y, T scale_x, T scale_y, int rotation = 0)
 	{
 		this->pos = Vector<T>(pos_x, pos_y);
 		this->size = Vector<T>(size_x, size_y);
 		this->scale = Vector<T>(scale_x, scale_y);
+		Error((int)rotation % 90 != 0, {"Object cannot have rotation that isn't divisible by 90"}, true);
+		this->rotation = rotation;
 	};
 	~Sized()
 	{
@@ -79,6 +86,38 @@ class Sized
 			(int)std::round(size.x),
 			(int)std::round(size.y)
 		};
+	}
+
+	Vector<T> get_collision_pos()
+	{
+		if(size.x == size.y || (int)rotation % 90 != 0)
+		{
+			// don't rotate, it's either square or has a dynamic rotation
+			return pos;
+		}
+		float rad_rotation = -rotation * 3.1415926535f/180.0f;
+		float p = pos.x + size.x/2;
+		float q = pos.y + size.y/2;
+		Fvec pos_prime = Fvec((-size.x/2) * cosf(rad_rotation) + (size.y/2) * sinf(rad_rotation) + p,
+							   (size.x/2) * sinf(rad_rotation) + (-size.y/2) * cosf(rad_rotation) + q);
+		return pos_prime;
+	}
+	Vector<T> get_collision_size()
+	{
+		switch((int)rotation)
+		{
+			case 0:
+			case 180:
+			{
+				return this->size;
+			} break;
+			case 90:
+			case 270:
+			{
+				return Vector<T>(size.y, size.x);
+			} break;
+		}
+		return Vector<T>(-1.0f, -1.0f);
 	}
 
 	protected:

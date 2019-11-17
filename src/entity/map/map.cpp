@@ -149,10 +149,10 @@ void Map::handle_collision(Entity* entity)
 			if(x_tile->get_size() != Fvec(-1, -1))
 			{
 				if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-										   x_tile->get_pos_copy(), x_tile->get_size_copy()))
+										   x_tile->get_collision_pos(), x_tile->get_collision_size()))
 				{
 					handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-											  x_tile->get_pos_copy(), x_tile->get_size_copy());
+											  x_tile->get_collision_pos(), x_tile->get_collision_size());
 				}
 			}
 		}
@@ -160,10 +160,10 @@ void Map::handle_collision(Entity* entity)
 	for(Map_Entity* map_e : map_entities)
 	{
 		if(test_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-								   map_e->get_pos_copy(), map_e->get_size_copy()))
+								   map_e->get_collision_pos(), map_e->get_collision_size()))
 		{
 			handle_collision_movingAA(entity->get_pos(), entity->get_size() * entity->get_scale(), entity->get_vel(),
-									  map_e->get_pos_copy(), map_e->get_size_copy());
+									  map_e->get_collision_pos(), map_e->get_collision_size());
 		}
 	}
 }

@@ -4,15 +4,15 @@
 #include "entity.hpp"
 #include "error.hpp"
 
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation):
 Renderable(renderer),
-Sized(pos, size, Fvec(1.0f, 1.0f))
+Sized(pos, size, Fvec(1.0f, 1.0f), rotation)
 {
 }
 
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, int rotation):
 Renderable(renderer),
-Sized(pos, size, scale)
+Sized(pos, size, scale, rotation)
 {
 }
 
