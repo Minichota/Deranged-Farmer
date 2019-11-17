@@ -37,7 +37,7 @@ void Player::update()
 
 void Player::render()
 {
-	SDL_Rect box = get_simple_rect();
+	SDL_Rect box = get_render_rect();
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;

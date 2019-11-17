@@ -9,8 +9,8 @@
 class Entity : public Renderable, public Event_Handler, public Sized<float>
 {
 	public:
-	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size);
-	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale);
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation = 0);
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, int rotation = 0);
 	virtual ~Entity();
 
 	virtual void update() = 0;
@@ -22,8 +22,6 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	void accelerate(Fvec vel);
 	void handle_physics();
 	void move();
-
-	SDL_Rect get_simple_rect();
 
 	// attributed
 	void set_health(int health);
@@ -42,8 +40,6 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	protected:
 	Fvec vel;
 	Fvec max_vel;
-
-	float rotation;
 
 	int health;
 	int max_health;

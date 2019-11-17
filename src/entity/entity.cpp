@@ -4,15 +4,15 @@
 #include "entity.hpp"
 #include "error.hpp"
 
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation):
 Renderable(renderer),
-Sized(pos, size, Fvec(1.0f, 1.0f))
+Sized(pos, size, Fvec(1.0f, 1.0f), rotation)
 {
 }
 
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, int rotation):
 Renderable(renderer),
-Sized(pos, size, scale)
+Sized(pos, size, scale, rotation)
 {
 }
 
@@ -105,17 +105,6 @@ void Entity::move()
 	{
 		this->rotation = 90;
 	}
-}
-
-SDL_Rect Entity::get_simple_rect()
-{
-	return SDL_Rect
-	{
-		(int)std::round(pos.x/scale.x),
-		(int)std::round(pos.y/scale.y),
-		(int)std::round(size.x),
-		(int)std::round(size.y)
-	};
 }
 
 void Entity::set_health(int health)

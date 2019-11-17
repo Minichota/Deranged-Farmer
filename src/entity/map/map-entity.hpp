@@ -6,7 +6,7 @@
 class Map_Entity : public Entity
 {
 	public:
-	Map_Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation);
+	Map_Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation = 0);
 	~Map_Entity();
 
 	void update();

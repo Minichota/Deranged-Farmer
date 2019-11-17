@@ -24,6 +24,7 @@ class Level : public Game_State
 
 	private:
 	void load_entities();
+	void handle_entity_collision(Entity* e_1, Entity* e_2);
 
 	private:
 	SDL_Texture* background;
