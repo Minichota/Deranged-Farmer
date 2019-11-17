@@ -18,8 +18,6 @@ map(renderer, map_data_file_path, map_image_file_path, Ivec(32,32)),
 map_data_file_path(map_data_file_path),
 map_image_file_path(map_image_file_path)
 {
-	background = IMG_LoadTexture(renderer, "res/graphics/background.png");
-	Error(!background, {"Failed to load background", SDL_GetError()});
 }
 
 Level::~Level()
@@ -67,6 +65,10 @@ void Level::init()
 		player_texture = IMG_LoadTexture(renderer, "res/graphics/player_test.png");
 		Error(player_texture == nullptr, {"Failed to load player texture", SDL_GetError()});
 	}
+	{
+		background = IMG_LoadTexture(renderer, "res/graphics/background.png");
+		Error(!background, {"Failed to load background", SDL_GetError()});
+	}
 	entities[0]->set_texture(player_texture);
 	load_entities();
 	map.init();
@@ -79,9 +81,9 @@ void Level::clear()
 		delete entity;
 	}
 	entities.clear();
-
 	map.clear();
 	Game_State::clear();
+	SDL_DestroyTexture(background);
 }
 
 void Level::handle_event(SDL_Event event)
@@ -128,7 +130,9 @@ void Level::load_entities()
 				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
 				bison->load_texture("res/graphics/bison.png");
 				entities.push_back(bison);
+				delete types[i];
 			} break;
 		}
 	}
+	types.clear();
 }

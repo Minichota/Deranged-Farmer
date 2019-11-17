@@ -64,6 +64,11 @@ class Vector
 		return Vector<T>(this->x * other, this->y * other);
 	}
 
+	Vector<T> operator*(const float other)
+	{
+		return Vector<T>(this->x * other, this->y * other);
+	}
+
 	template <class other_type>
 	Vector<T>& operator+=(const Vector<other_type>& other)
 	{

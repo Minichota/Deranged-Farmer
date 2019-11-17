@@ -30,6 +30,7 @@ UI_Text::~UI_Text()
 	this->text.clear();
 	this->prev_text.clear();
 	TTF_CloseFont(this->font);
+	SDL_DestroyTexture(output);
 }
 
 void UI_Text::update()

@@ -37,8 +37,8 @@ void Pause_Menu::init()
 	elements[4]->set_origin(elements[4]->get_size()/2);
 	elements[5]->set_origin(elements[5]->get_size()/2);
 
-	Settings::Data<int>* x;
-	if((x = Settings::get_setting(Settings::all, "volume")) != nullptr)
+	Settings::Data<int>* x = Settings::get_setting(Settings::all, "volume");
+	if(x != nullptr)
 	{
 		dynamic_cast<UI_Slider*>(elements[5])->set_bind(&x->data);
 	}

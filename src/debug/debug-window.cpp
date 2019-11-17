@@ -25,6 +25,7 @@ console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics
 
 Debug_Window::~Debug_Window()
 {
+	TTF_CloseFont(font);
 }
 
 void Debug_Window::update()

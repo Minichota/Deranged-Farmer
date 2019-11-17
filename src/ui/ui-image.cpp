@@ -30,6 +30,7 @@ UI_Base(renderer, pos, size, scale, SDL_Color{})
 
 UI_Image::~UI_Image()
 {
+	SDL_DestroyTexture(texture);
 }
 
 void UI_Image::update()
