@@ -30,7 +30,6 @@ class UI_Text : public UI_Base
 
 	Ivec tex_size;
 	Ivec actual_size;
-	Fvec prev_scale;
 
 	std::string prev_text;
 	std::string text;

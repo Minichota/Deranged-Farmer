@@ -39,6 +39,8 @@ class UI_Base : public Renderable
 	virtual void set_origin(Ivec origin);
 	virtual Ivec& get_origin();
 
+	virtual void handle_event(const SDL_Event& event);
+
 	protected:
 	virtual bool in_bounds(Ivec input_pos);
 

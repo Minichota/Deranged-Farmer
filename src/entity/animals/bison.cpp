@@ -38,7 +38,3 @@ void Bison::render()
 												 &this->rotation});
 	}
 }
-
-void Bison::handle_event(SDL_Event event)
-{
-}

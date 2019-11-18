@@ -20,7 +20,7 @@ class Level : public Game_State
 	void init();
 	void clear();
 
-	void handle_event(SDL_Event event);
+	void handle_event(const SDL_Event& event);
 
 	private:
 	void load_entities();

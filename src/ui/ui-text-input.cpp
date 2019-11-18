@@ -31,7 +31,7 @@ void UI_Text_Input::render()
 	}
 }
 
-void UI_Text_Input::handle_event(SDL_Event event)
+void UI_Text_Input::handle_event(const SDL_Event& event)
 {
 	switch(event.type)
 	{

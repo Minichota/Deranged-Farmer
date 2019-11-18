@@ -16,7 +16,7 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	virtual void update() = 0;
 	virtual void render() = 0;
 
-	virtual void handle_event(SDL_Event event);
+	virtual void handle_event(const SDL_Event& event);
 
 	// physics
 	void accelerate(Fvec vel);

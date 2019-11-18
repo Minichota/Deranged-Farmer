@@ -13,7 +13,7 @@ class UI_Slider : public UI_Base, public Event_Handler
 	void update();
 	void render();
 
-	void handle_event(SDL_Event event);
+	void handle_event(const SDL_Event& event);
 
 	int get_closest_tick(Ivec pos);
 

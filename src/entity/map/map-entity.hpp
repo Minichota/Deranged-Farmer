@@ -11,7 +11,5 @@ class Map_Entity : public Entity
 
 	void update();
 	void render();
-
-	void handle_event(SDL_Event event);
 };
 #endif

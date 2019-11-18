@@ -31,6 +31,9 @@ Debug_Window::~Debug_Window()
 void Debug_Window::update()
 {
 	text_input.update();
+	inner_rects.clear();
+	outer_rects.clear();
+	console.clear();
 }
 
 void Debug_Window::render()
@@ -134,9 +137,6 @@ void Debug_Window::render()
 	}
 	text_input.render();
 	console.render();
-	inner_rects.clear();
-	outer_rects.clear();
-	console.clear();
 	clear_render_settings(renderer);
 }
 
@@ -149,7 +149,7 @@ void Debug_Window::clear()
 	active = false;
 }
 
-void Debug_Window::handle_event(SDL_Event event)
+void Debug_Window::handle_event(const SDL_Event& event)
 {
 	if(active)
 	{

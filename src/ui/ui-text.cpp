@@ -11,7 +11,6 @@ UI_Base(renderer, pos, size, scale, font_color)
 	this->type = type;
 	this->text = text;
 	this->prev_text = "";
-	this->prev_scale = Fvec(1.0f,1.0f);
 	this->font_path = font_path;
 
 	{
@@ -40,7 +39,7 @@ void UI_Text::update()
 
 void UI_Text::render()
 {
-	if(this->text != this->prev_text || this->scale != this->prev_scale)
+	if(this->text != this->prev_text)
 	{
 		reload_texture();
 	}
@@ -93,7 +92,6 @@ void UI_Text::reload_texture()
 	output = SDL_CreateTextureFromSurface(renderer, new_surface);
 	SDL_QueryTexture(output, NULL, NULL, &tex_size.x, &tex_size.y);
 	this->prev_text = this->text;
-	this->prev_scale = this->scale;
 	SDL_FreeSurface(new_surface);
 }
 

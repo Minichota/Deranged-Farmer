@@ -25,7 +25,6 @@ UI_Base(renderer, pos, size, scale, SDL_Color{})
 		{
 		} break;
 	}
-
 }
 
 UI_Image::~UI_Image()
@@ -35,14 +34,17 @@ UI_Image::~UI_Image()
 
 void UI_Image::update()
 {
-	output_rect = SDL_Rect{get_pos().x,
-						   get_pos().y,
-						   size.x,
-						   size.y};
 }
 
 void UI_Image::render()
 {
+	SDL_Rect output_rect =
+	{
+		(int)std::round(get_pos().x/scale.x),
+		(int)std::round(get_pos().y/scale.y),
+		(int)std::round(get_size().x),
+		(int)std::round(get_size().y)
+	};
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, texture, NULL, &output_rect);
 	clear_render_settings(renderer);

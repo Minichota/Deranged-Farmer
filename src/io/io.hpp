@@ -11,7 +11,7 @@
 std::string read(const char* file_path);
 
 template <class T>
-static void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>*>& values, int start_pos = 0, int count = 1000)
+void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>*>& values, int start_pos = 0, int count = 1000)
 {
 	std::string curr_name;
 	std::string curr_data;
@@ -66,7 +66,7 @@ static void parse(std::string data, const char delimiter, std::vector<Settings::
 }
 
 template <class T>
-static void parse_csv(std::string data, std::vector<std::vector<T>>& values, int start_pos = 0, int count = 1000)
+void parse_csv(std::string data, std::vector<std::vector<T>>& values, int start_pos = 0, int count = 1000)
 {
 	std::string curr_data;
 	int value_pos = 0;
@@ -123,7 +123,7 @@ static void parse_csv(std::string data, std::vector<std::vector<T>>& values, int
 }
 
 template <class T>
-static void write(const char* file_path, std::vector<Settings::Data<T>*> data)
+void write(const char* file_path, std::vector<Settings::Data<T>*> data)
 {
 	std::ofstream write(file_path);
 	Error(!write, {"failed to write to file:", file_path});

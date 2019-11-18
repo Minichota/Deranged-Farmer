@@ -49,7 +49,7 @@ void Main_Menu::init()
 	float_interpolaters.push_back(Interpolator<float>{OSCILLATOR, &elements[0]->get_scale().y, 0.75f, 2.25f, 3000, 3000});
 }
 
-void Main_Menu::handle_event(SDL_Event event)
+void Main_Menu::handle_event(const SDL_Event& event)
 {
 	switch(event.type)
 	{
