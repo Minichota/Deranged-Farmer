@@ -87,7 +87,7 @@ void Level::clear()
 	SDL_DestroyTexture(background);
 }
 
-void Level::handle_event(SDL_Event event)
+void Level::handle_event(const SDL_Event& event)
 {
 	switch(event.type)
 	{

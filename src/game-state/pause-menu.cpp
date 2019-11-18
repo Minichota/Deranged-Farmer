@@ -46,7 +46,7 @@ void Pause_Menu::init()
 	uchar_interpolaters.push_back(Interpolator<unsigned char>{OSCILLATOR,&elements[1]->get_color().a,0,255,750,750});
 }
 
-void Pause_Menu::handle_event(SDL_Event event)
+void Pause_Menu::handle_event(const SDL_Event& event)
 {
 	switch(event.type)
 	{

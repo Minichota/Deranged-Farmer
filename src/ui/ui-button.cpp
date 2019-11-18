@@ -29,7 +29,7 @@ void UI_Button::render()
 	clear_render_settings(renderer);
 }
 
-void UI_Button::handle_event(SDL_Event event)
+void UI_Button::handle_event(const SDL_Event& event)
 {
 	switch(event.type)
 	{

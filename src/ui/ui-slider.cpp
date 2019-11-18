@@ -48,7 +48,7 @@ void UI_Slider::render()
 	clear_render_settings(renderer);
 }
 
-void UI_Slider::handle_event(SDL_Event event)
+void UI_Slider::handle_event(const SDL_Event& event)
 {
 	switch(event.type)
 	{

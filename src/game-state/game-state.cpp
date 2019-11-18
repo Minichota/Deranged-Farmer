@@ -35,7 +35,7 @@ void Game_State::clear()
 	elements.clear();
 }
 
-void Game_State::handle_event(SDL_Event event)
+void Game_State::handle_event(const SDL_Event& event)
 {
 	for(size_t i = 0; i < elements.size(); i++)
 	{

@@ -13,5 +13,4 @@ class UI_Image : public UI_Base
 	Fill_Type fill_type;
 
 	SDL_Texture* texture;
-	SDL_Rect output_rect;
 };

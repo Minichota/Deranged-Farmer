@@ -30,7 +30,7 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	void clear();
 
-	void handle_event(SDL_Event event);
+	void handle_event(const SDL_Event& event);
 
 	void push_render(Sized<float>* address, std::string name_repr, std::vector<float*> values);
 	void push_console(float text);

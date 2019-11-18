@@ -1,3 +1,6 @@
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -33,13 +36,14 @@ class Game {
 	void handle_event(SDL_Event event);
 
 	private:
-	static SDL_Window* window;
-	static SDL_Renderer* renderer;
+	SDL_Window* window;
+	SDL_Renderer* renderer;
 
 	static bool closed;
 	static bool paused;
 
-	static std::vector<Game_State*> game_states;
+	static Game_State* game_states[STATE_COUNT];
 	static Pause_Menu* pause;
 	static int state;
 };
+#endif

@@ -3,6 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-extern void clear_render_settings(SDL_Renderer* renderer);
+void clear_render_settings(SDL_Renderer* const renderer);
 extern unsigned char* keys;
 #endif

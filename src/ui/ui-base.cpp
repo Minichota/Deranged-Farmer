@@ -94,3 +94,7 @@ bool UI_Base::in_bounds(Ivec input_pos)
 			top_left.y <= input_pos.y &&
 			input_pos.y <= bottom_left.y;
 }
+
+void UI_Base::handle_event(const SDL_Event& event)
+{
+}

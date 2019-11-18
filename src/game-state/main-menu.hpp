@@ -10,5 +10,5 @@ class Main_Menu : public Game_State
 
 	void init();
 
-	void handle_event(SDL_Event event);
+	void handle_event(const SDL_Event& event);
 };

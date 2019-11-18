@@ -15,7 +15,7 @@ class UI_Button : public UI_Base, public Event_Handler
 	void update();
 	void render();
 
-	void handle_event(SDL_Event event);
+	void handle_event(const SDL_Event& event);
 
 	private:
 	std::function<void()> callback;

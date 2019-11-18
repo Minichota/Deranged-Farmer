@@ -19,7 +19,7 @@ class Game_State : public Renderable, public Event_Handler
 	virtual void init()   = 0;
 	virtual void clear();
 
-	virtual void handle_event(SDL_Event event);
+	virtual void handle_event(const SDL_Event& event);
 
 	void push_element(UI_Base* element);
 	UI_Base* get_element(size_t index);

@@ -14,10 +14,8 @@
 
 // static variables
 int Game::state;
-std::vector<Game_State*> Game::game_states;
+Game_State* Game::game_states[STATE_COUNT];
 Pause_Menu* Game::pause;
-SDL_Window* Game::window;
-SDL_Renderer* Game::renderer;
 bool Game::paused = false;
 bool Game::closed = false;
 Debug_Window* Game::debug;
@@ -46,11 +44,8 @@ void Game::run()
 	std::string settings_data = read("res/save/settings.txt");
 	parse(settings_data, '=', Settings::all);
  	Game::debug = new Debug_Window(renderer);
-	game_states =
-	{
-		new Main_Menu(renderer),
-		new Level(renderer, "res/map/entities.dat", "res/map/test_map.dat", "res/graphics/tile_map.png")
-	};
+	game_states[0] = new Main_Menu(renderer);
+	game_states[1] = new Level(renderer, "res/map/entities.dat", "res/map/test_map.dat", "res/graphics/tile_map.png");
 
 	this->pause = new Pause_Menu(renderer);
 	set_state(0);
