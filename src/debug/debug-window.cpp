@@ -108,33 +108,39 @@ void Debug_Window::render()
 	}
 
 	// rendering of inner layer
-	draw_pos = pos;
 	if(outer_selection >= 0)
 	{
-		// rendering of inner text
-		for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
+		if(inner_renders.empty())
 		{
-			std::string x = std::to_string(*to_render[outer_selection].values[i]);
-			remove_zeros(x);
-
-			surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,255,255,255});
-			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-			SDL_FreeSurface(surface);
-			Ivec tex_size;
-			SDL_QueryTexture(texture, NULL, NULL, &tex_size.x, &tex_size.y);
-			SDL_Rect size_rect =
+			// rendering of inner text
+			for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
 			{
-				draw_pos.x + 50,
-				draw_pos.y,
-				tex_size.x,
-				tex_size.y
-			};
-			inner_rects.push_back(size_rect);
-			SDL_RenderCopy(renderer, texture, NULL, &size_rect);
-			SDL_DestroyTexture(texture);
-			draw_pos.y += tex_size.y;
+				std::string x = std::to_string(*to_render[outer_selection].values[i]);
+				remove_zeros(x);
+
+				surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,255,255,255});
+				inner_renders.push_back(SDL_CreateTextureFromSurface(renderer, surface));
+				SDL_FreeSurface(surface);
+			}
 		}
 	}
+	draw_pos = pos;
+	for(size_t i = 0; i < inner_renders.size(); i++)
+	{
+		Ivec tex_size;
+		SDL_QueryTexture(inner_renders[i], NULL, NULL, &tex_size.x, &tex_size.y);
+		SDL_Rect size_rect =
+		{
+			draw_pos.x + 50,
+			draw_pos.y,
+			tex_size.x,
+			tex_size.y
+		};
+		inner_rects.push_back(size_rect);
+		SDL_RenderCopy(renderer, inner_renders[i], NULL, &size_rect);
+		draw_pos.y += tex_size.y;
+	}
+
 	text_input.render();
 	console.render();
 	clear_render_settings(renderer);
@@ -145,6 +151,17 @@ void Debug_Window::clear()
 	text_input.set_string("");
 	outer_selection = -1;
 	inner_selection = -1;
+	for(size_t i = 0; i < to_render.size(); i++)
+	{
+		SDL_DestroyTexture(to_render[i].texture);
+	}
+	to_render.clear();
+	for(size_t i = 0; i < inner_renders.size(); i++)
+	{
+		SDL_DestroyTexture(inner_renders[i]);
+	}
+	inner_renders.clear();
+	inner_renders.resize(0);
 	to_render.clear();
 	active = false;
 }
@@ -213,6 +230,12 @@ void Debug_Window::handle_event(const SDL_Event& event)
 							{
 								outer_selection = 0;
 							}
+							for(size_t i = 0; i < inner_renders.size(); i++)
+							{
+								SDL_DestroyTexture(inner_renders[i]);
+							}
+							inner_renders.clear();
+							inner_renders.resize(0);
 							inner_selection = -1;
 							set_string("");
 							handle_keyboard_scrolling();
@@ -241,6 +264,12 @@ void Debug_Window::handle_event(const SDL_Event& event)
 							{
 								outer_selection = to_render.size() - 1;
 							}
+							for(size_t i = 0; i < inner_renders.size(); i++)
+							{
+								SDL_DestroyTexture(inner_renders[i]);
+							}
+							inner_renders.clear();
+							inner_renders.resize(0);
 							inner_selection = -1;
 							set_string("");
 							handle_keyboard_scrolling();
@@ -307,6 +336,14 @@ void Debug_Window::select(Ivec pos)
 		   pos.x < outer_rects[i].x + outer_rects[i].w &&
 		   pos.y < outer_rects[i].y + outer_rects[i].h)
 		{
+			for(size_t i = 0; i < inner_renders.size(); i++)
+			{
+				SDL_DestroyTexture(inner_renders[i]);
+			}
+			inner_renders.clear();
+			inner_renders.resize(0);
+			text_input.set_string("");
+			inner_selection = -1;
 			outer_selection = i;
 			return;
 		}
@@ -327,6 +364,12 @@ void Debug_Window::select(Ivec pos)
 	outer_selection = -1;
 
 	text_input.set_string("");
+	for(size_t i = 0; i < inner_renders.size(); i++)
+	{
+		SDL_DestroyTexture(inner_renders[i]);
+	}
+	inner_renders.clear();
+	inner_renders.resize(0);
 }
 
 void Debug_Window::set_string(std::string input)
