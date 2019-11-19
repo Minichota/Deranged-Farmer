@@ -8,10 +8,6 @@ Entity(renderer, pos, size, rotation)
 {
 }
 
-Map_Entity::~Map_Entity()
-{
-}
-
 void Map_Entity::update()
 {
 }

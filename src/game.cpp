@@ -48,6 +48,7 @@ void Game::run()
 	game_states[1] = new Level(renderer, "res/map/entities.dat", "res/map/test_map.dat", "res/graphics/tile_map.png");
 
 	this->pause = new Pause_Menu(renderer);
+	pause->init();
 	set_state(0);
 
 	closed = false;
@@ -110,12 +111,13 @@ void Game::increment_state()
 {
 	// clear previous state
 	game_states[Game::state]->clear();
-	pause->clear(); paused = false;
+	paused = false;
 	debug->clear();
 	Game::state++;
 	assert(state < STATE_COUNT);
 	// initialize new state
 	clear_interpolators();
+	pause->init();
 	game_states[Game::state]->init();
 }
 
@@ -124,25 +126,19 @@ void Game::set_state(int state)
 	assert(state >= 0 && state < STATE_COUNT);
 	// clear previous state
 	game_states[Game::state]->clear();
-	pause->clear(); paused = false;
+	paused = false;
 	debug->clear();
 	Game::state = state;
 	// initialize new state
 	clear_interpolators();
+	pause->init();
 	game_states[Game::state]->init();
 }
 
 void Game::toggle_pause()
 {
 	assert(state != 0);
-	if((paused = !paused))
-	{
-		pause->init();
-	}
-	else
-	{
-		pause->clear();
-	}
+	paused = !paused;
 }
 
 void Game::close()

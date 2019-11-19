@@ -22,7 +22,7 @@ Map::~Map()
 
 void Map::update()
 {
-	for(std::vector<Tile*> y_tiles : tiles)
+	for(std::vector<Tile*>& y_tiles : tiles)
 	{
 		for(Tile* x_tile : y_tiles)
 		{
@@ -40,7 +40,7 @@ void Map::update()
 
 void Map::render()
 {
-	for(std::vector<Tile*> y_tiles : tiles)
+	for(std::vector<Tile*>& y_tiles : tiles)
 	{
 		for(Tile* x_tile : y_tiles)
 		{
@@ -70,8 +70,14 @@ void Map::init()
 
 	std::vector<std::vector<int>> map_data;
 	parse_csv(data, map_data, 0, tile_count.y);
-
-	SDL_Texture* image_texture = IMG_LoadTexture(renderer, image_path);
+	{
+		if(tile_image == nullptr)
+		{
+			SDL_DestroyTexture(tile_image);
+		}
+		tile_image = IMG_LoadTexture(renderer, image_path);
+		Error(!tile_image, {"Failed to load image texture for tiles", image_path }, true);
+	}
 	for(int y = 0; y < tile_count.y; y++)
 	{
 		for(int x = 0; x < tile_count.x; x++)
@@ -89,7 +95,7 @@ void Map::init()
 			}
 			int tile_type = map_data[y][x] - 1;
 			Tile* tile = new Tile(renderer, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
-			tile->set_texture(image_texture, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
+			tile->set_texture(tile_image, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
 			if((int)tiles.size() <= y)
 			{
 				tiles.push_back(std::vector<Tile*>());
@@ -124,7 +130,7 @@ void Map::init()
 
 void Map::clear()
 {
-	for(std::vector<Tile*> y_tiles : tiles)
+	for(std::vector<Tile*>& y_tiles : tiles)
 	{
 		for(Tile* x_tile : y_tiles)
 		{
@@ -138,11 +144,13 @@ void Map::clear()
 	}
 	map_entities.clear();
 	tiles.clear();
+	SDL_DestroyTexture(tile_image);
+	tile_image = nullptr;
 }
 
 void Map::handle_collision(Entity* entity)
 {
-	for(std::vector<Tile*> y_tiles : tiles)
+	for(std::vector<Tile*>& y_tiles : tiles)
 	{
 		for(Tile* x_tile : y_tiles)
 		{

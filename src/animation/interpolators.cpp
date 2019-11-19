@@ -7,7 +7,7 @@ std::vector<Interpolator<Ivec>> ivec_interpolaters;
 
 void update_interpolators()
 {
-	for(Interpolator<float> i : float_interpolaters)
+	for(Interpolator<float>& i : float_interpolaters)
 	{
 		switch(i.type)
 		{
@@ -22,7 +22,7 @@ void update_interpolators()
 		}
 	}
 
-	for(Interpolator<unsigned char> i : uchar_interpolaters)
+	for(Interpolator<unsigned char>& i : uchar_interpolaters)
 	{
 		switch(i.type)
 		{
@@ -37,7 +37,7 @@ void update_interpolators()
 		}
 	}
 
-	for(Interpolator<int> i : int_interpolaters)
+	for(Interpolator<int>& i : int_interpolaters)
 	{
 		switch(i.type)
 		{
@@ -51,7 +51,8 @@ void update_interpolators()
 			} break;
 		}
 	}
-	for(Interpolator<Ivec> i : ivec_interpolaters)
+
+	for(Interpolator<Ivec>& i : ivec_interpolaters)
 	{
 		switch(i.type)
 		{

@@ -1,5 +1,5 @@
-#ifndef DEBUG_WINDOW
-#define DEBUG_WINDOW
+#ifndef DEBUG_WINDOW_HPP
+#define DEBUG_WINDOW_HPP
 
 #include <vector>
 #include <SDL2/SDL_ttf.h>
@@ -50,6 +50,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	TTF_Font* font;
 
 	std::vector<Debug_Element> to_render;
+	std::vector<SDL_Texture*> inner_renders;
 
 	std::vector<SDL_Rect> outer_rects;
 	std::vector<SDL_Rect> inner_rects;

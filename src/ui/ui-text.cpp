@@ -39,7 +39,7 @@ void UI_Text::update()
 
 void UI_Text::render()
 {
-	if(this->text != this->prev_text)
+	if(this->text != this->prev_text || !output)
 	{
 		reload_texture();
 	}
@@ -108,6 +108,11 @@ void UI_Text::append_text(std::string text)
 void UI_Text::clear()
 {
 	this->text.clear();
+	if(output != nullptr)
+	{
+		SDL_DestroyTexture(output);
+		output = nullptr;
+	}
 }
 
 std::string UI_Text::get_text()
