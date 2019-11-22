@@ -5,7 +5,6 @@ CXX=g++
 cpp_dirs=math game-state ui animation io entity entity/player entity/map debug entity/animals
 external_files=
 SRC=src
-DEBUG=false
 FILE=NULL
 
 SRC_FILES= $(wildcard $(SRC)/*.cpp $(addsuffix /*.cpp,$(addprefix $(SRC)/,$(cpp_dirs))))
@@ -23,22 +22,13 @@ compile: $(O_DIR)/$(PROGRAM_NAME)
 single: $(O_DIR)/$(FILE).o
 
 $(O_DIR)/$(PROGRAM_NAME): $(OBJ_FILES)
-ifeq ($(DEBUG),true)
-	@$(CXX) -D"DEBUG=true" -o $@ $^ $(CXX_FLAGS) $(external_files)
-	@echo "done :)"
-else
+	@echo "combining: $^"
 	@$(CXX) -o $@ $^ $(CXX_FLAGS) $(external_files)
 	@echo "done :)"
-endif
 
 $(O_DIR)/%.o: %.cpp | $(addprefix $(O_DIR)/,$(cpp_dirs))
-ifeq ($(DEBUG),true)
-	@echo "compiling: $@"
-	@$(CXX) -D"DEBUG=true" -c -o $@ $< $(CXX_FLAGS)
-else
 	@echo "compiling: $@"
 	@$(CXX) -c -o $@ $< $(CXX_FLAGS)
-endif
 
 
 $(addprefix $(O_DIR)/,$(cpp_dirs)):
@@ -50,4 +40,5 @@ clean:
 	@echo "cleaned :)"
 
 run: $(O_DIR)/$(PROGRAM_NAME)
-	@$<
+	@echo "running $(PROGRAM_NAME) :)"
+	@$^
