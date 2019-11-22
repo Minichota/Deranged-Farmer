@@ -218,6 +218,11 @@ void Debug_Window::handle_event(const SDL_Event& event)
 						{
 							*to_render[outer_selection].values[inner_selection] = atof(text_input.get_string().c_str());
 							set_string(*to_render[outer_selection].values[inner_selection]);
+							for(size_t i = 0; i < inner_renders.size(); i++)
+							{
+								SDL_DestroyTexture(inner_renders[i]);
+							}
+							inner_renders.clear();
 						}
 					} break;
 					case SDLK_j:
@@ -243,6 +248,11 @@ void Debug_Window::handle_event(const SDL_Event& event)
 						else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
 						{
 							set_string(--(*to_render[outer_selection].values[inner_selection]));
+							for(size_t i = 0; i < inner_renders.size(); i++)
+							{
+								SDL_DestroyTexture(inner_renders[i]);
+							}
+							inner_renders.clear();
 						}
 						else if(outer_selection >= 0)
 						{
@@ -277,6 +287,11 @@ void Debug_Window::handle_event(const SDL_Event& event)
 						else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
 						{
 							set_string(++(*to_render[outer_selection].values[inner_selection]));
+							for(size_t i = 0; i < inner_renders.size(); i++)
+							{
+								SDL_DestroyTexture(inner_renders[i]);
+							}
+							inner_renders.clear();
 						}
 						else if(outer_selection >= 0)
 						{
