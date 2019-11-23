@@ -48,7 +48,8 @@ void Player::render()
 		Game::debug->push_render(this, "Player", {&this->pos.x, &this->pos.y,
 												  &this->size.x, &this->size.y,
 												  &this->scale.x, &this->scale.y,
-												  &this->max_vel.x, &this->max_vel.y});
+												  &this->max_vel.x, &this->max_vel.y,
+												  &this->vel.x, &this->vel.y});
 	}
 	clear_render_settings(renderer);
 }
