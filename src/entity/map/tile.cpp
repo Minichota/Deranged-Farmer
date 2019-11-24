@@ -45,7 +45,14 @@ void Tile::render()
 		{
 			Game::debug->push_render(this, "Tile", { &this->pos.x, &this->pos.y,
 													 &this->size.x, &this->size.y });
+			Game::debug->push_rect(this->pos,
+								   this->size);
 		}
+	}
+	if(Game::debug->active)
+	{
+			Game::debug->push_rect(this->pos,
+								   this->size);
 	}
 }
 
@@ -73,4 +80,9 @@ void Tile::set_texture(SDL_Texture* texture, Ivec relative_pos)
 SDL_Texture* Tile::get_texture()
 {
 	return this->full_texture;
+}
+
+bool Tile::is_null()
+{
+	return renderer == nullptr;
 }

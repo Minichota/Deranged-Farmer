@@ -33,6 +33,7 @@ void Debug_Window::update()
 	text_input.update();
 	inner_rects.clear();
 	outer_rects.clear();
+	rects.clear();
 	console.clear();
 }
 
@@ -72,12 +73,22 @@ void Debug_Window::render()
 		draw_pos.y += tex_size.y;
 	}
 
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+	if(rects_active)
+	{
+		for(SDL_Rect x : rects)
+		{
+			SDL_RenderDrawRect(renderer, &x);
+		}
+	}
+
 	if(outer_selection >= 0)
 	{
 		// rendering of outline of outer text
 		Ivec tex_size;
 		SDL_QueryTexture(to_render[outer_selection].texture, NULL, NULL, &tex_size.x, &tex_size.y);
 		SDL_Rect selected_outline = {pos.x, pos.y + (-scroll_pos + 19 * outer_selection), tex_size.x, tex_size.y};
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &selected_outline);
 
 
@@ -90,12 +101,14 @@ void Debug_Window::render()
 			Ivec scale = entity->get_scale();
 			SDL_Rect entity_outline =
 			{
-				(int)std::round(pos.x),
-				(int)std::round(pos.y),
-				(int)std::round(size.x * scale.x),
-				(int)std::round(size.y * scale.y)
+				(int)std::round(pos.x/3.0f),
+				(int)std::round(pos.y/3.0f),
+				(int)std::round(size.x/3.0f * scale.x),
+				(int)std::round(size.y/3.0f * scale.y)
 			};
+			SDL_RenderSetScale(renderer, 3.0f, 3.0f);
 			SDL_RenderDrawRect(renderer, &entity_outline);
+			SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 		}
 		if(inner_selection >= 0)
 		{
@@ -144,6 +157,7 @@ void Debug_Window::clear()
 	{
 		SDL_DestroyTexture(to_render[i].texture);
 	}
+	rects.clear();
 	to_render.clear();
 	to_render.clear();
 	active = false;
@@ -194,6 +208,10 @@ void Debug_Window::handle_event(const SDL_Event& event)
 					case SDLK_BACKSPACE:
 					{
 						text_input.handle_event(event);
+					} break;
+					case SDLK_F11:
+					{
+						rects_active = !rects_active;
 					} break;
 					case SDLK_RETURN:
 					{
@@ -287,6 +305,15 @@ void Debug_Window::push_console(float text)
 	remove_zeros(str);
 	str.push_back(' ');
 	this->console.append_text(str);
+}
+
+void Debug_Window::push_rect(Fvec pos, Fvec size)
+{
+	SDL_Rect maybe{(int)std::round(pos.x),
+				   (int)std::round(pos.y),
+				   (int)std::round(size.x),
+				   (int)std::round(size.y)};
+	rects.push_back(maybe);
 }
 
 void Debug_Window::toggle()
