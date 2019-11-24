@@ -19,6 +19,8 @@ class Tile : public Renderable, public Sized<float>
 	void set_texture(SDL_Texture* texture, Ivec relative_pos);
 	SDL_Texture* get_texture();
 
+	bool is_null();
+
 	private:
 	SDL_Texture* full_texture;
 	Ivec relative_pos;

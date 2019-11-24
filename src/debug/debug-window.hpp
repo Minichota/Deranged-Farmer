@@ -34,10 +34,12 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	void push_render(Sized<float>* address, std::string name_repr, std::vector<float*> values);
 	void push_console(float text);
+	void push_rect(Fvec pos, Fvec size);
 
 	void toggle();
 
 	bool active = false;
+	bool rects_active = false;
 
 	private:
 	void select(Ivec pos);
@@ -50,6 +52,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	TTF_Font* font;
 
 	std::vector<Debug_Element> to_render;
+	std::vector<SDL_Rect> rects;
 
 	std::vector<SDL_Rect> outer_rects;
 	std::vector<SDL_Rect> inner_rects;

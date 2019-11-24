@@ -26,7 +26,7 @@ void Map::update()
 	{
 		for(Tile* x_tile : y_tiles)
 		{
-			if(x_tile->get_size() != Fvec(-1, -1))
+			if(!x_tile->is_null())
 			{
 				x_tile->update();
 			}
@@ -44,10 +44,7 @@ void Map::render()
 	{
 		for(Tile* x_tile : y_tiles)
 		{
-			if(x_tile->get_size() != Fvec(-1, -1))
-			{
-				x_tile->render();
-			}
+			x_tile->render();
 		}
 	}
 	for(Map_Entity* e : map_entities)
@@ -85,7 +82,7 @@ void Map::init()
 			if(map_data[y][x] == 0)
 			{
 				// null tile
-				Tile* tile = new Tile(nullptr, Fvec(x * tile_size.x, y * tile_size.y), Fvec(-1,-1));
+				Tile* tile = new Tile(nullptr, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
 				if((int)tiles.size() <= y)
 				{
 					tiles.push_back(std::vector<Tile*>());
@@ -154,7 +151,7 @@ void Map::handle_collision(Entity* entity)
 	{
 		for(Tile* x_tile : y_tiles)
 		{
-			if(x_tile->get_size() != Fvec(-1, -1))
+			if(!x_tile->is_null())
 			{
 				if(test_collision(entity->get_collision_pos(), entity->get_collision_size() * entity->get_scale(),
 								  x_tile->get_collision_pos(), x_tile->get_collision_size()))
