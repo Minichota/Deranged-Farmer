@@ -222,7 +222,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 					{
 						case SDLK_DELETE:
 						{
-							if(outer_selection >= 0)
+							if(outer_selection >= 0 && (size_t)outer_selection < to_render.size())
 							{
 								// checking all tiles
 								std::vector<std::vector<Tile*>>& tiles = level->get_map().get_tiles();
@@ -241,7 +241,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 								if(tile.base() != nullptr)
 								{
 									tiles[y_index].erase(tiles[y_index].begin() + std::distance(tiles[y_index].begin(), tile));
-									to_render.erase(to_render.begin() + outer_selection);;
+									to_render.erase(to_render.begin() + outer_selection);
 								}
 								// checking all map entities
 								std::vector<Map_Entity*>& map_entities = level->get_map().get_map_entities();
@@ -258,7 +258,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 								if(map_entity.base() != nullptr)
 								{
 									map_entities.erase(map_entities.begin() + std::distance(map_entities.begin(), map_entity));
-									to_render.erase(to_render.begin() + outer_selection);;
+									to_render.erase(to_render.begin() + outer_selection);
 								}
 								// checking all normal entities
 								std::vector<Entity*>& entities = level->get_entities();
@@ -281,6 +281,10 @@ void Debug_Window::handle_event(const SDL_Event& event)
 								{
 									outer_selection--;
 								}
+							}
+							if((size_t)outer_selection >= to_render.size())
+							{
+								outer_selection = -1;
 							}
 						} break;
 						case SDLK_BACKSPACE:
