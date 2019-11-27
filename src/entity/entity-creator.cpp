@@ -19,7 +19,8 @@ Renderable(renderer)
 	};
 	for(size_t i = 0; i < names.size(); i++)
 	{
-		entity_names.push_back(new UI_Text(renderer, Ivec(0, 20*i), Ivec(0,0), Fvec(1.0f, 1.0f), names[i].name, "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
+		entity_names.push_back(new UI_Text(renderer, Ivec(0, 18*i), Ivec(0,0), Fvec(1.0f, 1.0f), names[i].name, "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
+		entity_names[i]->set_font_size(15);
 	}
 }
 
@@ -41,10 +42,21 @@ void Entity_Creator::update()
 
 void Entity_Creator::render()
 {
+	SDL_Rect shadow =
+	{
+		0,
+		0,
+		200,
+		608
+	};
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+	SDL_RenderFillRect(renderer, &shadow);
+
 	for(UI_Text* x : entity_names)
 	{
 		x->render();
 	}
+
 	if(curr_state)
 	{
 		std::string copy = inputs[selected_field]->get_string();
@@ -52,6 +64,7 @@ void Entity_Creator::render()
 		inputs[selected_field]->render();
 		inputs[selected_field]->set_string(copy);
 	}
+
 	Ivec outline_pos = entity_names[selected_name]->get_pos();
 	Ivec outline_size = entity_names[selected_name]->get_size();
 	SDL_Rect outline_box =
