@@ -199,9 +199,14 @@ void Map::insert_entity(Map_Entity* e, size_t pos)
 	map_entities.insert(map_entities.begin() + pos, e);
 }
 
-std::vector<std::vector<Tile*>> Map::get_tiles()
+std::vector<std::vector<Tile*>>& Map::get_tiles()
 {
 	return this->tiles;
+}
+
+std::vector<Map_Entity*>& Map::get_map_entities()
+{
+	return this->map_entities;
 }
 
 Ivec& Map::get_tile_count()

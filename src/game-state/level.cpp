@@ -155,3 +155,8 @@ void Level::push_entity(Entity* entity)
 {
 	this->entities.push_back(entity);
 }
+
+std::vector<Entity*>& Level::get_entities()
+{
+	return this->entities;
+}

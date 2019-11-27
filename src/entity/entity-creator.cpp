@@ -46,7 +46,7 @@ void Entity_Creator::render()
 	{
 		0,
 		0,
-		200,
+		120,
 		608
 	};
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
@@ -172,23 +172,56 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 									case 0:
 									{
 										tile->load_texture("res/graphics/tile_map.png", Ivec(0,0));
+										level->get_map().push_tile(tile);
+									} break;
+									case 1:
+									{
+										tile->load_texture("res/graphics/tile_map.png", Ivec(32,0));
+										level->get_map().push_tile(tile);
+									} break;
+									default:
+									{
+										Error(true, {"That type of tile: ", inputs[4]->get_string().c_str(), " does not exist"});
+										delete tile;
 									} break;
 								}
-								level->get_map().push_tile(tile);
 							} break;
 							case 1:
 							{
-								Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
-																   			 Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())), std::stof(inputs[4]->get_string()));
-								fence->load_texture("res/graphics/fence.png");
-								level->get_map().push_entity(fence);
+								Error(std::stoi(inputs[4]->get_string()) % 90 != 0, {"rotation must be divisible by 90"});
+								if(std::stoi(inputs[4]->get_string()) % 90 == 0)
+								{
+									Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
+																				 Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())),
+																				 std::stof(inputs[4]->get_string()));
+									Error(fence->get_size().x <= 0, {"width cannot be <= 0"});
+									Error(fence->get_size().y <= 0, {"height cannot be <= 0"});
+									if(fence->get_size().x > 0 && fence->get_size().y > 0)
+									{
+										fence->load_texture("res/graphics/fence.png");
+										level->get_map().push_entity(fence);
+									}
+									else
+									{
+										delete fence;
+									}
+								}
 							} break;
 							case 2:
 							{
 								Bison* bison = new Bison(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																   Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())));
-								bison->load_texture("res/graphics/bison.png");
-								level->push_entity(bison);
+								Error(bison->get_size().x <= 0, {"width cannot be <= 0"});
+								Error(bison->get_size().y <= 0, {"height cannot be <= 0"});
+								if(bison->get_size().x > 0 && bison->get_size().y > 0)
+								{
+									bison->load_texture("res/graphics/bison.png");
+									level->push_entity(bison);
+								}
+								else
+								{
+									delete bison;
+								}
 							} break;
 						}
 						selected_name = 0;
