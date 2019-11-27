@@ -10,6 +10,8 @@
 #include "ui-text.hpp"
 #include "ui-text-input.hpp"
 #include "sized.hpp"
+#include "level.hpp"
+#include "entity-creator.hpp"
 
 typedef struct
 {
@@ -41,6 +43,8 @@ class Debug_Window : public Renderable, public Event_Handler
 	bool active = false;
 	bool rects_active = false;
 
+	void set_level(Level* level);
+
 	private:
 	void select(Ivec pos);
 	void set_string(std::string input);
@@ -49,6 +53,8 @@ class Debug_Window : public Renderable, public Event_Handler
 	void handle_keyboard_scrolling();
 
 	private:
+	Level* level;
+
 	TTF_Font* font;
 
 	std::vector<Debug_Element> to_render;
@@ -56,6 +62,8 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	std::vector<SDL_Rect> outer_rects;
 	std::vector<SDL_Rect> inner_rects;
+
+	Entity_Creator entity_creator;
 
 	Ivec pos;
 	int scroll_pos;

@@ -11,6 +11,7 @@
 
 Debug_Window::Debug_Window(SDL_Renderer* renderer):
 Renderable(renderer),
+entity_creator(renderer, nullptr),
 text_input(renderer, Ivec(400,350), Ivec(100,100), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
 console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, WRAPPED)
 {
@@ -18,6 +19,7 @@ console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics
 	this->outer_selection = -1;
 	this->pos = Ivec(600,0);
 	scroll_pos = 0;
+	entity_creator.active = false;
 
 	font = TTF_OpenFont("res/graphics/font.ttf", 16);
 	Error(!font, {"failed to load font", SDL_GetError()});
@@ -30,6 +32,10 @@ Debug_Window::~Debug_Window()
 
 void Debug_Window::update()
 {
+	if(entity_creator.active)
+	{
+		entity_creator.update();
+	}
 	text_input.update();
 	inner_rects.clear();
 	outer_rects.clear();
@@ -39,6 +45,10 @@ void Debug_Window::update()
 
 void Debug_Window::render()
 {
+	if(entity_creator.active)
+	{
+		entity_creator.render();
+	}
 	// background blending
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 127);
 	SDL_Rect x = {pos.x,pos.y,200,608};
@@ -159,133 +169,146 @@ void Debug_Window::clear()
 	}
 	rects.clear();
 	to_render.clear();
-	to_render.clear();
 	active = false;
 }
 
 void Debug_Window::handle_event(const SDL_Event& event)
 {
-	if(active)
+	if(entity_creator.active)
 	{
-		switch(event.type)
+		entity_creator.handle_event(event);
+	}
+	else
+	{
+		if(active)
 		{
-			case SDL_MOUSEBUTTONDOWN:
+			switch(event.type)
 			{
-				Ivec mouse_position = Ivec(event.button.x, event.button.y);
-				switch(event.button.button)
+				case SDL_MOUSEBUTTONDOWN:
 				{
-					case SDL_BUTTON_LEFT:
+					Ivec mouse_position = Ivec(event.button.x, event.button.y);
+					switch(event.button.button)
 					{
-						select(mouse_position);
-					} break;
-				}
-			} break;
-			case SDL_MOUSEWHEEL:
-			{
-				if(event.wheel.y > 0)
-				{
-					// scroll up
-					this->scroll_pos -= 100;
-					if(scroll_pos < 0)
-					{
-						scroll_pos = 0;
+						case SDL_BUTTON_LEFT:
+						{
+							select(mouse_position);
+						} break;
 					}
-				}
-				if(event.wheel.y < 0)
+				} break;
+				case SDL_MOUSEWHEEL:
 				{
-					// scroll down
-					this->scroll_pos += 100;
-					if(scroll_pos > MAX_SCROLL)
+					if(event.wheel.y > 0)
 					{
-						scroll_pos = MAX_SCROLL;
+						// scroll up
+						this->scroll_pos -= 100;
+						if(scroll_pos < 0)
+						{
+							scroll_pos = 0;
+						}
 					}
-				}
-			} break;
-			case SDL_KEYDOWN:
-			{
-				switch(event.key.keysym.sym)
+					if(event.wheel.y < 0)
+					{
+						// scroll down
+						this->scroll_pos += 100;
+						if(scroll_pos > MAX_SCROLL)
+						{
+							scroll_pos = MAX_SCROLL;
+						}
+					}
+				} break;
+				case SDL_KEYDOWN:
 				{
-					case SDLK_BACKSPACE:
+					switch(event.key.keysym.sym)
+					{
+						case SDLK_BACKSPACE:
+						{
+							text_input.handle_event(event);
+						} break;
+						case SDLK_F11:
+						{
+							rects_active = !rects_active;
+						} break;
+						case SDLK_RETURN:
+						{
+							if(text_input.get_string().size() > 0)
+							{
+								*to_render[outer_selection].values[inner_selection] = atof(text_input.get_string().c_str());
+								set_string(*to_render[outer_selection].values[inner_selection]);
+							}
+						} break;
+						case SDLK_j:
+						{
+							// down
+							if(keys[SDL_SCANCODE_LCTRL])
+							{
+								outer_selection++;
+								if((size_t)outer_selection > to_render.size() - 1)
+								{
+									outer_selection = 0;
+								}
+								inner_selection = -1;
+								set_string("");
+								handle_keyboard_scrolling();
+							}
+							else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
+							{
+								set_string(--(*to_render[outer_selection].values[inner_selection]));
+							}
+							else if(outer_selection >= 0)
+							{
+								inner_selection++;
+								if((size_t)inner_selection > to_render[outer_selection].values.size() - 1)
+								{
+									inner_selection = 0;
+								}
+								set_string(*to_render[outer_selection].values[inner_selection]);
+							}
+						} break;
+						case SDLK_k:
+						{
+							// up
+							if(keys[SDL_SCANCODE_LCTRL])
+							{
+								outer_selection--;
+								if(outer_selection < 0)
+								{
+									outer_selection = to_render.size() - 1;
+								}
+								inner_selection = -1;
+								set_string("");
+								handle_keyboard_scrolling();
+							}
+							else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
+							{
+								set_string(++(*to_render[outer_selection].values[inner_selection]));
+							}
+							else if(outer_selection >= 0)
+							{
+								inner_selection--;
+								if(inner_selection < 0)
+								{
+									inner_selection = to_render[outer_selection].values.size() - 1;
+								}
+								set_string(*to_render[outer_selection].values[inner_selection]);
+							}
+						} break;
+						case SDLK_n:
+						{
+							if(keys[SDL_SCANCODE_LCTRL])
+							{
+								entity_creator.active = true;
+							}
+						} break;
+					}
+				} break;
+				case SDL_TEXTINPUT:
+				{
+					if((isdigit(event.text.text[0]) || event.text.text[0] == '.' || event.text.text[0] == '-') && inner_selection >= 0)
 					{
 						text_input.handle_event(event);
-					} break;
-					case SDLK_F11:
-					{
-						rects_active = !rects_active;
-					} break;
-					case SDLK_RETURN:
-					{
-						if(text_input.get_string().size() > 0)
-						{
-							*to_render[outer_selection].values[inner_selection] = atof(text_input.get_string().c_str());
-							set_string(*to_render[outer_selection].values[inner_selection]);
-						}
-					} break;
-					case SDLK_j:
-					{
-						// down
-						if(keys[SDL_SCANCODE_LCTRL])
-						{
-							outer_selection++;
-							if((size_t)outer_selection > to_render.size() - 1)
-							{
-								outer_selection = 0;
-							}
-							inner_selection = -1;
-							set_string("");
-							handle_keyboard_scrolling();
-						}
-						else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
-						{
-							set_string(--(*to_render[outer_selection].values[inner_selection]));
-						}
-						else if(outer_selection >= 0)
-						{
-							inner_selection++;
-							if((size_t)inner_selection > to_render[outer_selection].values.size() - 1)
-							{
-								inner_selection = 0;
-							}
-							set_string(*to_render[outer_selection].values[inner_selection]);
-						}
-					} break;
-					case SDLK_k:
-					{
-						// up
-						if(keys[SDL_SCANCODE_LCTRL])
-						{
-							outer_selection--;
-							if(outer_selection < 0)
-							{
-								outer_selection = to_render.size() - 1;
-							}
-							inner_selection = -1;
-							set_string("");
-							handle_keyboard_scrolling();
-						}
-						else if(keys[SDL_SCANCODE_LSHIFT] && inner_selection >= 0)
-						{
-							set_string(++(*to_render[outer_selection].values[inner_selection]));
-						}
-						else if(outer_selection >= 0)
-						{
-							inner_selection--;
-							if(inner_selection < 0)
-							{
-								inner_selection = to_render[outer_selection].values.size() - 1;
-							}
-							set_string(*to_render[outer_selection].values[inner_selection]);
-						}
-					} break;
-				}
-			} break;
-			case SDL_TEXTINPUT:
-			{
-				if((isdigit(event.text.text[0]) || event.text.text[0] == '.' || event.text.text[0] == '-') && inner_selection >= 0)
-				{
-					text_input.handle_event(event);
-				}
-			} break;
+					}
+				} break;
+			}
 		}
 	}
 }
@@ -398,4 +421,10 @@ void Debug_Window::handle_keyboard_scrolling()
 		scroll_pos -= 19;
 		rect_pos = pos.y + (-scroll_pos + 19 * outer_selection);
 	}
+}
+
+void Debug_Window::set_level(Level* level)
+{
+	this->level = level;
+	this->entity_creator.set_level(level);
 }
