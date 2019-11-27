@@ -220,6 +220,69 @@ void Debug_Window::handle_event(const SDL_Event& event)
 				{
 					switch(event.key.keysym.sym)
 					{
+						case SDLK_DELETE:
+						{
+							if(outer_selection >= 0)
+							{
+								// checking all tiles
+								std::vector<std::vector<Tile*>>& tiles = level->get_map().get_tiles();
+								std::vector<Tile*>::iterator tile;
+								size_t y_index = 0;
+								for(size_t i = 0; i < tiles.size(); i++)
+								{
+									std::vector<Tile*>::iterator found_tile = std::find_if(tiles[i].begin(), tiles[i].end(), [&](Tile* x) -> bool {return x == to_render[outer_selection].address;});
+									if(found_tile != tiles[i].end())
+									{
+										tile = found_tile;
+										y_index = i;
+										break;
+									}
+								}
+								if(tile.base() != nullptr)
+								{
+									tiles[y_index].erase(tiles[y_index].begin() + std::distance(tiles[y_index].begin(), tile));
+									to_render.erase(to_render.begin() + outer_selection);;
+								}
+								// checking all map entities
+								std::vector<Map_Entity*>& map_entities = level->get_map().get_map_entities();
+								std::vector<Map_Entity*>::iterator map_entity;
+								for(size_t i = 0; i < map_entities.size(); i++)
+								{
+									std::vector<Map_Entity*>::iterator found_e = std::find_if(map_entities.begin(), map_entities.end(), [&](Map_Entity* x) -> bool {return x == to_render[outer_selection].address;});
+									if(found_e != map_entities.end())
+									{
+										map_entity = found_e;
+										break;
+									}
+								}
+								if(map_entity.base() != nullptr)
+								{
+									map_entities.erase(map_entities.begin() + std::distance(map_entities.begin(), map_entity));
+									to_render.erase(to_render.begin() + outer_selection);;
+								}
+								// checking all normal entities
+								std::vector<Entity*>& entities = level->get_entities();
+								std::vector<Entity*>::iterator entity;
+								for(size_t i = 0; i < entities.size(); i++)
+								{
+									std::vector<Entity*>::iterator found_e = std::find_if(entities.begin(), entities.end(), [&](Entity* x) -> bool {return x == to_render[outer_selection].address;});
+									if(found_e != entities.end())
+									{
+										entity = found_e;
+										break;
+									}
+								}
+								if(entity.base() != nullptr)
+								{
+									entities.erase(entities.begin() + std::distance(entities.begin(), entity));
+									to_render.erase(to_render.begin() + outer_selection);
+								}
+								if((size_t)outer_selection > to_render.size() - 1)
+								{
+									outer_selection--;
+								}
+							}
+						} break;
 						case SDLK_BACKSPACE:
 						{
 							text_input.handle_event(event);
