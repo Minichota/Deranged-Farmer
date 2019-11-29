@@ -26,7 +26,7 @@ class Sized
 		Error((int)rotation % 90 != 0, {"Object cannot have rotation that isn't divisible by 90"}, true);
 		this->rotation = rotation;
 	};
-	~Sized()
+	virtual ~Sized()
 	{
 	};
 

@@ -22,6 +22,11 @@ class Level : public Game_State
 
 	void handle_event(const SDL_Event& event);
 
+	Map& get_map();
+	void push_entity(Entity* entity);
+
+	std::vector<Entity*>& get_entities();
+
 	private:
 	void load_entities();
 	void handle_entity_collision(Entity* e_1, Entity* e_2);

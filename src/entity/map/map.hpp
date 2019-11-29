@@ -24,7 +24,14 @@ class Map : public Renderable
 
 	void validate_pos(Fvec& pos);
 
-	std::vector<std::vector<Tile*>> get_tiles();
+	void push_tile(Tile* tile);
+	void insert_tile(Tile* tile, STvec pos);
+
+	void push_entity(Map_Entity* tile);
+	void insert_entity(Map_Entity* tile, size_t pos);
+
+	std::vector<std::vector<Tile*>>& get_tiles();
+	std::vector<Map_Entity*>& get_map_entities();
 	Ivec& get_tile_count();
 	Tile* get_tile(size_t x, size_t y);
 	Ivec& get_tile_size();

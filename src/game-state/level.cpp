@@ -145,3 +145,18 @@ void Level::handle_entity_collision(Entity* e_1, Entity* e_2)
 		// player collided with some shite
 	}
 }
+
+Map& Level::get_map()
+{
+	return this->map;
+}
+
+void Level::push_entity(Entity* entity)
+{
+	this->entities.push_back(entity);
+}
+
+std::vector<Entity*>& Level::get_entities()
+{
+	return this->entities;
+}

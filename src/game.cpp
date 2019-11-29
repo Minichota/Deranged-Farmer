@@ -45,7 +45,9 @@ void Game::run()
 	parse(settings_data, '=', Settings::all);
  	Game::debug = new Debug_Window(renderer);
 	game_states[0] = new Main_Menu(renderer);
-	game_states[1] = new Level(renderer, "res/map/entities.dat", "res/map/test_map.dat", "res/graphics/tile_map.png");
+	Level* level = new Level(renderer, "res/map/entities.dat", "res/map/test_map.dat", "res/graphics/tile_map.png");
+	game_states[1] = level;
+	debug->set_level(level);
 
 	this->pause = new Pause_Menu(renderer);
 	pause->init();
