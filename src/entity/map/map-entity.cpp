@@ -18,7 +18,8 @@ void Map_Entity::render()
 	if(Game::debug->active)
 	{
 		Game::debug->push_render(this, "Entity", {&pos.x, &pos.y,
-												  &size.x, &size.y});
+												  &size.x, &size.y,
+												  &rotation});
 	}
 	SDL_SetRenderDrawColor(renderer, 255,255,255,255);
 	SDL_RenderCopyEx(renderer, texture, NULL, &output_rect, this->rotation, NULL, SDL_FLIP_NONE);

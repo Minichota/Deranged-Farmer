@@ -183,6 +183,12 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							{
 								Tile* tile = new Tile(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())));
+								if(tile->get_size().x <= 0 || tile->get_size().y <= 0)
+								{
+									Game::debug->push_log({"width or height cannot be <= 0"});
+									delete tile;
+									break;
+								}
 								switch(std::stoi(inputs[4]->get_string()))
 								{
 									case 0:
@@ -204,19 +210,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							} break;
 							case 1:
 							{
-								if(std::stoi(inputs[4]->get_string()) % 90 != 0)
-								{
-									Game::debug->push_log({"rotation must be divisible by 90"});
-								}
 								if(std::stoi(inputs[4]->get_string()) % 90 == 0)
 								{
 									Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																				 Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())),
 																				 std::stof(inputs[4]->get_string()));
-									if(fence->get_size().x <= 0 || fence->get_size().y <= 0)
-									{
-										Game::debug->push_log({"width or height cannot be <= 0"});
-									}
 									if(fence->get_size().x > 0 && fence->get_size().y > 0)
 									{
 										fence->load_texture("res/graphics/fence.png");
@@ -224,18 +222,19 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 									}
 									else
 									{
+										Game::debug->push_log({"width or height cannot be <= 0"});
 										delete fence;
 									}
+								}
+								else
+								{
+									Game::debug->push_log({"rotation must be divisible by 90"});
 								}
 							} break;
 							case 2:
 							{
 								Bison* bison = new Bison(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																   Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())));
-								if(bison->get_size().x <= 0 || bison->get_size().y <= 0)
-								{
-									Game::debug->push_log({"width or height cannot be <= 0"});
-								}
 								if(bison->get_size().x > 0 && bison->get_size().y > 0)
 								{
 									bison->load_texture("res/graphics/bison.png");
@@ -243,6 +242,7 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 								}
 								else
 								{
+									Game::debug->push_log({"width or height cannot be <= 0"});
 									delete bison;
 								}
 							} break;
