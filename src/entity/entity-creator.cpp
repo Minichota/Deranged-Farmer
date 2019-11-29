@@ -110,11 +110,6 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					{
 						if(curr_state == 0)
 						{
-							if(inputs[selected_name]->get_string() == "")
-							{
-								// check if previous input is null
-								inputs[selected_name]->get_string() = "0";
-							}
 							selected_name++;
 							if((size_t)selected_name > entity_names.size() - 1)
 							{
@@ -123,6 +118,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 						}
 						else
 						{
+							if(inputs[selected_field]->get_string() == "")
+							{
+								// check if previous input is null
+								inputs[selected_field]->get_string() = "0";
+							}
 							selected_field++;
 							if((size_t)selected_field > names[selected_name].input_repr.size() - 1)
 							{
@@ -137,11 +137,6 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					{
 						if(curr_state == 0)
 						{
-							if(inputs[selected_name]->get_string() == "")
-							{
-								// check if previous input is null
-								inputs[selected_name]->get_string() = "0";
-							}
 							selected_name--;
 							if(selected_name < 0)
 							{
@@ -150,6 +145,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 						}
 						else
 						{
+							if(inputs[selected_field]->get_string() == "")
+							{
+								// check if previous input is null
+								inputs[selected_field]->get_string() = "0";
+							}
 							selected_field--;
 							if(selected_field < 0)
 							{
