@@ -417,6 +417,21 @@ void Debug_Window::toggle()
 
 void Debug_Window::select(Ivec pos)
 {
+	// check if user clicked an entity
+	for(size_t i = 0; i < to_render.size(); i++)
+	{
+		Ivec e_pos = to_render[i].address->get_collision_pos();
+		Ivec e_bot_right = e_pos + to_render[i].address->get_collision_size();
+		if(pos.x > e_pos.x && pos.x < e_bot_right.x &&
+		   pos.y > e_pos.y && pos.y < e_bot_right.y)
+		{
+			// clicked the entity
+			outer_selection = i;
+			handle_keyboard_scrolling();
+			return;
+		}
+	}
+	// if the user didn't click any entities, it selects based off of the outer/inner selections
 	for(size_t i = 0; i < outer_rects.size(); i++)
 	{
 		if(pos.x > outer_rects[i].x &&
