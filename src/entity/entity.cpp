@@ -18,7 +18,10 @@ Sized(pos, size, scale, rotation)
 
 Entity::~Entity()
 {
-	SDL_DestroyTexture(texture);
+	if(texture != nullptr)
+	{
+		SDL_DestroyTexture(texture);
+	}
 }
 
 void Entity::handle_event(const SDL_Event& e)

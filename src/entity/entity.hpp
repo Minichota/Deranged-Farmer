@@ -44,6 +44,6 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	int health;
 	int max_health;
 
-	SDL_Texture* texture;
+	SDL_Texture* texture = nullptr;
 };
 #endif
