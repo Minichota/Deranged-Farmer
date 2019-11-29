@@ -213,7 +213,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 					if(event.wheel.y > 0)
 					{
 						// scroll up
-						this->scroll_pos -= 100;
+						this->scroll_pos -= 30;
 						if(scroll_pos < 0)
 						{
 							scroll_pos = 0;
@@ -222,7 +222,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 					if(event.wheel.y < 0)
 					{
 						// scroll down
-						this->scroll_pos += 100;
+						this->scroll_pos += 30;
 						if(scroll_pos > MAX_SCROLL)
 						{
 							scroll_pos = MAX_SCROLL;
