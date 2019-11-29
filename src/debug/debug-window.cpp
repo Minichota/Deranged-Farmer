@@ -23,6 +23,7 @@ console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics
 
 	font = TTF_OpenFont("res/graphics/font.ttf", 16);
 	Error(!font, {"failed to load font", SDL_GetError()});
+	console.set_font_size(18);
 }
 
 Debug_Window::~Debug_Window()
@@ -41,6 +42,18 @@ void Debug_Window::update()
 	outer_rects.clear();
 	rects.clear();
 	console.clear();
+
+	for(size_t i = 0; i < logs.size(); i++)
+	{
+		if(!logs[i].get_active())
+		{
+			logs.erase(logs.begin() + i);
+		}
+		else
+		{
+			push_console(logs[i].get_text());
+		}
+	}
 }
 
 void Debug_Window::render()
@@ -389,6 +402,13 @@ void Debug_Window::push_render(Sized<float>* address, std::string name_repr, std
 	}
 }
 
+void Debug_Window::push_console(std::string& text)
+{
+	remove_zeros(text);
+	text.push_back(' ');
+	this->console.append_text(text);
+}
+
 void Debug_Window::push_console(float text)
 {
 	std::string str = std::to_string(std::round(text));
@@ -404,6 +424,16 @@ void Debug_Window::push_rect(Fvec pos, Fvec size)
 				   (int)std::round(size.x),
 				   (int)std::round(size.y)};
 	rects.push_back(maybe);
+}
+
+void Debug_Window::push_log(std::vector<const char*> text, long long life_time)
+{
+	std::string x;
+	for(const char* i : text)
+	{
+		x.append(i);
+	}
+	logs.push_back(Console_Log(x, life_time));
 }
 
 void Debug_Window::toggle()

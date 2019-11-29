@@ -12,6 +12,7 @@
 #include "sized.hpp"
 #include "level.hpp"
 #include "entity-creator.hpp"
+#include "console-log.hpp"
 
 typedef struct
 {
@@ -35,8 +36,10 @@ class Debug_Window : public Renderable, public Event_Handler
 	void handle_event(const SDL_Event& event);
 
 	void push_render(Sized<float>* address, std::string name_repr, std::vector<float*> values);
+	void push_console(std::string& text);
 	void push_console(float text);
 	void push_rect(Fvec pos, Fvec size);
+	void push_log(std::vector<const char*> text, long long life_time = 3000);
 
 	void toggle();
 
@@ -64,6 +67,8 @@ class Debug_Window : public Renderable, public Event_Handler
 	std::vector<SDL_Rect> inner_rects;
 
 	Entity_Creator entity_creator;
+
+	std::vector<Console_Log> logs;
 
 	Ivec pos;
 	int scroll_pos;
