@@ -35,6 +35,10 @@ void Level::update()
 		map.handle_collision(entity);
 		entity->move();
 	}
+	for(AI* ai : ais)
+	{
+		ai->update();
+	}
 	handle_entity_collision(entities[0], entities[1]);
 }
 
@@ -125,10 +129,11 @@ void Level::load_entities()
 		{
 			case 0:
 			{
-				// some weird entity
 				// TODO implement some entity classes
 				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
 				bison->load_texture("res/graphics/bison.png");
+				AI_Roaming* bison_ai = new AI_Roaming(this->map, bison, 1000);
+				ais.push_back(bison_ai);
 				entities.push_back(bison);
 				delete types[i];
 			} break;
