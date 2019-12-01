@@ -8,9 +8,11 @@
 
 struct Position
 {
+	Ivec index;
 	Fvec pos;
 	bool null;
 	bool checked = false;
+	Position* parent;
 };
 
 class AI
@@ -27,10 +29,12 @@ class AI
 	Fvec normalize(Fvec pos, Ivec& tile_size);
 
 	protected:
+	Fvec goal_position;
+
 	Map& map;
 	Entity* parent;
 
-	std::queue<Position> pos;
+	Position pos;
 	Fvec next_pos = Fvec(1.0f, 1.0f);
 
 	long long last_time;
