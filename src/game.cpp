@@ -81,6 +81,10 @@ void Game::run()
 void Game::update()
 {
 	assert(state >= 0 && state < STATE_COUNT);
+	if(debug->active)
+	{
+		debug->update();
+	}
 	if(paused)
 	{
 		pause->update();
@@ -88,10 +92,6 @@ void Game::update()
 	else
 	{
 		game_states[this->state]->update();
-	}
-	if(debug->active)
-	{
-		debug->update();
 	}
 }
 

@@ -40,8 +40,8 @@ void Debug_Window::update()
 	text_input.update();
 	inner_rects.clear();
 	outer_rects.clear();
-	rects.clear();
 	console.clear();
+	rects.clear();
 
 	for(size_t i = 0; i < logs.size(); i++)
 	{
