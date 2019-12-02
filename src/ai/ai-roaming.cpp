@@ -104,11 +104,13 @@ bool AI_Roaming::generate_path()
 		if(v->pos == goal_position)
 		{
 			Position* x = v;
-			std::cout << "found the end" << v->pos << std::endl;
-			// converting reversed linked list to a vector
+			// reversing linked list
+			/*
+			   (1->2->3) ->
+			   -> (3->2->1)
+			*/
 			Position* current = x;
-			Position* next = nullptr;
-			Position* prev = nullptr;
+			Position* next = nullptr; Position* prev = nullptr;
 			while(current->parent != nullptr)
 			{
 				next = current->parent;
@@ -125,6 +127,11 @@ bool AI_Roaming::generate_path()
 				// entity is already at position
 				pos = Position{Ivec(0,0), Fvec(-1.0f,-1.0f)};
 			}
+			// clearing memory
+			while(!q.empty())
+			{
+				q.pop();
+			}
 			return true;
 		}
 		std::vector<Position*> adjacents;
@@ -132,6 +139,7 @@ bool AI_Roaming::generate_path()
 		{
 			if(tile_positions[v->index.y][v->index.x - 1].null)
 			{
+				// left tile is null and will be checked
 				adjacents.push_back(&tile_positions[v->index.y][v->index.x - 1]);
 			}
 		}
@@ -139,6 +147,7 @@ bool AI_Roaming::generate_path()
 		{
 			if(tile_positions[v->index.y][v->index.x + 1].null)
 			{
+				// right tile is null and will be checked
 				adjacents.push_back(&tile_positions[v->index.y][v->index.x + 1]);
 			}
 		}
@@ -146,6 +155,7 @@ bool AI_Roaming::generate_path()
 		{
 			if(tile_positions[v->index.y - 1][v->index.x].null)
 			{
+				// top tile is null and will be checked
 				adjacents.push_back(&tile_positions[v->index.y - 1][v->index.x]);
 			}
 		}
@@ -153,6 +163,7 @@ bool AI_Roaming::generate_path()
 		{
 			if(tile_positions[v->index.y + 1][v->index.x].null)
 			{
+				// bottom tile is null and will be checked
 				adjacents.push_back(&tile_positions[v->index.y + 1][v->index.x]);
 			}
 		}
@@ -162,6 +173,7 @@ bool AI_Roaming::generate_path()
 			{
 				if(!p->checked)
 				{
+					// tile has not been checked yet
 					p->checked = true;
 					p->parent = v;
 					q.push(*p);
@@ -169,6 +181,12 @@ bool AI_Roaming::generate_path()
 			}
 		}
 	}
+	// nullifing pos
 	pos.pos = Fvec(-1.0,-1.0f);
+	// clearing memory
+	while(!q.empty())
+	{
+		q.pop();
+	}
 	return false;
 }
