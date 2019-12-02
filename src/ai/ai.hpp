@@ -12,7 +12,7 @@ struct Position
 	Fvec pos;
 	bool null;
 	bool checked = false;
-	Position* parent;
+	Position* parent = nullptr;
 };
 
 class AI
@@ -23,7 +23,7 @@ class AI
 
 	virtual void update() = 0;
 
-	virtual void generate_path() = 0;
+	virtual bool generate_path() = 0;
 
 	protected:
 	Fvec normalize(Fvec pos, Ivec& tile_size);

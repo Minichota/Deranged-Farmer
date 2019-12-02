@@ -132,7 +132,7 @@ void Level::load_entities()
 				// TODO implement some entity classes
 				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
 				bison->load_texture("res/graphics/bison.png");
-				AI_Roaming* bison_ai = new AI_Roaming(this->map, bison, 10000);
+				AI_Roaming* bison_ai = new AI_Roaming(this->map, bison, 3000);
 				ais.push_back(bison_ai);
 				entities.push_back(bison);
 				delete types[i];

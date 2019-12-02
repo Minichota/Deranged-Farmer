@@ -10,10 +10,12 @@ class AI_Roaming : public AI
 
 	void update();
 
-	void generate_path();
+	bool generate_path();
 
 	private:
 	long long delay;
+	long long prev_location;
+	bool done;
 };
 
 #endif

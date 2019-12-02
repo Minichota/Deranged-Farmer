@@ -12,28 +12,50 @@ AI(map, parent)
 
 void AI_Roaming::update()
 {
-	this->goal_position = normalize(Fvec(300,100), map.get_tile_size());
-	Game::debug->push_console(goal_position.x);
-	Game::debug->push_console(goal_position.y);
 	long long curr_time = SDL_GetTicks();
-	if(curr_time - last_time > delay)
+	if(curr_time - last_time > delay && done)
 	{
-		std::cout << "generated path" << std::endl;
-		last_time = curr_time;
-		generate_path();
-
-		while(&pos != nullptr){
-			std::cout << pos.pos << std::endl;
-			if(pos.parent == nullptr)
-			{
-				break;
-			}
-			pos = *pos.parent;
+		this->goal_position = normalize(Fvec(rand()%800,rand()%608), map.get_tile_size());
+		if((done = !generate_path()))
+		{
+			last_time = curr_time;
 		}
+		prev_location = curr_time;
+	}
+
+	if(pos.pos != Fvec(-1.0f,-1.0f) && !done)
+	{
+		Fvec delta_pos = pos.pos - parent->get_collision_pos();
+		if(abs(delta_pos.x) > 10)
+		{
+			parent->accelerate(Fvec(delta_pos.x, 0.0f));
+		}
+		if(abs(delta_pos.y) > 10)
+		{
+			parent->accelerate(Fvec(0.0f, delta_pos.y));
+		}
+		if(abs((delta_pos.x) <= 10 && abs(delta_pos.y) <= 10))
+		{
+			if(pos.parent != nullptr)
+			{
+				pos = *pos.parent;
+				prev_location = curr_time;
+			}
+			else
+			{
+				done = true;
+				last_time = curr_time;
+			}
+		}
+	}
+
+	if(curr_time - prev_location > threshold)
+	{
+		done = true;
 	}
 }
 
-void AI_Roaming::generate_path()
+bool AI_Roaming::generate_path()
 {
 	std::vector<std::vector<Tile*>>& tiles = map.get_tiles();
 	std::vector<Map_Entity*>& map_entities = map.get_map_entities();
@@ -83,8 +105,27 @@ void AI_Roaming::generate_path()
 		{
 			Position* x = v;
 			std::cout << "found the end" << v->pos << std::endl;
-			pos = *x;
-			return;
+			// converting reversed linked list to a vector
+			Position* current = x;
+			Position* next = nullptr;
+			Position* prev = nullptr;
+			while(current->parent != nullptr)
+			{
+				next = current->parent;
+				current->parent = prev;
+				prev = current;
+				current = next;
+			}
+			if(prev != nullptr)
+			{
+				pos = *prev;
+			}
+			else
+			{
+				// entity is already at position
+				pos = Position{Ivec(0,0), Fvec(-1.0f,-1.0f)};
+			}
+			return true;
 		}
 		std::vector<Position*> adjacents;
 		if(v->index.x > 0)
@@ -128,5 +169,6 @@ void AI_Roaming::generate_path()
 			}
 		}
 	}
-	std::cout << "did not find the end" << std::endl;
+	pos.pos = Fvec(-1.0,-1.0f);
+	return false;
 }

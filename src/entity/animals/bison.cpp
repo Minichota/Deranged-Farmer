@@ -7,14 +7,14 @@ Bison::Bison(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
 Entity(renderer, pos, size, scale)
 {
 	this->rotation = 0;
-	this->max_vel = Fvec(2.2f, 2.2f);
+	this->max_vel = Fvec(1.2f, 1.2f);
 }
 
 Bison::Bison(SDL_Renderer* renderer, Fvec pos, Fvec size):
 Entity(renderer, pos, size, Fvec(1.0f,1.0f))
 {
 	this->rotation = 0;
-	this->max_vel = Fvec(2.2f, 2.2f);
+	this->max_vel = Fvec(1.2f, 1.2f);
 }
 
 Bison::~Bison()
