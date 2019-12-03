@@ -4,6 +4,7 @@ AI::AI(Map& map, Entity* parent):
 map(map)
 {
 	this->parent = parent;
+	this->pos = new Position{Ivec(0,0), Fvec(-1.0f,-1.0f)};
 }
 
 AI::~AI()

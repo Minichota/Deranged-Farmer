@@ -23,9 +23,9 @@ void AI_Roaming::update()
 		prev_location = curr_time;
 	}
 
-	if(pos.pos != Fvec(-1.0f,-1.0f) && !done)
+	if(pos->pos != Fvec(-1.0f,-1.0f) && !done)
 	{
-		Fvec delta_pos = pos.pos - parent->get_collision_pos();
+		Fvec delta_pos = pos->pos - parent->get_collision_pos();
 		if(abs(delta_pos.x) > 10)
 		{
 			parent->accelerate(Fvec(delta_pos.x, 0.0f));
@@ -36,15 +36,18 @@ void AI_Roaming::update()
 		}
 		if(abs((delta_pos.x) <= 10 && abs(delta_pos.y) <= 10))
 		{
-			if(pos.parent != nullptr)
+			if(pos->parent != nullptr)
 			{
-				pos = *pos.parent;
+				Position* previous = pos;
+				pos = pos->parent;
 				prev_location = curr_time;
+				delete previous;
 			}
 			else
 			{
 				done = true;
 				last_time = curr_time;
+				delete pos;
 			}
 		}
 	}
@@ -96,10 +99,13 @@ bool AI_Roaming::generate_path()
 	}
 	// pathfinding
 	std::queue<Position> q;
+	std::vector<Position*> cleanups;
 	q.push(Position{parent_index, normalize(this->parent->get_collision_pos(), map.get_tile_size()), true, false});
+	bool found = false;
 	while(!q.empty())
 	{
 		Position* v = new Position(q.front());
+		cleanups.push_back(v);
 		q.pop();
 		if(v->pos == goal_position)
 		{
@@ -120,19 +126,14 @@ bool AI_Roaming::generate_path()
 			}
 			if(prev != nullptr)
 			{
-				pos = *prev;
+				pos = prev;
 			}
 			else
 			{
 				// entity is already at position
-				pos = Position{Ivec(0,0), Fvec(-1.0f,-1.0f)};
+				pos = new Position{Ivec(0,0), Fvec(-1.0f,-1.0f)};
 			}
-			// clearing memory
-			while(!q.empty())
-			{
-				q.pop();
-			}
-			return true;
+			found = true;
 		}
 		std::vector<Position*> adjacents;
 		if(v->index.x > 0)
@@ -181,12 +182,19 @@ bool AI_Roaming::generate_path()
 			}
 		}
 	}
-	// nullifing pos
-	pos.pos = Fvec(-1.0,-1.0f);
 	// clearing memory
 	while(!q.empty())
 	{
 		q.pop();
 	}
-	return false;
+	for(size_t i = 0; i < cleanups.size(); i++)
+	{
+		delete cleanups[i];
+	}
+	if(!found)
+	{
+		// nullifing pos
+		pos->pos = Fvec(-1.0f,-1.0f);
+	}
+	return found;
 }
