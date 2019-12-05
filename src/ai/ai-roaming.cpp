@@ -15,7 +15,13 @@ void AI_Roaming::update()
 	long long curr_time = SDL_GetTicks();
 	if(curr_time - last_time > delay && done)
 	{
-		this->goal_position = normalize(Fvec(rand()%800,rand()%608), map.get_tile_size());
+		//this->goal_position = normalize(Fvec(rand()%800,rand()%608), map.get_tile_size());
+		float r = 300 * sqrt((rand() % 300) / 300.0f);
+		float theta = rand() * 2 * 3.1415926f;
+		this->goal_position.x = parent->get_collision_pos().x + parent->get_collision_size().x / 2 + r * cosf(theta);
+		this->goal_position.y = parent->get_collision_pos().y + parent->get_size().y / 2 + r * sinf(theta);
+		this->goal_position = normalize(goal_position, map.get_tile_size());
+		done = false;
 		if((done = !generate_path()))
 		{
 			last_time = curr_time;
@@ -101,7 +107,6 @@ bool AI_Roaming::generate_path()
 	std::queue<Position> q;
 	std::vector<Position*> cleanups;
 	q.push(Position{parent_index, normalize(this->parent->get_collision_pos(), map.get_tile_size()), true, false});
-	bool found = false;
 	while(!q.empty())
 	{
 		Position* v = new Position(q.front());
@@ -131,11 +136,18 @@ bool AI_Roaming::generate_path()
 			else
 			{
 				// entity is already at position
-				pos = new Position{Ivec(0,0), Fvec(-1.0f,-1.0f)};
+				// cleaning positions
+				for(size_t i = 0; i < cleanups.size(); i++)
+				{
+					delete cleanups[i];
+				}
+				std::cout << cleanups.size() << std::endl;
+				pos = new Position();
 			}
-			found = true;
+			return true;
 		}
 		std::vector<Position*> adjacents;
+		adjacents.reserve(4);
 		if(v->index.x > 0)
 		{
 			if(tile_positions[v->index.y][v->index.x - 1].null)
@@ -182,19 +194,11 @@ bool AI_Roaming::generate_path()
 			}
 		}
 	}
-	// clearing memory
-	while(!q.empty())
-	{
-		q.pop();
-	}
+	// cleaning positions
 	for(size_t i = 0; i < cleanups.size(); i++)
 	{
 		delete cleanups[i];
 	}
-	if(!found)
-	{
-		// nullifing pos
-		pos->pos = Fvec(-1.0f,-1.0f);
-	}
-	return found;
+	pos = new Position();
+	return false;
 }
