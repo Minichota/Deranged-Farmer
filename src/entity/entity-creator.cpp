@@ -14,9 +14,9 @@ Renderable(renderer)
 	curr_state = 0;
 	names =
 	{
-		{ "Tile",  {"x: ", "y: ", "w: ", "h: ", "type: "}},
-		{ "Fence", {"x: ", "y: ", "w: ", "h: ", "rotation: "}},
-		{ "Bison", {"x: ", "y: ", "w: ", "h: "}}
+		{ "Tile",  {"x: ", "y: ", "w: ", "h: ", "type: "}, false},
+		{ "Fence", {"x: ", "y: ", "w: ", "h: ", "rotation: "}, true},
+		{ "Bison", {"x: ", "y: ", "w: ", "h: "}, false}
 	};
 	for(size_t i = 0; i < names.size(); i++)
 	{
@@ -64,12 +64,22 @@ void Entity_Creator::render()
 		{
 			Ivec curr_pos  = Ivec(std::stoi(inputs[0]->get_string()), std::stoi(inputs[1]->get_string()));
 			Ivec curr_size = Ivec(std::stoi(inputs[2]->get_string()), std::stoi(inputs[3]->get_string()));
+			Sized<int> x;
+			if(names[selected_name].rotateable && std::stoi(inputs[4]->get_string()) % 90 == 0)
+			{
+				// has rotation?
+				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f), std::stoi(inputs[4]->get_string()));
+			}
+			else
+			{
+				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f));
+			}
 			SDL_Rect entity_pos =
 			{
-				curr_pos.x,
-				curr_pos.y,
-				curr_size.x,
-				curr_size.y
+				x.get_collision_pos().x,
+				x.get_collision_pos().y,
+				x.get_collision_size().x,
+				x.get_collision_size().y
 			};
 			SDL_RenderDrawRect(renderer, &entity_pos);
 		}
@@ -123,15 +133,7 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 			{
 				case SDLK_n:
 				{
-					selected_name = 0;
-					selected_field = 0;
-					curr_state = 0;
-					for(UI_Text_Input* x : inputs)
-					{
-						delete x;
-					}
-					inputs.clear();
-					this->active = false;
+					clear();
 				} break;
 				case SDLK_j:
 				{

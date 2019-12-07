@@ -26,6 +26,13 @@ class Sized
 		Error((int)rotation % 90 != 0, {"Object cannot have rotation that isn't divisible by 90"}, true);
 		this->rotation = rotation;
 	};
+	Sized<T>()
+	{
+		this->pos = Vector<T>(0,0);
+		this->size = Vector<T>(0,0);
+		this->scale = Vector<T>(0,0);
+		this->rotation = 0;
+	};
 	virtual ~Sized()
 	{
 	};
