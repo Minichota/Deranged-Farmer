@@ -44,12 +44,7 @@ void Entity_Creator::update()
 void Entity_Creator::render()
 {
 	SDL_Rect shadow =
-	{
-		0,
-		0,
-		120,
-		608
-	};
+	{ 0, 0, 120, 608 };
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
 	SDL_RenderFillRect(renderer, &shadow);
 
@@ -64,6 +59,20 @@ void Entity_Creator::render()
 		inputs[selected_field]->set_string(names[selected_name].input_repr[selected_field] + copy);
 		inputs[selected_field]->render();
 		inputs[selected_field]->set_string(copy);
+		// drawing outline for where entity will be
+		if(!inputs[selected_field]->get_string().empty())
+		{
+			Ivec curr_pos  = Ivec(std::stoi(inputs[0]->get_string()), std::stoi(inputs[1]->get_string()));
+			Ivec curr_size = Ivec(std::stoi(inputs[2]->get_string()), std::stoi(inputs[3]->get_string()));
+			SDL_Rect entity_pos =
+			{
+				curr_pos.x,
+				curr_pos.y,
+				curr_size.x,
+				curr_size.y
+			};
+			SDL_RenderDrawRect(renderer, &entity_pos);
+		}
 	}
 
 	Ivec outline_pos = entity_names[selected_name]->get_pos();
@@ -75,6 +84,7 @@ void Entity_Creator::render()
 		outline_size.x,
 		outline_size.y
 	};
+
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderDrawRect(renderer, &outline_box);
 	clear_render_settings(renderer);
@@ -82,12 +92,18 @@ void Entity_Creator::render()
 
 void Entity_Creator::handle_event(const SDL_Event& event)
 {
-	if(curr_state)
-	{
-		inputs[selected_field]->handle_event(event);
-	}
 	switch(event.type)
 	{
+		case SDL_TEXTINPUT:
+		{
+			if(curr_state)
+			{
+				if((isdigit(event.text.text[0]) || event.text.text[0] == '.' || event.text.text[0] == '-'))
+				{
+					inputs[selected_field]->handle_event(event);
+				}
+			}
+		} break;
 		case SDL_KEYDOWN:
 		{
 			switch(event.key.keysym.sym)
@@ -256,6 +272,10 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 						}
 						inputs.clear();
 					}
+				} break;
+				case SDLK_BACKSPACE:
+				{
+					inputs[selected_field]->handle_event(event);
 				} break;
 			}
 		} break;
