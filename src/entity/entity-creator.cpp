@@ -14,9 +14,9 @@ Renderable(renderer)
 	curr_state = 0;
 	names =
 	{
-		{ "Tile",  {"x: ", "y: ", "w: ", "h: ", "type: "}},
-		{ "Fence", {"x: ", "y: ", "w: ", "h: ", "rotation: "}},
-		{ "Bison", {"x: ", "y: ", "w: ", "h: "}}
+		{ "Tile",  {"x: ", "y: ", "w: ", "h: ", "type: "}, false},
+		{ "Fence", {"x: ", "y: ", "w: ", "h: ", "rotation: "}, true},
+		{ "Bison", {"x: ", "y: ", "w: ", "h: "}, false}
 	};
 	for(size_t i = 0; i < names.size(); i++)
 	{
@@ -44,12 +44,7 @@ void Entity_Creator::update()
 void Entity_Creator::render()
 {
 	SDL_Rect shadow =
-	{
-		0,
-		0,
-		120,
-		608
-	};
+	{ 0, 0, 120, 608 };
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
 	SDL_RenderFillRect(renderer, &shadow);
 
@@ -64,6 +59,30 @@ void Entity_Creator::render()
 		inputs[selected_field]->set_string(names[selected_name].input_repr[selected_field] + copy);
 		inputs[selected_field]->render();
 		inputs[selected_field]->set_string(copy);
+		// drawing outline for where entity will be
+		if(!inputs[selected_field]->get_string().empty())
+		{
+			Ivec curr_pos  = Ivec(std::stoi(inputs[0]->get_string()), std::stoi(inputs[1]->get_string()));
+			Ivec curr_size = Ivec(std::stoi(inputs[2]->get_string()), std::stoi(inputs[3]->get_string()));
+			Sized<int> x;
+			if(names[selected_name].rotateable && std::stoi(inputs[4]->get_string()) % 90 == 0)
+			{
+				// has rotation?
+				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f), std::stoi(inputs[4]->get_string()));
+			}
+			else
+			{
+				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f));
+			}
+			SDL_Rect entity_pos =
+			{
+				x.get_collision_pos().x,
+				x.get_collision_pos().y,
+				x.get_collision_size().x,
+				x.get_collision_size().y
+			};
+			SDL_RenderDrawRect(renderer, &entity_pos);
+		}
 	}
 
 	Ivec outline_pos = entity_names[selected_name]->get_pos();
@@ -75,34 +94,46 @@ void Entity_Creator::render()
 		outline_size.x,
 		outline_size.y
 	};
+
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderDrawRect(renderer, &outline_box);
 	clear_render_settings(renderer);
 }
 
+void Entity_Creator::clear()
+{
+	curr_state = 0;
+	selected_name = 0;
+	selected_field = 0;
+	active = false;
+	for(UI_Text_Input* x : inputs)
+	{
+		delete x;
+	}
+	inputs.clear();
+}
+
 void Entity_Creator::handle_event(const SDL_Event& event)
 {
-	if(curr_state)
-	{
-		inputs[selected_field]->handle_event(event);
-	}
 	switch(event.type)
 	{
+		case SDL_TEXTINPUT:
+		{
+			if(curr_state)
+			{
+				if((isdigit(event.text.text[0]) || event.text.text[0] == '.' || event.text.text[0] == '-'))
+				{
+					inputs[selected_field]->handle_event(event);
+				}
+			}
+		} break;
 		case SDL_KEYDOWN:
 		{
 			switch(event.key.keysym.sym)
 			{
 				case SDLK_n:
 				{
-					selected_name = 0;
-					selected_field = 0;
-					curr_state = 0;
-					for(UI_Text_Input* x : inputs)
-					{
-						delete x;
-					}
-					inputs.clear();
-					this->active = false;
+					clear();
 				} break;
 				case SDLK_j:
 				{
@@ -130,6 +161,12 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							}
 						}
 					}
+					else if(keys[SDL_SCANCODE_LSHIFT])
+					{
+						std::string& input_string = inputs[selected_field]->get_string();
+						input_string = std::to_string(std::stof(input_string) - 1.0f);
+						remove_zeros(input_string);
+					}
 				} break;
 				case SDLK_k:
 				{
@@ -156,6 +193,12 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 								selected_field = names[selected_name].input_repr.size() - 1;
 							}
 						}
+					}
+					else if(keys[SDL_SCANCODE_LSHIFT])
+					{
+						std::string& input_string = inputs[selected_field]->get_string();
+						input_string =std::to_string(std::stof(input_string) + 1.0f);
+						remove_zeros(input_string);
 					}
 				} break;
 				case SDLK_RETURN:
@@ -247,16 +290,17 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 								}
 							} break;
 						}
-						selected_name = 0;
-						selected_field = 0;
-						active = false;
-						for(UI_Text_Input* x : inputs)
-						{
-							delete x;
-						}
-						inputs.clear();
+						clear();
 					}
 				} break;
+				case SDLK_BACKSPACE:
+				{
+					inputs[selected_field]->handle_event(event);
+				} break;
+				case SDLK_ESCAPE:
+				{
+					clear();
+				}
 			}
 		} break;
 	}

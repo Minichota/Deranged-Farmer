@@ -13,6 +13,7 @@ struct Entity_Creator_Data
 {
 	std::string name;
 	std::vector<std::string> input_repr;
+	bool rotateable;
 };
 
 class Entity_Creator : public Renderable, public Event_Handler
@@ -23,6 +24,8 @@ class Entity_Creator : public Renderable, public Event_Handler
 
 	void update();
 	void render();
+
+	void clear();
 
 	void handle_event(const SDL_Event& event);
 
