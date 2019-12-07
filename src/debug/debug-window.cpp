@@ -360,6 +360,10 @@ void Debug_Window::handle_event(const SDL_Event& event)
 								entity_creator.active = true;
 							}
 						} break;
+						case SDLK_ESCAPE:
+						{
+							clear();
+						} break;
 					}
 				} break;
 				case SDL_TEXTINPUT:

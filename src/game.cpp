@@ -173,17 +173,17 @@ void Game::handle_event(SDL_Event event)
 		}
 		default:
 		{
-			if(paused)
+			if(debug->active)
+			{
+				debug->handle_event(event);
+			}
+			else if(paused)
 			{
 				pause->handle_event(event);
 			}
 			else
 			{
 				game_states[this->state]->handle_event(event);
-			}
-			if(debug->active)
-			{
-				debug->handle_event(event);
 			}
 		} break;
 	}

@@ -90,6 +90,19 @@ void Entity_Creator::render()
 	clear_render_settings(renderer);
 }
 
+void Entity_Creator::clear()
+{
+	curr_state = 0;
+	selected_name = 0;
+	selected_field = 0;
+	active = false;
+	for(UI_Text_Input* x : inputs)
+	{
+		delete x;
+	}
+	inputs.clear();
+}
+
 void Entity_Creator::handle_event(const SDL_Event& event)
 {
 	switch(event.type)
@@ -275,20 +288,17 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 								}
 							} break;
 						}
-						selected_name = 0;
-						selected_field = 0;
-						active = false;
-						for(UI_Text_Input* x : inputs)
-						{
-							delete x;
-						}
-						inputs.clear();
+						clear();
 					}
 				} break;
 				case SDLK_BACKSPACE:
 				{
 					inputs[selected_field]->handle_event(event);
 				} break;
+				case SDLK_ESCAPE:
+				{
+					clear();
+				}
 			}
 		} break;
 	}

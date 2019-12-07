@@ -24,6 +24,8 @@ class Entity_Creator : public Renderable, public Event_Handler
 	void update();
 	void render();
 
+	void clear();
+
 	void handle_event(const SDL_Event& event);
 
 	void set_level(Level* level);
