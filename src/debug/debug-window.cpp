@@ -486,21 +486,6 @@ void Debug_Window::set_string(float input)
 	text_input.set_string(str);
 }
 
-void Debug_Window::remove_zeros(std::string& input)
-{
-	char* c = &input.back();
-	while(*c == '0')
-	{
-		input.pop_back();
-		c--;
-	}
-	// remove decimal point
-	if(*c == '.')
-	{
-		input.pop_back();
-	}
-}
-
 void Debug_Window::handle_keyboard_scrolling()
 {
 	int rect_pos = pos.y + (-scroll_pos + 19 * outer_selection);
@@ -519,4 +504,19 @@ void Debug_Window::set_level(Level* level)
 {
 	this->level = level;
 	this->entity_creator.set_level(level);
+}
+
+void remove_zeros(std::string& input)
+{
+	char* c = &input.back();
+	while(*c == '0')
+	{
+		input.pop_back();
+		c--;
+	}
+	// remove decimal point
+	if(*c == '.')
+	{
+		input.pop_back();
+	}
 }

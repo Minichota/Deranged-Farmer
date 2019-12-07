@@ -52,7 +52,6 @@ class Debug_Window : public Renderable, public Event_Handler
 	void select(Ivec pos);
 	void set_string(std::string input);
 	void set_string(float input);
-	void remove_zeros(std::string& input);
 	void handle_keyboard_scrolling();
 
 	private:
@@ -80,4 +79,5 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	UI_Text console;
 };
+void remove_zeros(std::string& input);
 #endif
