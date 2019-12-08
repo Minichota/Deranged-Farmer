@@ -112,7 +112,6 @@ void Entity_Creator::clear()
 	curr_state = 0;
 	selected_name = 0;
 	selected_field = 0;
-	active = false;
 	for(UI_Text_Input* x : inputs)
 	{
 		delete x;
@@ -144,7 +143,27 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 				} break;
 				case SDLK_j:
 				{
-					if(keys[SDL_SCANCODE_LCTRL])
+					if(keys[SDL_SCANCODE_LSHIFT])
+					{
+						if(curr_state != 0)
+						{
+							std::string& input_string = inputs[selected_field]->get_string();
+							if(input_string.empty())
+							{
+								input_string = "0";
+							}
+							if(selected_field < 2 && selected_name == 0)
+							{
+								input_string = std::to_string(std::stof(input_string) - 32.0f);
+							}
+							else
+							{
+								input_string = std::to_string(std::stof(input_string) - 1.0f);
+							}
+							remove_zeros(input_string);
+						}
+					}
+					else
 					{
 						if(curr_state == 0)
 						{
@@ -168,16 +187,30 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							}
 						}
 					}
-					else if(keys[SDL_SCANCODE_LSHIFT])
-					{
-						std::string& input_string = inputs[selected_field]->get_string();
-						input_string = std::to_string(std::stof(input_string) - 1.0f);
-						remove_zeros(input_string);
-					}
 				} break;
 				case SDLK_k:
 				{
-					if(keys[SDL_SCANCODE_LCTRL])
+					if(keys[SDL_SCANCODE_LSHIFT])
+					{
+						if(curr_state != 0)
+						{
+							std::string& input_string = inputs[selected_field]->get_string();
+							if(input_string.empty())
+							{
+								input_string = "0";
+							}
+							if(selected_field < 2 && selected_name == 0)
+							{
+								input_string =std::to_string(std::stof(input_string) + 32.0f);
+							}
+							else
+							{
+								input_string =std::to_string(std::stof(input_string) + 1.0f);
+							}
+							remove_zeros(input_string);
+						}
+					}
+					else
 					{
 						if(curr_state == 0)
 						{
@@ -200,12 +233,6 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 								selected_field = names[selected_name].input_repr.size() - 1;
 							}
 						}
-					}
-					else if(keys[SDL_SCANCODE_LSHIFT])
-					{
-						std::string& input_string = inputs[selected_field]->get_string();
-						input_string =std::to_string(std::stof(input_string) + 1.0f);
-						remove_zeros(input_string);
 					}
 				} break;
 				case SDLK_RETURN:
@@ -289,6 +316,7 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					if(curr_state == 0)
 					{
 						clear();
+						active = false;
 					}
 					else
 					{
