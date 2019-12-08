@@ -20,8 +20,9 @@ Renderable(renderer)
 	};
 	for(size_t i = 0; i < names.size(); i++)
 	{
-		entity_names.push_back(new UI_Text(renderer, Ivec(0, 18*i), Ivec(0,0), Fvec(1.0f, 1.0f), names[i].name, "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
+		entity_names.push_back(new UI_Text(renderer, Ivec(400, 150 + 18*i), Ivec(0,0), Fvec(1.0f, 1.0f), names[i].name, "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
 		entity_names[i]->set_font_size(15);
+		entity_names[i]->set_origin(Fvec(entity_names[i]->get_size().x/2, 0));
 	}
 }
 
@@ -44,7 +45,7 @@ void Entity_Creator::update()
 void Entity_Creator::render()
 {
 	SDL_Rect shadow =
-	{ 0, 0, 120, 608 };
+	{ 350, 150, 100, (int)entity_names.size() * 18 };
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
 	SDL_RenderFillRect(renderer, &shadow);
 
@@ -57,8 +58,14 @@ void Entity_Creator::render()
 	{
 		std::string copy = inputs[selected_field]->get_string();
 		inputs[selected_field]->set_string(names[selected_name].input_repr[selected_field] + copy);
+
+		// change origin and re-update to assert that origin is set to ui-text
+		inputs[selected_field]->set_origin(Fvec(inputs[selected_field]->get_size().x/2, 0));
+		inputs[selected_field]->update();
+
 		inputs[selected_field]->render();
 		inputs[selected_field]->set_string(copy);
+
 		// drawing outline for where entity will be
 		if(!inputs[selected_field]->get_string().empty())
 		{
@@ -207,8 +214,9 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					{
 						for(size_t i = 0; i < names[selected_name].input_repr.size(); i++)
 						{
-							inputs.push_back(new UI_Text_Input(renderer, Ivec(400,30), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
+							inputs.push_back(new UI_Text_Input(renderer, Ivec(400,120), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
 							inputs[i]->set_string("0");
+							inputs[i]->set_font_size(24);
 						}
 						curr_state++;
 					}
@@ -220,6 +228,7 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							// check if current input is null
 							inputs[selected_field]->get_string() = "0";
 						}
+						Game::debug->push_log({"created entity @", inputs[0]->get_string().c_str(), ", ", inputs[1]->get_string().c_str()}, 5000);
 						switch(selected_name)
 						{
 							case 0:
@@ -277,7 +286,19 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 				} break;
 				case SDLK_ESCAPE:
 				{
-					clear();
+					if(curr_state == 0)
+					{
+						clear();
+					}
+					else
+					{
+						for(UI_Text_Input* x : inputs)
+						{
+							delete x;
+						}
+						inputs.clear();
+						curr_state--;
+					}
 				}
 			}
 		} break;

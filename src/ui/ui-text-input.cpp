@@ -65,3 +65,13 @@ std::string& UI_Text_Input::get_string()
 {
 	return this->text;
 }
+
+Ivec& UI_Text_Input::get_size()
+{
+	return this->ui_text.get_size();
+}
+
+void UI_Text_Input::set_font_size(size_t size)
+{
+	this->ui_text.set_font_size(size);
+}

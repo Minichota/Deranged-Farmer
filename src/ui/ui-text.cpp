@@ -98,6 +98,10 @@ void UI_Text::reload_texture()
 void UI_Text::set_text(std::string text)
 {
 	this->text = text;
+	if(this->text != this->prev_text)
+	{
+		reload_texture();
+	}
 }
 
 void UI_Text::append_text(std::string text)

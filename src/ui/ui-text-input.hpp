@@ -19,6 +19,10 @@ class UI_Text_Input : public UI_Base, public Event_Handler
 	void set_string(std::string str);
 	std::string& get_string();
 
+	Ivec& get_size();
+
+	void set_font_size(size_t size);
+
 	private:
 	UI_Text ui_text;
 	std::string text;
