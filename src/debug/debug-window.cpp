@@ -385,7 +385,7 @@ void Debug_Window::push_render(Sized<float>* address, std::string name_repr, std
 	}
 }
 
-void Debug_Window::push_console(std::string& text)
+void Debug_Window::push_console(std::string text)
 {
 	text.push_back(' ');
 	this->console.append_text(text);
@@ -427,6 +427,12 @@ void Debug_Window::toggle()
 	}
 }
 
+void Debug_Window::refresh()
+{
+	clear();
+	this->active = true;
+}
+
 void Debug_Window::select(Ivec pos)
 {
 	// check if user clicked an entity
@@ -439,6 +445,11 @@ void Debug_Window::select(Ivec pos)
 		{
 			// clicked the entity
 			outer_selection = i;
+			std::string x_pos = std::to_string(to_render[i].address->get_collision_pos().x);
+			std::string y_pos = std::to_string(to_render[i].address->get_collision_pos().y);
+			remove_zeros(x_pos);
+			remove_zeros(y_pos);
+			push_log({"clicked entity: @", x_pos.c_str(), ", ", y_pos.c_str()});
 			handle_keyboard_scrolling();
 			return;
 		}

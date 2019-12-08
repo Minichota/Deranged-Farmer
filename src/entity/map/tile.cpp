@@ -41,13 +41,13 @@ void Tile::render()
 	if(renderer!=nullptr)
 	{
 		SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
-		if(Game::debug->active)
-		{
-			Game::debug->push_render(this, "Tile", { &this->pos.x, &this->pos.y,
-													 &this->size.x, &this->size.y });
-			Game::debug->push_rect(this->pos,
-								   this->size);
-		}
+		//if(Game::debug->active)
+		//{
+		//	Game::debug->push_render(this, "Tile", { &this->pos.x, &this->pos.y,
+		//											 &this->size.x, &this->size.y });
+		//	Game::debug->push_rect(this->pos,
+		//						   this->size);
+		//}
 	}
 	if(Game::debug->active)
 	{
