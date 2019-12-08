@@ -255,7 +255,7 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							// check if current input is null
 							inputs[selected_field]->get_string() = "0";
 						}
-						Game::debug->push_log({"created entity @", inputs[0]->get_string().c_str(), ", ", inputs[1]->get_string().c_str()}, 5000);
+						Game::debug->push_log({"trying to created entity @", inputs[0]->get_string().c_str(), ", ", inputs[1]->get_string().c_str(), "\n"});
 						switch(selected_name)
 						{
 							case 0:
@@ -267,7 +267,20 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 													  (int)(tile->get_pos().x/32) % tile_count.x);
 								if(std::stoi(inputs[0]->get_string()) % 32 != 0 || std::stoi(inputs[0]->get_string()) % 32 != 0)
 								{
-									Game::debug->push_log({"Width and height must `mod 32` to 0: "});
+									Game::debug->push_log({"Width and height must `mod 32` to 0"});
+									delete tile;
+									break;
+								}
+								else if(std::stoi(inputs[0]->get_string()) < 0 || std::stoi(inputs[0]->get_string()) < 0)
+								{
+									Game::debug->push_log({"Width and height must be > 0"});
+									delete tile;
+									break;
+								} else if(std::stoi(inputs[0]->get_string()) > 768 || std::stoi(inputs[0]->get_string()) > 576)
+								{
+									Game::debug->push_log({"Tile must be within map"});
+									delete tile;
+									break;
 								}
 								switch(std::stoi(inputs[2]->get_string()))
 								{

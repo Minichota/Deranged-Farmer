@@ -387,7 +387,10 @@ void Debug_Window::push_render(Sized<float>* address, std::string name_repr, std
 
 void Debug_Window::push_console(std::string text)
 {
-	text.push_back(' ');
+	if(text.back() != '\n')
+	{
+		text.push_back(' ');
+	}
 	this->console.append_text(text);
 }
 
