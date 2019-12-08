@@ -65,26 +65,23 @@ void Entity_Creator::render()
 			Ivec curr_pos  = Ivec(std::stoi(inputs[0]->get_string()), std::stoi(inputs[1]->get_string()));
 			Ivec curr_size = names[selected_name].size;
 			Sized<int> x;
-			if(inputs.size() > 2)
+			if(names[selected_name].rotateable && std::stoi(inputs[2]->get_string()) % 90 == 0)
 			{
-				if(names[selected_name].rotateable && std::stoi(inputs[2]->get_string()) % 90 == 0)
-				{
-					// has rotation?
-					x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f), std::stoi(inputs[2]->get_string()));
-				}
-				else
-				{
-					x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f));
-				}
-				SDL_Rect entity_pos =
-				{
-					x.get_collision_pos().x,
-					x.get_collision_pos().y,
-					x.get_collision_size().x,
-					x.get_collision_size().y
-				};
-				SDL_RenderDrawRect(renderer, &entity_pos);
+				// has rotation?
+				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f), std::stoi(inputs[2]->get_string()));
 			}
+			else
+			{
+				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f));
+			}
+			SDL_Rect entity_pos =
+			{
+				x.get_collision_pos().x,
+				x.get_collision_pos().y,
+				x.get_collision_size().x,
+				x.get_collision_size().y
+			};
+			SDL_RenderDrawRect(renderer, &entity_pos);
 		}
 	}
 
@@ -218,10 +215,10 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					else
 					{
 						curr_state = 0;
-						if(inputs[selected_name]->get_string() == "")
+						if(inputs[selected_field]->get_string() == "")
 						{
 							// check if current input is null
-							inputs[selected_name]->get_string() = "0";
+							inputs[selected_field]->get_string() = "0";
 						}
 						switch(selected_name)
 						{
@@ -255,11 +252,8 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 									Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																				 names[selected_name].size,
 																				 std::stof(inputs[2]->get_string()));
-									if(fence->get_size().x > 0 && fence->get_size().y > 0)
-									{
-										fence->load_texture("res/graphics/fence.png");
-										level->get_map().push_entity(fence);
-									}
+									fence->load_texture("res/graphics/fence.png");
+									level->get_map().push_entity(fence);
 								}
 								else
 								{
@@ -270,11 +264,8 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							{
 								Bison* bison = new Bison(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																   names[selected_name].size);
-								if(bison->get_size().x > 0 && bison->get_size().y > 0)
-								{
-									bison->load_texture("res/graphics/bison.png");
-									level->push_entity(bison);
-								}
+								bison->load_texture("res/graphics/bison.png");
+								level->push_entity(bison);
 							} break;
 						}
 						clear();

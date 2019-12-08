@@ -124,14 +124,12 @@ void Debug_Window::render()
 			Ivec scale = entity->get_scale();
 			SDL_Rect entity_outline =
 			{
-				(int)std::round(pos.x/3.0f),
-				(int)std::round(pos.y/3.0f),
-				(int)std::round(size.x/3.0f * scale.x),
-				(int)std::round(size.y/3.0f * scale.y)
+				(int)std::round(pos.x),
+				(int)std::round(pos.y),
+				(int)std::round(size.x * scale.x),
+				(int)std::round(size.y * scale.y)
 			};
-			SDL_RenderSetScale(renderer, 3.0f, 3.0f);
 			SDL_RenderDrawRect(renderer, &entity_outline);
-			SDL_RenderSetScale(renderer, 1.0f, 1.0f);
 		}
 		if(inner_selection >= 0)
 		{
