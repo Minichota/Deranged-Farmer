@@ -262,17 +262,34 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							{
 								Tile* tile = new Tile(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																names[selected_name].size);
+								Ivec tile_count = level->get_map().get_tile_count();
+								Ivec index_to_replace((int)(tile->get_pos().y/32),
+													  (int)(tile->get_pos().x/32) % tile_count.x);
+								if(std::stoi(inputs[0]->get_string()) % 32 != 0 || std::stoi(inputs[0]->get_string()) % 32 != 0)
+								{
+									Game::debug->push_log({"Width and height must `mod 32` to 0: "});
+								}
 								switch(std::stoi(inputs[2]->get_string()))
 								{
 									case 0:
 									{
 										tile->load_texture("res/graphics/tile_map.png", Ivec(0,0));
-										level->get_map().push_tile(tile);
+										Tile* old_tile = level->get_map().get_tiles()[index_to_replace.x]
+																					 [index_to_replace.y];
+										level->get_map().get_tiles()[index_to_replace.x]
+																	[index_to_replace.y] = tile;
+										delete old_tile;
+										Game::debug->refresh();
 									} break;
 									case 1:
 									{
 										tile->load_texture("res/graphics/tile_map.png", Ivec(32,0));
-										level->get_map().push_tile(tile);
+										Tile* old_tile = level->get_map().get_tiles()[index_to_replace.x]
+																					 [index_to_replace.y];
+										level->get_map().get_tiles()[index_to_replace.x]
+																	[index_to_replace.y] = tile;
+										delete old_tile;
+										Game::debug->refresh();
 									} break;
 									default:
 									{
