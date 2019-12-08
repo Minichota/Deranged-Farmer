@@ -36,7 +36,7 @@ void AI_Roaming::update()
 		{
 			parent->accelerate(Fvec(delta_pos.x, 0.0f));
 		}
-		if(abs(delta_pos.y) > 10)
+		else if(abs(delta_pos.y) > 10)
 		{
 			parent->accelerate(Fvec(0.0f, delta_pos.y));
 		}

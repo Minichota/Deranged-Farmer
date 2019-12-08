@@ -86,6 +86,11 @@ void Level::clear()
 		delete entity;
 	}
 	entities.clear();
+	for(AI* ai : ais)
+	{
+		delete ai;
+	}
+	ais.clear();
 	map.clear();
 	Game_State::clear();
 	SDL_DestroyTexture(background);

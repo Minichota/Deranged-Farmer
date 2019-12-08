@@ -13,6 +13,7 @@ struct Entity_Creator_Data
 {
 	std::string name;
 	std::vector<std::string> input_repr;
+	Fvec size;
 	bool rotateable;
 };
 
