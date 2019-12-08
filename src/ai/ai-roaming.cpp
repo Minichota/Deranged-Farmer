@@ -32,15 +32,15 @@ void AI_Roaming::update()
 	if(pos->pos != Fvec(-1.0f,-1.0f) && !done)
 	{
 		Fvec delta_pos = pos->pos - parent->get_collision_pos();
-		if(abs(delta_pos.x) > 10)
+		if(abs(delta_pos.x) > 5)
 		{
 			parent->accelerate(Fvec(delta_pos.x, 0.0f));
 		}
-		else if(abs(delta_pos.y) > 10)
+		else if(abs(delta_pos.y) > 5)
 		{
 			parent->accelerate(Fvec(0.0f, delta_pos.y));
 		}
-		if(abs((delta_pos.x) <= 10 && abs(delta_pos.y) <= 10))
+		if(abs((delta_pos.x) <= 5 && abs(delta_pos.y) <= 5))
 		{
 			if(pos->parent != nullptr)
 			{
