@@ -14,9 +14,9 @@ Renderable(renderer)
 	curr_state = 0;
 	names =
 	{
-		{ "Tile",  {"x: ", "y: ", "w: ", "h: ", "type: "}, false},
-		{ "Fence", {"x: ", "y: ", "w: ", "h: ", "rotation: "}, true},
-		{ "Bison", {"x: ", "y: ", "w: ", "h: "}, false}
+		{ "Tile",  {"x: ", "y: ", "type: "}, Fvec(32,32), false},
+		{ "Fence", {"x: ", "y: ", "rotation: "}, Fvec(30,4), true},
+		{ "Bison", {"x: ", "y: "}, Fvec(24, 16), false}
 	};
 	for(size_t i = 0; i < names.size(); i++)
 	{
@@ -63,25 +63,28 @@ void Entity_Creator::render()
 		if(!inputs[selected_field]->get_string().empty())
 		{
 			Ivec curr_pos  = Ivec(std::stoi(inputs[0]->get_string()), std::stoi(inputs[1]->get_string()));
-			Ivec curr_size = Ivec(std::stoi(inputs[2]->get_string()), std::stoi(inputs[3]->get_string()));
+			Ivec curr_size = names[selected_name].size;
 			Sized<int> x;
-			if(names[selected_name].rotateable && std::stoi(inputs[4]->get_string()) % 90 == 0)
+			if(inputs.size() > 2)
 			{
-				// has rotation?
-				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f), std::stoi(inputs[4]->get_string()));
+				if(names[selected_name].rotateable && std::stoi(inputs[2]->get_string()) % 90 == 0)
+				{
+					// has rotation?
+					x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f), std::stoi(inputs[2]->get_string()));
+				}
+				else
+				{
+					x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f));
+				}
+				SDL_Rect entity_pos =
+				{
+					x.get_collision_pos().x,
+					x.get_collision_pos().y,
+					x.get_collision_size().x,
+					x.get_collision_size().y
+				};
+				SDL_RenderDrawRect(renderer, &entity_pos);
 			}
-			else
-			{
-				x = Sized<int>(curr_pos, curr_size, Fvec(1.0f,1.0f));
-			}
-			SDL_Rect entity_pos =
-			{
-				x.get_collision_pos().x,
-				x.get_collision_pos().y,
-				x.get_collision_size().x,
-				x.get_collision_size().y
-			};
-			SDL_RenderDrawRect(renderer, &entity_pos);
 		}
 	}
 
@@ -225,14 +228,8 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							case 0:
 							{
 								Tile* tile = new Tile(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
-																Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())));
-								if(tile->get_size().x <= 0 || tile->get_size().y <= 0)
-								{
-									Game::debug->push_log({"width or height cannot be <= 0"});
-									delete tile;
-									break;
-								}
-								switch(std::stoi(inputs[4]->get_string()))
+																names[selected_name].size);
+								switch(std::stoi(inputs[2]->get_string()))
 								{
 									case 0:
 									{
@@ -246,27 +243,22 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 									} break;
 									default:
 									{
-										Game::debug->push_log({"That type of tile: ", inputs[4]->get_string().c_str(), " does not exist"});
+										Game::debug->push_log({"That type of tile: ", inputs[2]->get_string().c_str(), " does not exist"});
 										delete tile;
 									} break;
 								}
 							} break;
 							case 1:
 							{
-								if(std::stoi(inputs[4]->get_string()) % 90 == 0)
+								if(std::stoi(inputs[2]->get_string()) % 90 == 0)
 								{
 									Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
-																				 Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())),
-																				 std::stof(inputs[4]->get_string()));
+																				 names[selected_name].size,
+																				 std::stof(inputs[2]->get_string()));
 									if(fence->get_size().x > 0 && fence->get_size().y > 0)
 									{
 										fence->load_texture("res/graphics/fence.png");
 										level->get_map().push_entity(fence);
-									}
-									else
-									{
-										Game::debug->push_log({"width or height cannot be <= 0"});
-										delete fence;
 									}
 								}
 								else
@@ -277,16 +269,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							case 2:
 							{
 								Bison* bison = new Bison(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
-																   Fvec(std::stof(inputs[2]->get_string()), std::stof(inputs[3]->get_string())));
+																   names[selected_name].size);
 								if(bison->get_size().x > 0 && bison->get_size().y > 0)
 								{
 									bison->load_texture("res/graphics/bison.png");
 									level->push_entity(bison);
-								}
-								else
-								{
-									Game::debug->push_log({"width or height cannot be <= 0"});
-									delete bison;
 								}
 							} break;
 						}

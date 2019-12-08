@@ -9,6 +9,10 @@ map(map)
 
 AI::~AI()
 {
+	while(pos != nullptr)
+	{
+		pos = pos->parent;
+	}
 }
 
 Fvec AI::normalize(Fvec pos, Ivec& tile_size)
