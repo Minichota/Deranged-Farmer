@@ -282,42 +282,33 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 									delete tile;
 									break;
 								}
-								switch(std::stoi(inputs[2]->get_string()))
+
+								if(std::stoi(inputs[2]->get_string()) < 3)
 								{
-									case 0:
-									{
-										tile->load_texture("res/graphics/tile_map.png", Ivec(0,0));
-										Tile* old_tile = level->get_map().get_tiles()[index_to_replace.x]
-																					 [index_to_replace.y];
-										level->get_map().get_tiles()[index_to_replace.x]
-																	[index_to_replace.y] = tile;
-										delete old_tile;
-										Game::debug->refresh();
-									} break;
-									case 1:
-									{
-										tile->load_texture("res/graphics/tile_map.png", Ivec(32,0));
-										Tile* old_tile = level->get_map().get_tiles()[index_to_replace.x]
-																					 [index_to_replace.y];
-										level->get_map().get_tiles()[index_to_replace.x]
-																	[index_to_replace.y] = tile;
-										delete old_tile;
-										Game::debug->refresh();
-									} break;
-									default:
-									{
-										Game::debug->push_log({"That type of tile: ", inputs[2]->get_string().c_str(), " does not exist"});
-										delete tile;
-									} break;
+									tile->load_texture("res/graphics/tile_map.png",
+										   				Ivec(std::stoi(inputs[2]->get_string())%tile_count.y * level->get_map().get_tile_size().x,
+													   (int)(std::stoi(inputs[2]->get_string())/tile_count.x * level->get_map().get_tile_size().y)));
+									Tile* old_tile = level->get_map().get_tiles()[index_to_replace.x]
+																				 [index_to_replace.y];
+									level->get_map().get_tiles()[index_to_replace.x]
+																[index_to_replace.y] = tile;
+									delete old_tile;
+									Game::debug->refresh();
+								}
+								else
+								{
+									Game::debug->push_log({"That type of tile: ", inputs[2]->get_string().c_str(), " does not exist"});
+									delete tile;
 								}
 							} break;
 							case 1:
 							{
 								if(std::stoi(inputs[2]->get_string()) % 90 == 0)
 								{
-									Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
-																				 names[selected_name].size,
-																				 std::stof(inputs[2]->get_string()));
+									Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()),
+																					  std::stof(inputs[1]->get_string())),
+																					  names[selected_name].size,
+																				 	  std::stof(inputs[2]->get_string()));
 									fence->load_texture("res/graphics/fence.png");
 									level->get_map().push_entity(fence);
 								}

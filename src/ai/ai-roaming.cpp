@@ -141,7 +141,6 @@ bool AI_Roaming::generate_path()
 				{
 					delete cleanups[i];
 				}
-				std::cout << cleanups.size() << std::endl;
 				pos = new Position();
 			}
 			return true;
