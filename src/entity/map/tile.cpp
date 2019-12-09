@@ -38,16 +38,14 @@ void Tile::update()
 
 void Tile::render()
 {
+	static float* place_holder = new float(0.0f);
 	if(renderer!=nullptr)
 	{
 		SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
-		//if(Game::debug->active)
-		//{
-		//	Game::debug->push_render(this, "Tile", { &this->pos.x, &this->pos.y,
-		//											 &this->size.x, &this->size.y });
-		//	Game::debug->push_rect(this->pos,
-		//						   this->size);
-		//}
+		if(Game::debug->active)
+		{
+			Game::debug->push_render(this, "Tile", {place_holder});
+		}
 	}
 	if(Game::debug->active)
 	{

@@ -4,6 +4,7 @@
 #include "tile.hpp"
 #include "map-entity.hpp"
 #include "bison.hpp"
+#include "snake.hpp"
 #include "util.hpp"
 
 Entity_Creator::Entity_Creator(SDL_Renderer* const renderer, Level* level):
@@ -16,7 +17,8 @@ Renderable(renderer)
 	{
 		{ "Tile",  {"x: ", "y: ", "type: "}, Fvec(32,32), false},
 		{ "Fence", {"x: ", "y: ", "rotation: "}, Fvec(30,4), true},
-		{ "Bison", {"x: ", "y: "}, Fvec(24, 16), false}
+		{ "Bison", {"x: ", "y: "}, Fvec(24, 16), false},
+		{ "Snake", {"x: ", "y: "}, Fvec(28, 14), false}
 	};
 	for(size_t i = 0; i < names.size(); i++)
 	{
@@ -323,6 +325,13 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 																   names[selected_name].size);
 								bison->load_texture("res/graphics/bison.png");
 								level->push_entity(bison);
+							} break;
+							case 3:
+							{
+								Snake* snake = new Snake(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
+																   names[selected_name].size);
+								snake->load_texture("res/graphics/snake.png");
+								level->push_entity(snake);
 							} break;
 						}
 						clear();

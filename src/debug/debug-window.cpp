@@ -248,8 +248,14 @@ void Debug_Window::handle_event(const SDL_Event& event)
 									if(tile != tiles[i].end())
 									{
 										y_index = i;
-										tiles[y_index].erase(tiles[y_index].begin() + std::distance(tiles[y_index].begin(), tile));
+										Map& map = level->get_map();
+										Ivec tile_size = map.get_tile_size();
+										Tile* old_tile = tiles[y_index][std::distance(tiles[y_index].begin(), tile)];
+
+										tiles[y_index][std::distance(tiles[y_index].begin(), tile)] = new Tile(nullptr, Fvec(old_tile->get_pos().x * tile_size.x, old_tile->get_pos().y * tile_size.y), tile_size);
+
 										to_render.erase(to_render.begin() + outer_selection);
+										delete old_tile;
 										goto end;
 									}
 								}

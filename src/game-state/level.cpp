@@ -10,6 +10,7 @@
 #include "collisions.hpp"
 #include "io.hpp"
 #include "bison.hpp"
+#include "snake.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path):
 Game_State(renderer),
@@ -134,12 +135,20 @@ void Level::load_entities()
 		{
 			case 0:
 			{
-				// TODO implement some entity classes
 				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
 				bison->load_texture("res/graphics/bison.png");
 				AI_Roaming* bison_ai = new AI_Roaming(this->map, bison, 3000);
 				ais.push_back(bison_ai);
 				entities.push_back(bison);
+				delete types[i];
+			} break;
+			case 1:
+			{
+				Snake* snake = new Snake(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
+				snake->load_texture("res/graphics/snake.png");
+				AI_Roaming* snake_ai = new AI_Roaming(this->map, snake, 3000);
+				ais.push_back(snake_ai);
+				entities.push_back(snake);
 				delete types[i];
 			} break;
 		}
