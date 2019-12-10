@@ -84,6 +84,11 @@ class Sized
 		this->size = Vector<T>(scale_x, scale_y);
 	};
 
+	virtual float get_rotation()
+	{
+		return this->rotation;
+	};
+
 	inline SDL_Rect get_render_rect()
 	{
 		return

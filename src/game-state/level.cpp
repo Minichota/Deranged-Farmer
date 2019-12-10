@@ -8,6 +8,7 @@
 #include "player.hpp"
 #include "error.hpp"
 #include "collisions.hpp"
+#include "interpolators.hpp"
 #include "io.hpp"
 #include "bison.hpp"
 #include "snake.hpp"

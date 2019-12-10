@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include "entity.hpp"
+#include "animation.hpp"
 
 class Player : public Entity
 {
@@ -14,5 +15,8 @@ class Player : public Entity
 	void render();
 
 	void handle_input();
+
+	private:
+	Animation animation;
 };
 #endif

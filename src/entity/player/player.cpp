@@ -10,23 +10,28 @@
 #define MAX_VEL 3.2f
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size):
-Entity(renderer, pos, size)
+Entity(renderer, pos, size),
+animation(renderer, this, "res/graphics/player.png", size, 500)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
 	set_health(max_health);
+	animation.init();
 }
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
-Entity(renderer, pos, size, scale)
+Entity(renderer, pos, size, scale),
+animation(renderer, this, "res/graphics/player.png", size, 500)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
 	set_health(max_health);
+	animation.init();
 }
 
 Player::~Player()
 {
+	animation.clear();
 }
 
 void Player::update()
@@ -37,12 +42,10 @@ void Player::update()
 
 void Player::render()
 {
-	SDL_Rect box = get_render_rect();
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
-	float mouse_angle = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;
-	SDL_RenderSetScale(renderer, scale.x, scale.y);
-	SDL_RenderCopyEx(renderer, texture, NULL, &box, mouse_angle, NULL, SDL_FLIP_NONE);
+	this->rotation  = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;
+	animation.render();
 	if(Game::debug->active)
 	{
 		Game::debug->push_render(this, "Player", {&this->pos.x, &this->pos.y,
