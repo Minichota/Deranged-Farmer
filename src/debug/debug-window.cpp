@@ -12,7 +12,7 @@
 Debug_Window::Debug_Window(SDL_Renderer* renderer):
 Renderable(renderer),
 entity_creator(renderer, nullptr),
-text_input(renderer, Ivec(400,350), Ivec(100,100), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
+text_input(renderer, Ivec(0,0), Ivec(100,100), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,0,255,255}, NORMAL),
 console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, WRAPPED)
 {
 	this->inner_selection = -1;
@@ -24,6 +24,7 @@ console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics
 	font = TTF_OpenFont("res/graphics/font.ttf", 16);
 	Error(!font, {"failed to load font", SDL_GetError()});
 	console.set_font_size(18);
+	text_input.set_font_size(12);
 }
 
 Debug_Window::~Debug_Window()
@@ -163,8 +164,14 @@ void Debug_Window::render()
 			SDL_FreeSurface(surface);
 		}
 	}
-
-	text_input.render();
+	if(!text_input.get_string().empty())
+	{
+		Sized<float>* address = to_render[outer_selection].address;
+		text_input.set_abs_pos(Fvec(address->get_pos().x + address->get_size().x/2,
+									address->get_pos().y + address->get_size().y/2));
+		text_input.set_origin(text_input.get_size()/2);
+		text_input.render();
+	}
 	console.render();
 	clear_render_settings(renderer);
 }
