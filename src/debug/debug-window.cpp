@@ -326,7 +326,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 							{
 								set_string(--(*to_render[outer_selection].values[inner_selection]));
 							}
-							else if(outer_selection >= 0)
+							else if(outer_selection >= 0 && to_render[outer_selection].values.size() > 0)
 							{
 								inner_selection++;
 								if((size_t)inner_selection > to_render[outer_selection].values.size() - 1)
@@ -357,7 +357,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 							else if(outer_selection >= 0)
 							{
 								inner_selection--;
-								if(inner_selection < 0)
+								if(inner_selection < 0 && to_render[outer_selection].values.size() > 0)
 								{
 									inner_selection = to_render[outer_selection].values.size() - 1;
 								}

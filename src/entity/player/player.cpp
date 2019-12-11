@@ -11,7 +11,7 @@
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size):
 Entity(renderer, pos, size),
-animation(renderer, this, "res/graphics/player.png", size, 500)
+animation(renderer, this, "res/graphics/player.png", size, 1500)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
@@ -21,7 +21,7 @@ animation(renderer, this, "res/graphics/player.png", size, 500)
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
 Entity(renderer, pos, size, scale),
-animation(renderer, this, "res/graphics/player.png", size, 500)
+animation(renderer, this, "res/graphics/player.png", size, 1500)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
