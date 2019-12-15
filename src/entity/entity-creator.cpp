@@ -46,24 +46,36 @@ void Entity_Creator::update()
 
 void Entity_Creator::render()
 {
-	SDL_Rect shadow =
-	{ 350, 150, 100, (int)entity_names.size() * 18 };
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
-	SDL_RenderFillRect(renderer, &shadow);
-
-	for(UI_Text* x : entity_names)
+	if(curr_state == 0)
 	{
-		x->render();
+		const SDL_Rect shadow =
+		{ 350, 150, 100, (int)entity_names.size() * 18 };
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+		SDL_RenderFillRect(renderer, &shadow);
+
+		for(UI_Text* x : entity_names)
+		{
+			x->render();
+		}
+
+		Ivec outline_pos = entity_names[selected_name]->get_pos();
+		Ivec outline_size = entity_names[selected_name]->get_size();
+		SDL_Rect outline_box =
+		{
+			outline_pos.x,
+			outline_pos.y,
+			outline_size.x,
+			outline_size.y
+		};
+
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderDrawRect(renderer, &outline_box);
 	}
 
 	if(curr_state)
 	{
 		std::string copy = inputs[selected_field]->get_string();
 		inputs[selected_field]->set_string(names[selected_name].input_repr[selected_field] + copy);
-
-		// change origin and re-update to assert that origin is set to ui-text
-		inputs[selected_field]->set_origin(Fvec(inputs[selected_field]->get_size().x/2, 0));
-		inputs[selected_field]->update();
 
 		inputs[selected_field]->render();
 		inputs[selected_field]->set_string(copy);
@@ -93,19 +105,6 @@ void Entity_Creator::render()
 			SDL_RenderDrawRect(renderer, &entity_pos);
 		}
 	}
-
-	Ivec outline_pos = entity_names[selected_name]->get_pos();
-	Ivec outline_size = entity_names[selected_name]->get_size();
-	SDL_Rect outline_box =
-	{
-		outline_pos.x,
-		outline_pos.y,
-		outline_size.x,
-		outline_size.y
-	};
-
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderDrawRect(renderer, &outline_box);
 	clear_render_settings(renderer);
 }
 
@@ -243,7 +242,7 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					{
 						for(size_t i = 0; i < names[selected_name].input_repr.size(); i++)
 						{
-							inputs.push_back(new UI_Text_Input(renderer, Ivec(400,120), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
+							inputs.push_back(new UI_Text_Input(renderer, Ivec(0,0), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
 							inputs[i]->set_string("0");
 							inputs[i]->set_font_size(24);
 						}
