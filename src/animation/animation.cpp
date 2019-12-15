@@ -34,6 +34,13 @@ void Animation::render()
 
 void Animation::init()
 {
+	/*
+	img(64,32) ->
+	-> texture[]
+	{
+		(32,32),(32,32)
+	}
+	*/
 	{
 		master_frame = IMG_LoadTexture(renderer, file_name.c_str());
 		Error{master_frame==nullptr, {"Failed to load animation"}, true};
