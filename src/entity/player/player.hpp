@@ -17,6 +17,7 @@ class Player : public Entity
 	void handle_input();
 
 	private:
-	Animation animation;
+	Animation idle_animation;
+	Animation moving_animation;
 };
 #endif

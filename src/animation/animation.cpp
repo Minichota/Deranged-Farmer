@@ -2,6 +2,7 @@
 
 #include "animation.hpp"
 #include "interpolators.hpp"
+#include "util.hpp"
 
 Animation::Animation(SDL_Renderer* renderer, Entity* parent, std::string file_name, Ivec frame_size, long long delay):
 renderer(renderer),
@@ -25,9 +26,10 @@ void Animation::render()
 		frame_size.x,
 		frame_size.y
 	};
-	SDL_RenderSetScale(renderer, parent->get_scale().x, parent->get_scale().y);
 	SDL_Rect dst = parent->get_render_rect();
+	SDL_RenderSetScale(renderer, parent->get_scale().x, parent->get_scale().y);
 	SDL_RenderCopyEx(renderer, master_frame, &src, &dst, parent->get_rotation(), NULL, SDL_FLIP_NONE);
+	clear_render_settings(renderer);
 }
 
 void Animation::init()

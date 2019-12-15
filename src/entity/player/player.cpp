@@ -11,27 +11,32 @@
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size):
 Entity(renderer, pos, size),
-animation(renderer, this, "res/graphics/player.png", size, 1500)
+idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
+moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
 	set_health(max_health);
-	animation.init();
+	idle_animation.init();
+	moving_animation.init();
 }
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
 Entity(renderer, pos, size, scale),
-animation(renderer, this, "res/graphics/player.png", size, 1500)
+idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
+moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
 	set_health(max_health);
-	animation.init();
+	idle_animation.init();
+	moving_animation.init();
 }
 
 Player::~Player()
 {
-	animation.clear();
+	idle_animation.clear();
+	moving_animation.clear();
 }
 
 void Player::update()
@@ -45,7 +50,15 @@ void Player::render()
 	Ivec mouse_pos;
 	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 	this->rotation  = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;
-	animation.render();
+	if(abs(this->vel.x) > 0.5f ||
+	   abs(this->vel.y) > 0.5f)
+	{
+		moving_animation.render();
+	}
+	else
+	{
+		idle_animation.render();
+	}
 	if(Game::debug->active)
 	{
 		Game::debug->push_render(this, "Player", {&this->pos.x, &this->pos.y,
