@@ -129,10 +129,22 @@ Ivec& UI_Text::get_size()
 	return this->tex_size;
 }
 
-void UI_Text::set_font_size(int font_size)
+void UI_Text::set_font_size(int font_size, bool refresh)
 {
 	TTF_CloseFont(font);
 	font = TTF_OpenFont(font_path.c_str(), font_size);
-	reload_texture();
+	if(refresh)
+	{
+		reload_texture();
+	}
 	this->font_height = TTF_FontHeight(font);
+}
+
+void UI_Text::set_color(const SDL_Color color, bool refresh)
+{
+	this->font_color = color;
+	if(refresh)
+	{
+		reload_texture();
+	}
 }

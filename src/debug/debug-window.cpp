@@ -12,7 +12,7 @@
 Debug_Window::Debug_Window(SDL_Renderer* renderer):
 Renderable(renderer),
 entity_creator(renderer, nullptr),
-text_input(renderer, Ivec(0,0), Ivec(100,100), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,0,255,255}, NORMAL),
+text_input(renderer, Ivec(0,0), Ivec(100,100), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
 console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, WRAPPED)
 {
 	this->inner_selection = -1;
@@ -24,7 +24,7 @@ console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics
 	font = TTF_OpenFont("res/graphics/font.ttf", 16);
 	Error(!font, {"failed to load font", SDL_GetError()});
 	console.set_font_size(18);
-	text_input.set_font_size(12);
+	text_input.set_font_size(14);
 }
 
 Debug_Window::~Debug_Window()
@@ -65,13 +65,12 @@ void Debug_Window::render()
 	}
 	// background blending
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 127);
-	SDL_Rect x = {pos.x,pos.y,200,608};
+	SDL_Rect x = {pos.x,pos.y,210,608};
 	SDL_RenderFillRect(renderer, &x);
 	x = {0,400,800,208};
 	SDL_RenderFillRect(renderer, &x);
 
 	Ivec draw_pos = {this->pos.x, this->pos.y - scroll_pos};
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
 	// rendering of outer layer
 	SDL_Surface* surface;
@@ -92,8 +91,26 @@ void Debug_Window::render()
 			tex_size.x,
 			tex_size.y
 		};
-		outer_rects.push_back(size_rect);
-		SDL_RenderCopy(renderer, to_render[i].texture, NULL, &size_rect);
+		// render blue if selected text
+		if((int)i == outer_selection)
+		{
+			surface = TTF_RenderText_Solid(font, to_render[i].name.c_str(), SDL_Color{0,127,255,255});
+			SDL_Texture* temp = SDL_CreateTextureFromSurface(renderer, surface);
+			size_rect =
+			{
+				draw_pos.x + 5,
+				draw_pos.y,
+				tex_size.x,
+				tex_size.y
+			};
+			SDL_FreeSurface(surface);
+			SDL_RenderCopy(renderer, temp, NULL, &size_rect);
+			SDL_DestroyTexture(temp);
+		}
+		else
+		{
+			SDL_RenderCopy(renderer, to_render[i].texture, NULL, &size_rect);
+		}
 		draw_pos.y += tex_size.y;
 	}
 
@@ -109,12 +126,7 @@ void Debug_Window::render()
 	if(outer_selection >= 0)
 	{
 		// rendering of outline of outer text
-		Ivec tex_size;
-		SDL_QueryTexture(to_render[outer_selection].texture, NULL, NULL, &tex_size.x, &tex_size.y);
-		SDL_Rect selected_outline = {pos.x, pos.y + (-scroll_pos + 19 * outer_selection), tex_size.x, tex_size.y};
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderDrawRect(renderer, &selected_outline);
-
 
 		// rendering entity's outline
 		Sized<float>* entity = to_render[outer_selection].address;
@@ -132,14 +144,6 @@ void Debug_Window::render()
 			};
 			SDL_RenderDrawRect(renderer, &entity_outline);
 		}
-		if(inner_selection >= 0)
-		{
-			// rendering of inner selection mini-rectangle
-			Ivec tex_size;
-			SDL_Rect selected_box_2 = {pos.x + 50, pos.y + 19 * inner_selection, 5, 5};
-			SDL_RenderDrawRect(renderer, &selected_box_2);
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		}
 		draw_pos = pos;
 		for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
 		{
@@ -147,12 +151,19 @@ void Debug_Window::render()
 			std::string x = std::to_string(*to_render[outer_selection].values[i]);
 			remove_zeros(x);
 
-			surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,255,255,255});
+			if((int)i == inner_selection)
+			{
+				surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,127,0,255});
+			}
+			else
+			{
+				surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,255,255,255});
+			}
 			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 			SDL_QueryTexture(texture, NULL, NULL, &tex_size.x, &tex_size.y);
 			SDL_Rect size_rect =
 			{
-				draw_pos.x + 50,
+				draw_pos.x + 65,
 				draw_pos.y,
 				tex_size.x,
 				tex_size.y
@@ -166,7 +177,9 @@ void Debug_Window::render()
 	}
 	if(!text_input.get_string().empty())
 	{
+		// render input text
 		Sized<float>* address = to_render[outer_selection].address;
+		// restore positioning in center of entity
 		text_input.set_abs_pos(Fvec(address->get_pos().x + address->get_size().x/2,
 									address->get_pos().y + address->get_size().y/2));
 		text_input.set_origin(text_input.get_size()/2);

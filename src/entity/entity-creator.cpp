@@ -53,23 +53,21 @@ void Entity_Creator::render()
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
 		SDL_RenderFillRect(renderer, &shadow);
 
-		for(UI_Text* x : entity_names)
+		for(size_t i = 0; i < entity_names.size(); i++)
 		{
-			x->render();
+			// a slow approach but changes size and color
+			if((int)i == selected_name)
+			{
+				entity_names[i]->set_color(SDL_Color{255,127,0,255}, false);
+			}
+			else
+			{
+				entity_names[i]->set_color(SDL_Color{255,255,255,255}, false);
+			}
+			entity_names[i]->reload_texture();
+			entity_names[i]->set_origin(Fvec(entity_names[i]->get_size().x/2, 0));
+			entity_names[i]->render();
 		}
-
-		Ivec outline_pos = entity_names[selected_name]->get_pos();
-		Ivec outline_size = entity_names[selected_name]->get_size();
-		SDL_Rect outline_box =
-		{
-			outline_pos.x,
-			outline_pos.y,
-			outline_size.x,
-			outline_size.y
-		};
-
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderDrawRect(renderer, &outline_box);
 	}
 
 	if(curr_state)

@@ -23,7 +23,8 @@ class UI_Text : public UI_Base
 	std::string get_text();
 	Ivec& get_size();
 
-	void set_font_size(int font_size);
+	void set_font_size(int font_size, bool refresh = true);
+	void set_color(const SDL_Color color, bool refresh = true);
 
 	private:
 	Fill_Type type;
