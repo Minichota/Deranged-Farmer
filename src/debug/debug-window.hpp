@@ -54,6 +54,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	void set_string(std::string input);
 	void set_string(float input);
 	void handle_keyboard_scrolling();
+	void reload_inputs();
 
 	private:
 	Level* level;
@@ -76,7 +77,7 @@ class Debug_Window : public Renderable, public Event_Handler
 	int outer_selection;
 	int inner_selection;
 
-	UI_Text_Input text_input;
+	std::vector<UI_Text_Input*> text_inputs;
 
 	UI_Text console;
 };

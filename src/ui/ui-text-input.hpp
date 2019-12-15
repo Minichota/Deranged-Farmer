@@ -16,6 +16,8 @@ class UI_Text_Input : public UI_Base, public Event_Handler
 
 	void handle_event(const SDL_Event& event);
 
+	UI_Text& get_text();
+
 	void set_string(std::string str);
 	std::string& get_string();
 

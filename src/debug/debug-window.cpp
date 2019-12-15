@@ -12,7 +12,6 @@
 Debug_Window::Debug_Window(SDL_Renderer* renderer):
 Renderable(renderer),
 entity_creator(renderer, nullptr),
-text_input(renderer, Ivec(0,0), Ivec(100,100), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL),
 console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics/font.ttf", SDL_Color{255,255,255,255}, WRAPPED)
 {
 	this->inner_selection = -1;
@@ -24,7 +23,6 @@ console(renderer, Fvec(0,400), Fvec(800,208), Fvec(1.0f,1.0f), "", "res/graphics
 	font = TTF_OpenFont("res/graphics/font.ttf", 16);
 	Error(!font, {"failed to load font", SDL_GetError()});
 	console.set_font_size(18);
-	text_input.set_font_size(14);
 }
 
 Debug_Window::~Debug_Window()
@@ -38,7 +36,10 @@ void Debug_Window::update()
 	{
 		entity_creator.update();
 	}
-	text_input.update();
+	for(UI_Text_Input* x : text_inputs)
+	{
+		x->update();
+	}
 	inner_rects.clear();
 	outer_rects.clear();
 	console.clear();
@@ -125,9 +126,7 @@ void Debug_Window::render()
 
 	if(outer_selection >= 0)
 	{
-		// rendering of outline of outer text
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
 		// rendering entity's outline
 		Sized<float>* entity = to_render[outer_selection].address;
 		if(entity != nullptr)
@@ -145,45 +144,24 @@ void Debug_Window::render()
 			SDL_RenderDrawRect(renderer, &entity_outline);
 		}
 		draw_pos = pos;
-		for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
+	}
+	for(size_t i = 0; i < text_inputs.size(); i++)
+	{
+		if(!text_inputs[i]->get_string().empty())
 		{
-			Ivec tex_size;
-			std::string x = std::to_string(*to_render[outer_selection].values[i]);
-			remove_zeros(x);
-
-			if((int)i == inner_selection)
+			// render input text
+			if(inner_selection == (int)i)
 			{
-				surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,127,0,255});
+				text_inputs[i]->render();
 			}
 			else
 			{
-				surface = TTF_RenderText_Solid(font, x.c_str(), SDL_Color{255,255,255,255});
+				std::string x = std::to_string(*to_render[outer_selection].values[i]);
+				remove_zeros(x);
+				text_inputs[i]->set_string(x);
+				text_inputs[i]->render();
 			}
-			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-			SDL_QueryTexture(texture, NULL, NULL, &tex_size.x, &tex_size.y);
-			SDL_Rect size_rect =
-			{
-				draw_pos.x + 65,
-				draw_pos.y,
-				tex_size.x,
-				tex_size.y
-			};
-			inner_rects.push_back(size_rect);
-			SDL_RenderCopy(renderer, texture, NULL, &size_rect);
-			draw_pos.y += tex_size.y;
-			SDL_DestroyTexture(texture);
-			SDL_FreeSurface(surface);
 		}
-	}
-	if(!text_input.get_string().empty())
-	{
-		// render input text
-		Sized<float>* address = to_render[outer_selection].address;
-		// restore positioning in center of entity
-		text_input.set_abs_pos(Fvec(address->get_pos().x + address->get_size().x/2,
-									address->get_pos().y + address->get_size().y/2));
-		text_input.set_origin(text_input.get_size()/2);
-		text_input.render();
 	}
 	console.render();
 	clear_render_settings(renderer);
@@ -191,7 +169,11 @@ void Debug_Window::render()
 
 void Debug_Window::clear()
 {
-	text_input.set_string("");
+	for(UI_Text_Input* text_input : text_inputs)
+	{
+		delete text_input;
+	}
+	text_inputs.clear();
 	outer_selection = -1;
 	inner_selection = -1;
 	for(size_t i = 0; i < to_render.size(); i++)
@@ -307,7 +289,10 @@ void Debug_Window::handle_event(const SDL_Event& event)
 						} break;
 						case SDLK_BACKSPACE:
 						{
-							text_input.handle_event(event);
+							if(inner_selection >= -1)
+							{
+								text_inputs[inner_selection]->handle_event(event);
+							}
 						} break;
 						case SDLK_F11:
 						{
@@ -315,10 +300,13 @@ void Debug_Window::handle_event(const SDL_Event& event)
 						} break;
 						case SDLK_RETURN:
 						{
-							if(text_input.get_string().size() > 0)
+							if(inner_selection >= -1)
 							{
-								*to_render[outer_selection].values[inner_selection] = atof(text_input.get_string().c_str());
-								set_string(*to_render[outer_selection].values[inner_selection]);
+								if(text_inputs[inner_selection]->get_string().size() > 0)
+								{
+									*to_render[outer_selection].values[inner_selection] = atof(text_inputs[inner_selection]->get_string().c_str());
+									set_string(*to_render[outer_selection].values[inner_selection]);
+								}
 							}
 						} break;
 						case SDLK_j:
@@ -332,6 +320,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 									outer_selection = 0;
 								}
 								inner_selection = -1;
+								reload_inputs();
 								set_string("");
 								handle_keyboard_scrolling();
 							}
@@ -341,11 +330,16 @@ void Debug_Window::handle_event(const SDL_Event& event)
 							}
 							else if(outer_selection >= 0 && to_render[outer_selection].values.size() > 0)
 							{
+								if(inner_selection >= 0)
+								{
+									text_inputs[inner_selection]->get_text().set_color(SDL_Color{255,255,255,255});
+								}
 								inner_selection++;
 								if((size_t)inner_selection > to_render[outer_selection].values.size() - 1)
 								{
 									inner_selection = 0;
 								}
+								text_inputs[inner_selection]->get_text().set_color(SDL_Color{255,127,0,255});
 								set_string(*to_render[outer_selection].values[inner_selection]);
 							}
 						} break;
@@ -360,6 +354,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 									outer_selection = to_render.size() - 1;
 								}
 								inner_selection = -1;
+								reload_inputs();
 								set_string("");
 								handle_keyboard_scrolling();
 							}
@@ -367,13 +362,18 @@ void Debug_Window::handle_event(const SDL_Event& event)
 							{
 								set_string(++(*to_render[outer_selection].values[inner_selection]));
 							}
-							else if(outer_selection >= 0)
+							else if(outer_selection >= 0 && to_render[outer_selection].values.size() > 0)
 							{
+								if(inner_selection >= 0)
+								{
+									text_inputs[inner_selection]->get_text().set_color(SDL_Color{255,255,255,255});
+								}
 								inner_selection--;
 								if(inner_selection < 0 && to_render[outer_selection].values.size() > 0)
 								{
 									inner_selection = to_render[outer_selection].values.size() - 1;
 								}
+								text_inputs[inner_selection]->get_text().set_color(SDL_Color{255,127,0,255});
 								set_string(*to_render[outer_selection].values[inner_selection]);
 							}
 						} break;
@@ -394,7 +394,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 				{
 					if((isdigit(event.text.text[0]) || event.text.text[0] == '.' || event.text.text[0] == '-') && inner_selection >= 0)
 					{
-						text_input.handle_event(event);
+						text_inputs[inner_selection]->handle_event(event);
 					}
 				} break;
 			}
@@ -491,7 +491,10 @@ void Debug_Window::select(Ivec pos)
 		   pos.x < outer_rects[i].x + outer_rects[i].w &&
 		   pos.y < outer_rects[i].y + outer_rects[i].h)
 		{
-			text_input.set_string("");
+			for(UI_Text_Input* text_input : text_inputs)
+			{
+				text_input->set_string("");
+			}
 			inner_selection = -1;
 			outer_selection = i;
 			return;
@@ -512,20 +515,27 @@ void Debug_Window::select(Ivec pos)
 	inner_selection = -1;
 	outer_selection = -1;
 
-	text_input.set_string("");
+	for(UI_Text_Input* text_input : text_inputs)
+	{
+		delete text_input;
+	}
+	text_inputs.clear();
 }
 
 void Debug_Window::set_string(std::string input)
 {
 	remove_zeros(input);
-	text_input.set_string(input);
+	if(inner_selection >= 0)
+	{
+		text_inputs[inner_selection]->set_string(input);
+	}
 }
 
 void Debug_Window::set_string(float input)
 {
 	std::string str = std::to_string(input);
 	remove_zeros(str);
-	text_input.set_string(str);
+	text_inputs[inner_selection]->set_string(str);
 }
 
 void Debug_Window::handle_keyboard_scrolling()
@@ -539,6 +549,24 @@ void Debug_Window::handle_keyboard_scrolling()
 	{
 		scroll_pos -= 19;
 		rect_pos = pos.y + (-scroll_pos + 19 * outer_selection);
+	}
+}
+
+void Debug_Window::reload_inputs()
+{
+	for(UI_Text_Input* input : text_inputs)
+	{
+		delete input;
+	}
+	text_inputs.clear();
+	for(size_t i = 0; i < to_render[outer_selection].values.size(); i++)
+	{
+		UI_Text_Input* new_one = new UI_Text_Input(renderer, Ivec(pos.x + 65, pos.y + i * 19), Ivec(0,0), Fvec(1.0f, 1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL);
+		std::string x = std::to_string(*to_render[outer_selection].values[i]);
+		remove_zeros(x);
+		new_one->set_font_size(18);
+		new_one->set_string(x);
+		text_inputs.push_back(new_one);
 	}
 }
 
