@@ -70,12 +70,12 @@ bool AI_Roaming::generate_path()
 	std::vector<Map_Entity*>& map_entities = map.get_map_entities();
 
 	// generation of all tile positions and whether or not they're passable
-	std::vector<std::vector<struct Position>> tile_positions;
+	std::vector<std::vector<Position>> tile_positions;
 
 	Ivec parent_index;
 	for(size_t y = 0; y < tiles.size(); y++)
 	{
-		tile_positions.push_back(std::vector<Position>());
+		tile_positions.emplace_back();
 		for(size_t x = 0; x < tiles[y].size(); x++)
 		{
 			if(tiles[y][x]->get_pos() == normalize(parent->get_collision_pos(), map.get_tile_size()))
@@ -89,7 +89,7 @@ bool AI_Roaming::generate_path()
 				{
 					Fvec top_left  = normalize(map_entity->get_collision_pos(), map.get_tile_size());
 					Fvec bot_right = normalize(map_entity->get_collision_pos() + map_entity->get_collision_size(), map.get_tile_size());
-					if((top_left == tiles[y][x]->get_pos() || bot_right == tiles[y][x]->get_pos()))
+					if(top_left == tiles[y][x]->get_pos() || bot_right == tiles[y][x]->get_pos())
 					{
 						flag = false;
 						break;
@@ -103,6 +103,7 @@ bool AI_Roaming::generate_path()
 			}
 		}
 	}
+
 	// pathfinding
 	std::queue<Position> q;
 	std::vector<Position*> cleanups;
@@ -171,7 +172,7 @@ bool AI_Roaming::generate_path()
 				adjacents.push_back(&tile_positions[v->index.y - 1][v->index.x]);
 			}
 		}
-		if(v->index.x + 1 < (int)tile_positions.size())
+		if(v->index.y + 1 < (int)tile_positions.size())
 		{
 			if(tile_positions[v->index.y + 1][v->index.x].null)
 			{

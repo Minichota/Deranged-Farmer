@@ -24,9 +24,6 @@ class Map : public Renderable
 
 	void validate_pos(Fvec& pos);
 
-	void push_tile(Tile* tile);
-	void insert_tile(Tile* tile, STvec pos);
-
 	void push_entity(Map_Entity* tile);
 	void insert_entity(Map_Entity* tile, size_t pos);
 

@@ -179,16 +179,6 @@ void Map::validate_pos(Fvec& pos)
 			   (int)std::round(pos.y) - (int)std::round(pos.y) % tile_size.y);
 }
 
-void Map::push_tile(Tile* tile)
-{
-	tiles.back().push_back(tile);
-}
-
-void Map::insert_tile(Tile* tile, STvec pos)
-{
-	tiles[pos.y].insert(tiles[pos.y].begin() + pos.x, tile);
-}
-
 void Map::push_entity(Map_Entity* e)
 {
 	map_entities.push_back(e);

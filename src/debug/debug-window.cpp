@@ -240,8 +240,8 @@ void Debug_Window::handle_event(const SDL_Event& event)
 								// checking all tiles
 								std::vector<std::vector<Tile*>>& tiles = level->get_map().get_tiles();
 								std::vector<Map_Entity*>& map_entities = level->get_map().get_map_entities();
-								std::vector<Map_Entity*>::iterator map_entity = std::find_if(map_entities.begin(), map_entities.end(), [&](Map_Entity* x) -> bool {return x == to_render[outer_selection].address;});
 								std::vector<Entity*>& entities = level->get_entities();
+								std::vector<Map_Entity*>::iterator map_entity = std::find_if(map_entities.begin(), map_entities.end(), [&](Map_Entity* x) -> bool {return x == to_render[outer_selection].address;});
 								std::vector<Entity*>::iterator entity = std::find_if(entities.begin(), entities.end(), [&](Entity* x) -> bool {return x == to_render[outer_selection].address;});
 								size_t y_index = 0;
 								for(size_t i = 0; i < tiles.size(); i++)
@@ -253,8 +253,9 @@ void Debug_Window::handle_event(const SDL_Event& event)
 										Map& map = level->get_map();
 										Ivec tile_size = map.get_tile_size();
 										Tile* old_tile = tiles[y_index][std::distance(tiles[y_index].begin(), tile)];
+										Tile* new_tile = new Tile(nullptr, Fvec(old_tile->get_pos().x * tile_size.x, old_tile->get_pos().y * tile_size.y), tile_size);
 
-										tiles[y_index][std::distance(tiles[y_index].begin(), tile)] = new Tile(nullptr, Fvec(old_tile->get_pos().x * tile_size.x, old_tile->get_pos().y * tile_size.y), tile_size);
+										tiles[y_index][std::distance(tiles[y_index].begin(), tile)] = new_tile;
 
 										to_render.erase(to_render.begin() + outer_selection);
 										delete old_tile;
