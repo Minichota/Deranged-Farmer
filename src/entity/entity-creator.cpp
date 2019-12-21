@@ -72,11 +72,23 @@ void Entity_Creator::render()
 
 	if(curr_state)
 	{
-		std::string copy = inputs[selected_field]->get_string();
-		inputs[selected_field]->set_string(names[selected_name].input_repr[selected_field] + copy);
 
-		inputs[selected_field]->render();
-		inputs[selected_field]->set_string(copy);
+		for(size_t i = 0; i < inputs.size(); i++)
+		{
+			// a slow approach but changes size and color
+			if((int)i == selected_field)
+			{
+				inputs[i]->get_text().set_color(SDL_Color{0,0,255,255});
+			}
+			else
+			{
+				inputs[i]->get_text().set_color(SDL_Color{255,255,255,255});
+			}
+			std::string copy = inputs[i]->get_string();
+			inputs[i]->set_string(names[selected_name].input_repr[i] + copy);
+			inputs[i]->render();
+			inputs[i]->set_string(copy);
+		}
 
 		// drawing outline for where entity will be
 		if(!inputs[selected_field]->get_string().empty())
@@ -240,7 +252,7 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					{
 						for(size_t i = 0; i < names[selected_name].input_repr.size(); i++)
 						{
-							inputs.push_back(new UI_Text_Input(renderer, Ivec(0,0), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
+							inputs.push_back(new UI_Text_Input(renderer, Ivec(6,i * 20), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
 							inputs[i]->set_string("0");
 							inputs[i]->set_font_size(24);
 						}
