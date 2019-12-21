@@ -287,6 +287,10 @@ void Debug_Window::handle_event(const SDL_Event& event)
 							{
 								outer_selection = -1;
 							}
+							if((size_t)to_render.size() > 0)
+							{
+								reload_inputs();
+							}
 						} break;
 						case SDLK_BACKSPACE:
 						{
@@ -301,7 +305,7 @@ void Debug_Window::handle_event(const SDL_Event& event)
 						} break;
 						case SDLK_RETURN:
 						{
-							if(inner_selection >= -1)
+							if(inner_selection > -1 && text_inputs.size() > 0)
 							{
 								if(text_inputs[inner_selection]->get_string().size() > 0)
 								{
