@@ -7,6 +7,7 @@
 #include "ui-base.hpp"
 #include "entity.hpp"
 #include "map.hpp"
+#include "tile-editor.hpp"
 #include "ai-roaming.hpp"
 #include "ai.hpp"
 
@@ -39,6 +40,7 @@ class Level : public Game_State
 	std::vector<AI*> ais;
 	const std::string entity_file_path;
 	Map map;
+	Tile_Editor tile_editor;
 	const std::string map_data_file_path;
 	const std::string map_image_file_path;
 };

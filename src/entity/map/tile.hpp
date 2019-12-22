@@ -15,6 +15,7 @@ class Tile : public Renderable, public Sized<float>
 	void render();
 
 	void set_relative_pos(Ivec new_pos);
+	Ivec& get_relative_pos();
 
 	bool is_null();
 	void set_renderer(SDL_Renderer* renderer);

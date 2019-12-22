@@ -39,10 +39,6 @@ void Tile::render()
 	if(renderer!=nullptr)
 	{
 		SDL_RenderCopy(renderer, full_texture, &src_rect, &rect);
-		if(Game::debug->active)
-		{
-			Game::debug->push_render(this, "Tile", {});
-		}
 	}
 	if(Game::debug->active)
 	{
@@ -65,6 +61,11 @@ void load_tileset(SDL_Renderer* renderer, const char* file_path)
 void Tile::set_relative_pos(Ivec new_pos)
 {
 	this->relative_pos = new_pos;
+}
+
+Ivec& Tile::get_relative_pos()
+{
+	return this->relative_pos;
 }
 
 SDL_Texture* get_texture()

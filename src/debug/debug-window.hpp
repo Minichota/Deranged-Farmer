@@ -12,6 +12,7 @@
 #include "sized.hpp"
 #include "level.hpp"
 #include "entity-creator.hpp"
+#include "tile-editor.hpp"
 #include "console-log.hpp"
 
 typedef struct
