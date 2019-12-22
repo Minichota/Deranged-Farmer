@@ -14,6 +14,6 @@ class Renderable
 	virtual void render() = 0;
 
 	protected:
-	SDL_Renderer* const renderer;
+	SDL_Renderer* renderer;
 };
 #endif

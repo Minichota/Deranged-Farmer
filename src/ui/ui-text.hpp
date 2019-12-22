@@ -18,6 +18,7 @@ class UI_Text : public UI_Base
 
 	void set_text(std::string text);
 	void append_text(std::string text);
+	void prepend_text(std::string text);
 	void clear();
 
 	std::string get_text();

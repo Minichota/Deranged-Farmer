@@ -40,6 +40,5 @@ class Map : public Renderable
 	const char* image_path;
 	std::vector<std::vector<Tile*>> tiles;
 	std::vector<Map_Entity*> map_entities;
-	SDL_Texture* tile_image;
 };
 #endif

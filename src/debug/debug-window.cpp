@@ -56,6 +56,7 @@ void Debug_Window::update()
 			push_console(logs[i].get_text());
 		}
 	}
+	logs.shrink_to_fit();
 }
 
 void Debug_Window::render()
@@ -180,8 +181,8 @@ void Debug_Window::clear()
 	{
 		SDL_DestroyTexture(to_render[i].texture);
 	}
-	rects.clear();
 	to_render.clear();
+	rects.clear();
 	active = false;
 }
 
@@ -243,22 +244,15 @@ void Debug_Window::handle_event(const SDL_Event& event)
 								std::vector<Entity*>& entities = level->get_entities();
 								std::vector<Map_Entity*>::iterator map_entity = std::find_if(map_entities.begin(), map_entities.end(), [&](Map_Entity* x) -> bool {return x == to_render[outer_selection].address;});
 								std::vector<Entity*>::iterator entity = std::find_if(entities.begin(), entities.end(), [&](Entity* x) -> bool {return x == to_render[outer_selection].address;});
-								size_t y_index = 0;
 								for(size_t i = 0; i < tiles.size(); i++)
 								{
 									std::vector<Tile*>::iterator tile = std::find_if(tiles[i].begin(), tiles[i].end(), [&](Tile* x) -> bool {return x == to_render[outer_selection].address;});
 									if(tile != tiles[i].end())
 									{
-										y_index = i;
-										Map& map = level->get_map();
-										Ivec tile_size = map.get_tile_size();
-										Tile* old_tile = tiles[y_index][std::distance(tiles[y_index].begin(), tile)];
-										Tile* new_tile = new Tile(nullptr, Fvec(old_tile->get_pos().x * tile_size.x, old_tile->get_pos().y * tile_size.y), tile_size);
-
-										tiles[y_index][std::distance(tiles[y_index].begin(), tile)] = new_tile;
+										Tile* old_tile = tiles[i][std::distance(tiles[i].begin(), tile)];
+										old_tile->set_renderer(nullptr);
 
 										to_render.erase(to_render.begin() + outer_selection);
-										delete old_tile;
 										goto end;
 									}
 								}
@@ -449,7 +443,21 @@ void Debug_Window::push_log(std::vector<const char*> text, long long life_time)
 	{
 		x.append(i);
 	}
-	logs.push_back(Console_Log(x, life_time));
+	logs.insert(logs.begin(), Console_Log(x, life_time));
+
+	std::string console_text = console.get_text();
+	size_t lc = 0;
+	for(size_t i = 0; i < console_text.size(); i++)
+	{
+		if(console_text[i] == '\n')
+		{
+			lc++;
+		}
+	}
+	if(lc > 9)
+	{
+		logs.pop_back();
+	}
 }
 
 void Debug_Window::toggle()

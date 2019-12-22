@@ -109,6 +109,11 @@ void UI_Text::append_text(std::string text)
 	this->text.append(text);
 }
 
+void UI_Text::prepend_text(std::string text)
+{
+	this->text.insert(0, text);
+}
+
 void UI_Text::clear()
 {
 	this->text.clear();
