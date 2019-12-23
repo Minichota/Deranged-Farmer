@@ -9,23 +9,22 @@ class Tile : public Renderable, public Sized<float>
 {
 	public:
 	Tile(SDL_Renderer* renderer, Fvec pos, Fvec size);
-	Tile();
 	~Tile();
 
 	void update();
 	void render();
 
-	void load_texture(const char* file_path, Ivec relative_pos);
-	void set_texture(SDL_Texture* texture, Ivec relative_pos);
-	SDL_Texture* get_texture();
+	void set_relative_pos(Ivec new_pos);
+	Ivec& get_relative_pos();
 
 	bool is_null();
+	void set_renderer(SDL_Renderer* renderer);
 
 	private:
-	SDL_Texture* full_texture;
 	Ivec relative_pos;
-
-	SDL_Rect rect;
-	SDL_Rect src_rect;
 };
+
+extern SDL_Texture* full_texture;
+void load_tileset(SDL_Renderer* renderer, const char* file_path);
+SDL_Texture* get_texture();
 #endif

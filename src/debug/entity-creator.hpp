@@ -32,6 +32,7 @@ class Entity_Creator : public Renderable, public Event_Handler
 
 	void set_level(Level* level);
 
+	public:
 	bool active;
 
 	private:

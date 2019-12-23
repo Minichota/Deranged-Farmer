@@ -15,7 +15,6 @@ Renderable(renderer)
 	curr_state = 0;
 	names =
 	{
-		{ "Tile",  {"x: ", "y: ", "type: "}, Fvec(32,32), false},
 		{ "Fence", {"x: ", "y: ", "rotation: "}, Fvec(30,4), true},
 		{ "Bison", {"x: ", "y: "}, Fvec(24, 16), false},
 		{ "Snake", {"x: ", "y: "}, Fvec(28, 14), false}
@@ -53,32 +52,42 @@ void Entity_Creator::render()
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
 		SDL_RenderFillRect(renderer, &shadow);
 
-		for(UI_Text* x : entity_names)
+		for(size_t i = 0; i < entity_names.size(); i++)
 		{
-			x->render();
+			// a slow approach but changes size and color
+			if((int)i == selected_name)
+			{
+				entity_names[i]->set_color(SDL_Color{255,127,0,255}, false);
+			}
+			else
+			{
+				entity_names[i]->set_color(SDL_Color{255,255,255,255}, false);
+			}
+			entity_names[i]->reload_texture();
+			entity_names[i]->set_origin(Fvec(entity_names[i]->get_size().x/2, 0));
+			entity_names[i]->render();
 		}
-
-		Ivec outline_pos = entity_names[selected_name]->get_pos();
-		Ivec outline_size = entity_names[selected_name]->get_size();
-		SDL_Rect outline_box =
-		{
-			outline_pos.x,
-			outline_pos.y,
-			outline_size.x,
-			outline_size.y
-		};
-
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderDrawRect(renderer, &outline_box);
 	}
 
 	if(curr_state)
 	{
-		std::string copy = inputs[selected_field]->get_string();
-		inputs[selected_field]->set_string(names[selected_name].input_repr[selected_field] + copy);
 
-		inputs[selected_field]->render();
-		inputs[selected_field]->set_string(copy);
+		for(size_t i = 0; i < inputs.size(); i++)
+		{
+			// a slow approach but changes size and color
+			if((int)i == selected_field)
+			{
+				inputs[i]->get_text().set_color(SDL_Color{0,0,255,255});
+			}
+			else
+			{
+				inputs[i]->get_text().set_color(SDL_Color{255,255,255,255});
+			}
+			std::string copy = inputs[i]->get_string();
+			inputs[i]->set_string(names[selected_name].input_repr[i] + copy);
+			inputs[i]->render();
+			inputs[i]->set_string(copy);
+		}
 
 		// drawing outline for where entity will be
 		if(!inputs[selected_field]->get_string().empty())
@@ -102,6 +111,7 @@ void Entity_Creator::render()
 				x.get_collision_size().x,
 				x.get_collision_size().y
 			};
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderDrawRect(renderer, &entity_pos);
 		}
 	}
@@ -140,7 +150,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 			{
 				case SDLK_n:
 				{
-					clear();
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						clear();
+						active = false;
+					}
 				} break;
 				case SDLK_j:
 				{
@@ -153,18 +167,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							{
 								input_string = "0";
 							}
-							if(selected_field < 2 && selected_name == 0)
-							{
-								input_string = std::to_string(std::stof(input_string) - 32.0f);
-							}
-							else
-							{
-								input_string = std::to_string(std::stof(input_string) - 1.0f);
-							}
+							input_string = std::to_string(std::stof(input_string) - 1.0f);
 							remove_zeros(input_string);
 						}
 					}
-					else
+					else if(keys[SDL_SCANCODE_LCTRL])
 					{
 						if(curr_state == 0)
 						{
@@ -188,6 +195,26 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							}
 						}
 					}
+					else
+					{
+						if(curr_state == 0)
+						{
+							selected_name++;
+							if((size_t)selected_name > entity_names.size() - 1)
+							{
+								selected_name = 0;
+							}
+						}
+						else
+						{
+							if(inputs[1]->get_string() == "")
+							{
+								// check if previous input is null
+								inputs[1]->get_string() = "0";
+							}
+							inputs[1]->get_string() = std::to_string(std::stoi(inputs[1]->get_string()) + 1);
+						}
+					}
 				} break;
 				case SDLK_k:
 				{
@@ -200,18 +227,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							{
 								input_string = "0";
 							}
-							if(selected_field < 2 && selected_name == 0)
-							{
-								input_string =std::to_string(std::stof(input_string) + 32.0f);
-							}
-							else
-							{
-								input_string =std::to_string(std::stof(input_string) + 1.0f);
-							}
+							input_string = std::to_string(std::stof(input_string) + 1.0f);
 							remove_zeros(input_string);
 						}
 					}
-					else
+					else if(keys[SDL_SCANCODE_LCTRL])
 					{
 						if(curr_state == 0)
 						{
@@ -235,6 +255,50 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							}
 						}
 					}
+					else
+					{
+						if(curr_state == 0)
+						{
+							selected_name--;
+							if(selected_name < 0)
+							{
+								selected_name = entity_names.size() - 1;
+							}
+						}
+						else
+						{
+							if(inputs[1]->get_string() == "")
+							{
+								// check if previous input is null
+								inputs[1]->get_string() = "0";
+							}
+							inputs[1]->get_string() = std::to_string(std::stoi(inputs[1]->get_string()) - 1);
+						}
+					}
+				} break;
+				case SDLK_h:
+				{
+					if(curr_state == 1)
+					{
+						if(inputs[0]->get_string() == "")
+						{
+							// check if previous input is null
+							inputs[0]->get_string() = "0";
+						}
+						inputs[0]->get_string() = std::to_string(std::stoi(inputs[0]->get_string()) - 1);
+					}
+				} break;
+				case SDLK_l:
+				{
+					if(curr_state == 1)
+					{
+						if(inputs[0]->get_string() == "")
+						{
+							// check if previous input is null
+							inputs[0]->get_string() = "0";
+						}
+						inputs[0]->get_string() = std::to_string(std::stoi(inputs[0]->get_string()) + 1);
+					}
 				} break;
 				case SDLK_RETURN:
 				{
@@ -242,67 +306,26 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 					{
 						for(size_t i = 0; i < names[selected_name].input_repr.size(); i++)
 						{
-							inputs.push_back(new UI_Text_Input(renderer, Ivec(0,0), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
+							inputs.push_back(new UI_Text_Input(renderer, Ivec(6,i * 20), Ivec(0,0), Fvec(1.0f,1.0f), "res/graphics/font.ttf", SDL_Color{255,255,255,255}, NORMAL));
 							inputs[i]->set_string("0");
 							inputs[i]->set_font_size(24);
 						}
 						curr_state++;
 					}
-					else
+				} break;
+				case SDLK_SPACE:
+				{
+					if(curr_state != 0)
 					{
-						curr_state = 0;
+						//curr_state = 0;
 						if(inputs[selected_field]->get_string() == "")
 						{
 							// check if current input is null
 							inputs[selected_field]->get_string() = "0";
 						}
-						Game::debug->push_log({"trying to created entity @", inputs[0]->get_string().c_str(), ", ", inputs[1]->get_string().c_str(), "\n"});
 						switch(selected_name)
 						{
 							case 0:
-							{
-								Tile* tile = new Tile(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
-																names[selected_name].size);
-								Ivec tile_count = level->get_map().get_tile_count();
-								Ivec index_to_replace((int)(tile->get_pos().y/32),
-													  (int)(tile->get_pos().x/32) % tile_count.x);
-								if(std::stoi(inputs[0]->get_string()) % 32 != 0 || std::stoi(inputs[0]->get_string()) % 32 != 0)
-								{
-									Game::debug->push_log({"Width and height must `mod 32` to 0"});
-									delete tile;
-									break;
-								}
-								else if(std::stoi(inputs[0]->get_string()) < 0 || std::stoi(inputs[0]->get_string()) < 0)
-								{
-									Game::debug->push_log({"Width and height must be > 0"});
-									delete tile;
-									break;
-								} else if(std::stoi(inputs[0]->get_string()) > 768 || std::stoi(inputs[0]->get_string()) > 576)
-								{
-									Game::debug->push_log({"Tile must be within map"});
-									delete tile;
-									break;
-								}
-
-								if(std::stoi(inputs[2]->get_string()) < 3)
-								{
-									tile->load_texture("res/graphics/tile_map.png",
-										   				Ivec(std::stoi(inputs[2]->get_string())%tile_count.y * level->get_map().get_tile_size().x,
-													   (int)(std::stoi(inputs[2]->get_string())/tile_count.x * level->get_map().get_tile_size().y)));
-									Tile* old_tile = level->get_map().get_tiles()[index_to_replace.x]
-																				 [index_to_replace.y];
-									level->get_map().get_tiles()[index_to_replace.x]
-																[index_to_replace.y] = tile;
-									delete old_tile;
-									Game::debug->refresh();
-								}
-								else
-								{
-									Game::debug->push_log({"That type of tile: ", inputs[2]->get_string().c_str(), " does not exist"});
-									delete tile;
-								}
-							} break;
-							case 1:
 							{
 								if(std::stoi(inputs[2]->get_string()) % 90 == 0)
 								{
@@ -315,17 +338,17 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 								}
 								else
 								{
-									Game::debug->push_log({"rotation must be divisible by 90"});
+									Game::debug->push_log({"rotation must be divisible by 90", "\n"});
 								}
 							} break;
-							case 2:
+							case 1:
 							{
 								Bison* bison = new Bison(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																   names[selected_name].size);
 								bison->load_texture("res/graphics/bison.png");
 								level->push_entity(bison);
 							} break;
-							case 3:
+							case 2:
 							{
 								Snake* snake = new Snake(renderer, Fvec(std::stof(inputs[0]->get_string()), std::stof(inputs[1]->get_string())),
 																   names[selected_name].size);
@@ -333,7 +356,6 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 								level->push_entity(snake);
 							} break;
 						}
-						clear();
 					}
 				} break;
 				case SDLK_BACKSPACE:

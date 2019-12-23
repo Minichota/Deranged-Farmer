@@ -24,9 +24,6 @@ class Map : public Renderable
 
 	void validate_pos(Fvec& pos);
 
-	void push_tile(Tile* tile);
-	void insert_tile(Tile* tile, STvec pos);
-
 	void push_entity(Map_Entity* tile);
 	void insert_entity(Map_Entity* tile, size_t pos);
 
@@ -43,6 +40,5 @@ class Map : public Renderable
 	const char* image_path;
 	std::vector<std::vector<Tile*>> tiles;
 	std::vector<Map_Entity*> map_entities;
-	SDL_Texture* tile_image;
 };
 #endif

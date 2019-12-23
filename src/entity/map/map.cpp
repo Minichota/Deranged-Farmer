@@ -68,12 +68,7 @@ void Map::init()
 	std::vector<std::vector<int>> map_data;
 	parse_csv(data, map_data, 0, tile_count.y);
 	{
-		if(tile_image == nullptr)
-		{
-			SDL_DestroyTexture(tile_image);
-		}
-		tile_image = IMG_LoadTexture(renderer, image_path);
-		Error(!tile_image, {"Failed to load image texture for tiles", image_path }, true);
+		load_tileset(renderer, image_path);
 	}
 	for(int y = 0; y < tile_count.y; y++)
 	{
@@ -92,7 +87,7 @@ void Map::init()
 			}
 			int tile_type = map_data[y][x] - 1;
 			Tile* tile = new Tile(renderer, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
-			tile->set_texture(tile_image, Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
+			tile->set_relative_pos(Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
 			if((int)tiles.size() <= y)
 			{
 				tiles.push_back(std::vector<Tile*>());
@@ -141,8 +136,6 @@ void Map::clear()
 	}
 	map_entities.clear();
 	tiles.clear();
-	SDL_DestroyTexture(tile_image);
-	tile_image = nullptr;
 }
 
 void Map::handle_collision(Entity* entity)
@@ -177,16 +170,6 @@ void Map::validate_pos(Fvec& pos)
 {
 	pos = Fvec((int)std::round(pos.x) - (int)std::round(pos.x) % tile_size.x,
 			   (int)std::round(pos.y) - (int)std::round(pos.y) % tile_size.y);
-}
-
-void Map::push_tile(Tile* tile)
-{
-	tiles.back().push_back(tile);
-}
-
-void Map::insert_tile(Tile* tile, STvec pos)
-{
-	tiles[pos.y].insert(tiles[pos.y].begin() + pos.x, tile);
 }
 
 void Map::push_entity(Map_Entity* e)

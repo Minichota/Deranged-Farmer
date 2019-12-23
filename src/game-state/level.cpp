@@ -17,9 +17,11 @@ Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* m
 Game_State(renderer),
 entity_file_path(entity_file_path),
 map(renderer, map_data_file_path, map_image_file_path, Ivec(32,32)),
+tile_editor(renderer),
 map_data_file_path(map_data_file_path),
 map_image_file_path(map_image_file_path)
 {
+	tile_editor.active = false;
 }
 
 Level::~Level()
@@ -29,6 +31,10 @@ Level::~Level()
 
 void Level::update()
 {
+	if(tile_editor.active)
+	{
+		tile_editor.update();
+	}
 	Game_State::update();
 	map.update();
 	for(Entity* entity : entities)
@@ -53,6 +59,10 @@ void Level::render()
 		entity->render();
 	}
 	Game_State::render();
+	if(tile_editor.active)
+	{
+		tile_editor.render();
+	}
 }
 
 void Level::init()
@@ -79,6 +89,7 @@ void Level::init()
 	entities[0]->set_texture(player_texture);
 	load_entities();
 	map.init();
+	tile_editor.set_map(&map);
 }
 
 void Level::clear()
@@ -94,6 +105,7 @@ void Level::clear()
 	}
 	ais.clear();
 	map.clear();
+	tile_editor.active = false;
 	Game_State::clear();
 	SDL_DestroyTexture(background);
 }
@@ -108,7 +120,14 @@ void Level::handle_event(const SDL_Event& event)
 			{
 				case SDLK_ESCAPE:
 				{
-					Game::toggle_pause();
+					if(!tile_editor.active)
+					{
+						Game::toggle_pause();
+					}
+				} break;
+				case SDLK_e:
+				{
+					tile_editor.active = true;
 				} break;
 			}
 		}
@@ -116,6 +135,10 @@ void Level::handle_event(const SDL_Event& event)
 	for(Entity* entity : entities)
 	{
 		entity->handle_event(event);
+	}
+	if(tile_editor.active)
+	{
+		tile_editor.handle_event(event);
 	}
 }
 
