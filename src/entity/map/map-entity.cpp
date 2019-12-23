@@ -3,9 +3,10 @@
 #include "map-entity.hpp"
 #include "game.hpp"
 
-Map_Entity::Map_Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation):
+Map_Entity::Map_Entity(SDL_Renderer* renderer, int type, Fvec pos, Fvec size, int rotation):
 Entity(renderer, pos, size, rotation)
 {
+	this->type = type;
 }
 
 void Map_Entity::update()
@@ -23,4 +24,9 @@ void Map_Entity::render()
 	}
 	SDL_SetRenderDrawColor(renderer, 255,255,255,255);
 	SDL_RenderCopyEx(renderer, texture, NULL, &output_rect, this->rotation, NULL, SDL_FLIP_NONE);
+}
+
+int Map_Entity::get_type()
+{
+	return this->type;
 }

@@ -109,7 +109,7 @@ void Map::init()
 			{
 				case 0:
 				{
-					Map_Entity* fence = new Map_Entity(renderer, Fvec(map_data[y][0], map_data[y][1]), Fvec(map_data[y][2], map_data[y][3]), map_data[y][4]);
+					Map_Entity* fence = new Map_Entity(renderer, 0, Fvec(map_data[y][0], map_data[y][1]), Fvec(map_data[y][2], map_data[y][3]), map_data[y][4]);
 					fence->load_texture("res/graphics/fence.png");
 					map_entities.push_back(fence);
 					delete variables[y];

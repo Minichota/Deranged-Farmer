@@ -75,7 +75,7 @@ void Game::run()
 		SDL_RenderPresent(renderer);
 		SDL_Delay(1000.0f/144.0f);
 	}
-	write("res/save/settings.txt", Settings::all);
+	write_settings("res/save/settings.txt", Settings::all);
 }
 
 void Game::update()
@@ -145,7 +145,7 @@ void Game::toggle_pause()
 
 void Game::close()
 {
-	write("res/save/settings.txt", Settings::all);
+	write_settings("res/save/settings.txt", Settings::all);
 	exit(-1);
 }
 
@@ -168,6 +168,11 @@ void Game::handle_event(SDL_Event event)
 					{
 						debug->toggle();
 					}
+				} break;
+				case SDLK_F4:
+				{
+					// bypass so save can be done in debug mode
+					game_states[this->state]->handle_event(event);
 				} break;
 			}
 		}
