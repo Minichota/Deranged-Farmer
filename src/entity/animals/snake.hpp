@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include "animation.hpp"
 
 class Snake : public Entity
 {
@@ -9,4 +10,7 @@ class Snake : public Entity
 
 	void update();
 	void render();
+
+	private:
+	Animation animation;
 };

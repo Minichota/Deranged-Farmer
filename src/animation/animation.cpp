@@ -15,6 +15,7 @@ delay(delay)
 
 Animation::~Animation()
 {
+	clear();
 }
 
 void Animation::render()

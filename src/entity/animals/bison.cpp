@@ -2,21 +2,26 @@
 #include "game.hpp"
 
 Bison::Bison(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale):
-Entity(renderer, pos, size, scale)
+Entity(renderer, pos, size, scale),
+animation(renderer, this, "res/graphics/bison.png", size, 1500)
 {
+	animation.init();
 	this->rotation = 0;
 	this->max_vel = Fvec(1.2f, 1.2f);
 }
 
 Bison::Bison(SDL_Renderer* renderer, Fvec pos, Fvec size):
-Entity(renderer, pos, size, Fvec(1.0f,1.0f))
+Entity(renderer, pos, size, Fvec(1.0f,1.0f)),
+animation(renderer, this, "res/graphics/bison.png", size, 1500)
 {
+	animation.init();
 	this->rotation = 0;
 	this->max_vel = Fvec(1.2f, 1.2f);
 }
 
 Bison::~Bison()
 {
+	animation.clear();
 }
 
 void Bison::update()
@@ -26,13 +31,5 @@ void Bison::update()
 
 void Bison::render()
 {
-	SDL_Rect dest_rect = get_render_rect();
-	SDL_RenderCopyEx(renderer, texture, NULL, &dest_rect, rotation, NULL, SDL_FLIP_NONE);
-	if(Game::debug->active)
-	{
-		Game::debug->push_render(this, "Bison", {&this->pos.x, &this->pos.y,
-												 &this->vel.x, &this->vel.y,
-												 &this->size.x, &this->size.y,
-												 &this->rotation});
-	}
+	animation.render();
 }

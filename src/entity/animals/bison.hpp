@@ -2,6 +2,7 @@
 #define BISON_HPP
 
 #include "entity.hpp"
+#include "animation.hpp"
 
 class Bison : public Entity
 {
@@ -12,5 +13,8 @@ class Bison : public Entity
 
 	void update();
 	void render();
+
+	private:
+	Animation animation;
 };
 #endif
