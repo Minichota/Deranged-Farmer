@@ -329,10 +329,11 @@ void Entity_Creator::handle_event(const SDL_Event& event)
 							{
 								if(std::stoi(inputs[2]->get_string()) % 90 == 0)
 								{
-									Map_Entity* fence = new Map_Entity(renderer, Fvec(std::stof(inputs[0]->get_string()),
-																					  std::stof(inputs[1]->get_string())),
-																					  names[selected_name].size,
-																				 	  std::stof(inputs[2]->get_string()));
+									Map_Entity* fence = new Map_Entity(renderer, 0,
+																	   Fvec(std::stof(inputs[0]->get_string()),
+																	   std::stof(inputs[1]->get_string())),
+																	   names[selected_name].size,
+																	   std::stof(inputs[2]->get_string()));
 									fence->load_texture("res/graphics/fence.png");
 									level->get_map().push_entity(fence);
 								}

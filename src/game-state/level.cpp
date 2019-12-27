@@ -129,6 +129,10 @@ void Level::handle_event(const SDL_Event& event)
 				{
 					tile_editor.active = true;
 				} break;
+				case SDLK_F4:
+				{
+					save_level();
+				} break;
 			}
 		}
 	}
@@ -178,6 +182,76 @@ void Level::load_entities()
 		}
 	}
 	types.clear();
+}
+
+void Level::save_level()
+{
+	// construct data
+	std::string data;
+	data.reserve(4000);
+	// sizing
+	Ivec map_size = map.get_tile_count();
+	data.append("width=");
+	data.append(std::to_string(map_size.x));
+	data.push_back('\n');
+	data.append("height=");
+	data.append(std::to_string(map_size.y));
+	data.push_back('\n');
+	// level tile_data
+	std::vector<std::vector<Tile*>>& tiles = map.get_tiles();
+	for(size_t i = 0; i < tiles.size(); i++)
+	{
+		for(size_t j = 0; j < tiles[i].size(); j++)
+		{
+			if(j != 0)
+			{
+				data.push_back(',');
+			}
+			if(tiles[i][j]->is_null())
+			{
+				data.push_back('0');
+			}
+			else
+			{
+				// find tile_pos
+				Ivec full_size;
+				Ivec tile_pos = tiles[i][j]->get_relative_pos()/32;
+				SDL_QueryTexture(full_texture, NULL, NULL, &full_size.x, &full_size.y);
+				full_size = full_size / 32;
+				data.append(std::to_string(tile_pos.y * full_size.y + tile_pos.x + 1));
+			}
+		}
+		data.push_back('\n');
+	}
+
+	// level map_data
+	std::vector<Map_Entity*>& map_entities = map.get_map_entities();
+	for(Map_Entity* e : map_entities)
+	{
+		if((int)e->get_rotation() % 90 != 0)
+		{
+			Game::debug->push_log({"failed to save, an entity has the rotation of: ",  std::to_string((int)e->get_rotation()).c_str()});
+			return;
+		}
+		data.append("type=");
+		data.append(std::to_string(e->get_type()));
+		data.push_back('\n');
+		std::string e_data;
+		e_data.append(std::to_string((int)e->get_pos().x));
+		e_data.push_back(',');
+		e_data.append(std::to_string((int)e->get_pos().y));
+		e_data.push_back(',');
+		e_data.append(std::to_string((int)e->get_size().x));
+		e_data.push_back(',');
+		e_data.append(std::to_string((int)e->get_size().y));
+		e_data.push_back(',');
+		e_data.append(std::to_string((int)e->get_rotation()));
+		e_data.push_back('\n');
+		data.append(e_data);
+	}
+
+	// write data
+	write(map_data_file_path.c_str(), data);
 }
 
 void Level::handle_entity_collision(Entity* e_1, Entity* e_2)

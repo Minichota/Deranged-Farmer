@@ -123,7 +123,7 @@ void parse_csv(std::string data, std::vector<std::vector<T>>& values, int start_
 }
 
 template <class T>
-void write(const char* file_path, std::vector<Settings::Data<T>*> data)
+void write_settings(const char* file_path, std::vector<Settings::Data<T>*> data)
 {
 	std::ofstream write(file_path);
 	Error(!write, {"failed to write to file:", file_path});
@@ -133,5 +133,7 @@ void write(const char* file_path, std::vector<Settings::Data<T>*> data)
 	}
 	write.close();
 }
+
+void write(const char* file_path, std::string& data);
 
 #endif
