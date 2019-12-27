@@ -206,3 +206,8 @@ Ivec& Map::get_tile_size()
 {
 	return tile_size;
 }
+
+const char* Map::get_data_path()
+{
+	return this->data_path;
+}

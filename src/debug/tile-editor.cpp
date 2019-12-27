@@ -1,3 +1,6 @@
+#include <fstream>
+#include <iterator>
+
 #include "tile-editor.hpp"
 #include "util.hpp"
 #include "game.hpp"
@@ -180,6 +183,21 @@ void Tile_Editor::handle_event(const SDL_Event& event)
 				case SDLK_ESCAPE:
 				{
 					clear();
+				} break;
+				case SDLK_n:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						// duplicates current file
+						std::string original_path = map->get_data_path();
+						std::ifstream is(original_path, std::ios::in | std::ios::binary);
+						std::ofstream os(original_path+"_copy", std::ios::out | std::ios::binary);
+
+						std::copy(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>(),
+							  std::ostreambuf_iterator<char>(os));
+						is.close();
+						os.close();
+					}
 				} break;
 			}
 		} break;
