@@ -33,6 +33,8 @@ class Map : public Renderable
 	Tile* get_tile(size_t x, size_t y);
 	Ivec& get_tile_size();
 
+	const char* get_data_path();
+
 	private:
 	Ivec tile_size;
 	Ivec tile_count;
