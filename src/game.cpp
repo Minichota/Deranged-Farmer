@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "game.hpp"
+#include "audio.hpp"
 #include "main-menu.hpp"
 #include "level.hpp"
 #include "pause-menu.hpp"
@@ -93,6 +94,7 @@ void Game::update()
 	{
 		game_states[this->state]->update();
 	}
+	audio::update();
 }
 
 void Game::render()
@@ -141,6 +143,7 @@ void Game::toggle_pause()
 {
 	assert(state != 0);
 	paused = !paused;
+	audio::toggle_pause();
 }
 
 void Game::close()
