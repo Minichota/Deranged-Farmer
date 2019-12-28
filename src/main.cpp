@@ -4,6 +4,7 @@
 
 #include "game.hpp"
 #include "error.hpp"
+#include "audio.hpp"
 
 int main(){
 	{
@@ -13,6 +14,7 @@ int main(){
 		int imgFlags = IMG_INIT_PNG;
 		Error(!(IMG_Init(imgFlags) & imgFlags), {"Failed to initialize SDL_image: ", SDL_GetError()}, true);
 	}
+	audio::init();
 	Game game = Game();
 	game.run();
 	return 0;

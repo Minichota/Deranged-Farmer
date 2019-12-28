@@ -2,7 +2,7 @@ PROGRAM_NAME=Deranged-farmer
 SRC_DIR=src
 O_DIR=obj
 CXX=g++
-cpp_dirs=math game-state ui animation io entity entity/player entity/map debug entity/animals ai
+cpp_dirs=math game-state ui animation io entity entity/player entity/map debug entity/animals ai audio
 external_files=
 SRC=src
 FILE=NULL
@@ -13,7 +13,7 @@ OBJ_FILES=$(patsubst $(SRC)/%.o,$(O_DIR)/%.o, $(SRC_FILES:.cpp=.o))
 
 VPATH=$(SRC_DIR) $(addprefix $(SRC)/,$(cppdirs))
 
-CXX_FLAGS=$(addprefix -I, $(H_FILES)) `sdl2-config --libs --cflags` -O3 -Wall -lSDL2_image -lm -std=c++17 -lSDL2_ttf -lutil -lSDL2_image -pthread
+CXX_FLAGS=$(addprefix -I, $(H_FILES)) `sdl2-config --libs --cflags` -O3 -Wall -lSDL2_image -lm -std=c++17 -lSDL2_ttf -lutil -lSDL2_image -pthread -lSDL2_mixer
 
 all: $(O_DIR)/$(PROGRAM_NAME) | run
 
