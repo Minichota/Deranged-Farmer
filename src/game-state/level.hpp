@@ -10,6 +10,7 @@
 #include "tile-editor.hpp"
 #include "ai-roaming.hpp"
 #include "ai.hpp"
+#include "item.hpp"
 
 class Level : public Game_State
 {
@@ -39,6 +40,7 @@ class Level : public Game_State
 	SDL_Texture* background;
 	std::vector<Entity*> entities;
 	std::vector<AI*> ais;
+	std::vector<Item*> items;
 	const std::string entity_file_path;
 	Map map;
 	Tile_Editor tile_editor;

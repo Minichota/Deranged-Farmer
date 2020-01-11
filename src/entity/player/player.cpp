@@ -12,7 +12,8 @@
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size):
 Entity(renderer, pos, size),
 idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
-moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500)
+moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500),
+inventory(this, renderer)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
@@ -24,7 +25,8 @@ moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500)
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
 Entity(renderer, pos, size, scale),
 idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
-moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500)
+moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500),
+inventory(this, renderer)
 {
 	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
 	this->max_health = 100;
@@ -47,9 +49,9 @@ void Player::update()
 
 void Player::render()
 {
-	Ivec mouse_pos;
-	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
-	this->rotation  = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;
+	inventory.render();
+	// fix rendering
+	this->rotation-=90;
 	if(abs(this->vel.x) > 0.5f ||
 	   abs(this->vel.y) > 0.5f)
 	{
@@ -67,6 +69,7 @@ void Player::render()
 												  &this->max_vel.x, &this->max_vel.y,
 												  &this->vel.x, &this->vel.y});
 	}
+	this->rotation+=90;
 	clear_render_settings(renderer);
 }
 
@@ -88,4 +91,50 @@ void Player::handle_input()
 	{
 		accelerate(Fvec(1.0f, 0.0f));
 	}
+}
+
+void Player::handle_event(const SDL_Event& event)
+{
+	switch(event.type)
+	{
+		case SDL_KEYDOWN:
+		{
+			switch(event.key.keysym.sym)
+			{
+				case SDLK_h:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.left();
+					}
+				} break;
+				case SDLK_j:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.down();
+					}
+				} break;
+				case SDLK_k:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.up();
+					}
+				} break;
+				case SDLK_l:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.right();
+					}
+				} break;
+			}
+		} break;
+	}
+}
+
+Inventory& Player::get_inventory()
+{
+	return this->inventory;
 }

@@ -58,6 +58,10 @@ void Level::render()
 	{
 		entity->render();
 	}
+	for(Item* item : items)
+	{
+		item->render();
+	}
 	Game_State::render();
 	if(tile_editor.active)
 	{
@@ -67,6 +71,10 @@ void Level::render()
 
 void Level::init()
 {
+	this->items =
+	{
+		new Item(renderer, this, Ivec(50, 50), "res/graphics/hoe.png")
+	};
 	entities =
 	{
 		new Player(renderer, Ivec(50,50), Ivec(27,27))
@@ -118,6 +126,19 @@ void Level::handle_event(const SDL_Event& event)
 		{
 			switch(event.key.keysym.sym)
 			{
+				case SDLK_p:
+				{
+					Player* player = dynamic_cast<Player*>(entities[0]);
+					for(size_t i = 0; i < items.size(); i++)
+					{
+						if(test_collision(player->get_pos(), player->get_size(),
+										  items[i]->get_pos(), items[i]->get_size()))
+						{
+							player->get_inventory().pick_item(items[i]);
+							items.erase(items.begin() + i);
+						}
+					}
+				} break;
 				case SDLK_ESCAPE:
 				{
 					if(!tile_editor.active)
