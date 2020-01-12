@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 
-#include "vectors.hpp"
 #include "error.hpp"
+#include "vectors.hpp"
 
 template <class T>
 class Sized
@@ -15,27 +15,30 @@ class Sized
 		this->pos = pos;
 		this->size = size;
 		this->scale = scale;
-		Error((int)rotation % 90 != 0, {"Object cannot have rotation that isn't divisible by 90"}, true);
+		Error((int)rotation % 90 != 0,
+			  { "Object cannot have rotation that isn't divisible by 90" },
+			  true);
 		this->rotation = rotation;
 	};
-	Sized<T>(T pos_x, T pos_y, T size_x, T size_y, T scale_x, T scale_y, int rotation = 0)
+	Sized<T>(T pos_x, T pos_y, T size_x, T size_y, T scale_x, T scale_y,
+			 int rotation = 0)
 	{
 		this->pos = Vector<T>(pos_x, pos_y);
 		this->size = Vector<T>(size_x, size_y);
 		this->scale = Vector<T>(scale_x, scale_y);
-		Error((int)rotation % 90 != 0, {"Object cannot have rotation that isn't divisible by 90"}, true);
+		Error((int)rotation % 90 != 0,
+			  { "Object cannot have rotation that isn't divisible by 90" },
+			  true);
 		this->rotation = rotation;
 	};
 	Sized<T>()
 	{
-		this->pos = Vector<T>(0,0);
-		this->size = Vector<T>(0,0);
-		this->scale = Vector<T>(0,0);
+		this->pos = Vector<T>(0, 0);
+		this->size = Vector<T>(0, 0);
+		this->scale = Vector<T>(0, 0);
 		this->rotation = 0;
 	};
-	virtual ~Sized()
-	{
-	};
+	virtual ~Sized(){};
 
 	virtual Vector<T>& get_pos()
 	{
@@ -91,13 +94,9 @@ class Sized
 
 	inline SDL_Rect get_render_rect()
 	{
-		return
-		{
-			(int)std::round(pos.x/scale.x),
-			(int)std::round(pos.y/scale.y),
-			(int)std::round(size.x),
-			(int)std::round(size.y)
-		};
+		return { (int)std::round(pos.x / scale.x),
+				 (int)std::round(pos.y / scale.y), (int)std::round(size.x),
+				 (int)std::round(size.y) };
 	}
 
 	Vector<T> get_collision_pos()
@@ -107,11 +106,13 @@ class Sized
 			// don't rotate, it's either square or has a dynamic rotation
 			return pos;
 		}
-		float rad_rotation = -(int)rotation % 180 * 3.1415926535f/180.0f;
-		float p = pos.x + size.x/2;
-		float q = pos.y + size.y/2;
-		Fvec pos_prime = Fvec((-size.x/2) * cosf(rad_rotation) + (size.y/2) * sinf(rad_rotation) + p,
-							   (size.x/2) * sinf(rad_rotation) + (-size.y/2) * cosf(rad_rotation) + q);
+		float rad_rotation = -(int)rotation % 180 * 3.1415926535f / 180.0f;
+		float p = pos.x + size.x / 2;
+		float q = pos.y + size.y / 2;
+		Fvec pos_prime = Fvec((-size.x / 2) * cosf(rad_rotation) +
+								  (size.y / 2) * sinf(rad_rotation) + p,
+							  (size.x / 2) * sinf(rad_rotation) +
+								  (-size.y / 2) * cosf(rad_rotation) + q);
 		return pos_prime;
 	}
 	Vector<T> get_collision_size()

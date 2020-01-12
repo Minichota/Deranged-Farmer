@@ -1,12 +1,12 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "entity.hpp"
 #include "animation.hpp"
-#include "inventory.hpp"
+#include "entity.hpp"
 #include "event-handler.hpp"
+#include "inventory.hpp"
 
-class Player : public Entity, public Event_Handler
+class Player : public Entity
 {
 	public:
 	Player(SDL_Renderer* renderer, Ivec pos, Ivec size);
@@ -28,4 +28,5 @@ class Player : public Entity, public Event_Handler
 
 	Inventory inventory;
 };
+
 #endif

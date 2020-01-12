@@ -3,11 +3,11 @@
 
 #include <vector>
 
-#include "renderable.hpp"
 #include "event-handler.hpp"
+#include "level.hpp"
+#include "renderable.hpp"
 #include "ui-text-input.hpp"
 #include "ui-text.hpp"
-#include "level.hpp"
 
 struct Entity_Creator_Data
 {
@@ -47,7 +47,7 @@ class Entity_Creator : public Renderable, public Event_Handler
 	int selected_field;
 
 	int curr_state;
- 	std::vector<Entity_Creator_Data> names;
+	std::vector<Entity_Creator_Data> names;
 };
 
 #endif

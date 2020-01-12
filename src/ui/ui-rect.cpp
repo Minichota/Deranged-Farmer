@@ -1,7 +1,8 @@
 #include "ui-rect.hpp"
 #include "util.hpp"
 
-UI_Rect::UI_Rect(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color color, Fill_Type type):
+UI_Rect::UI_Rect(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
+				 SDL_Color color, Fill_Type type) :
 UI_Base(renderer, pos, size, scale, color)
 {
 	this->type = type;
@@ -13,13 +14,7 @@ UI_Rect::~UI_Rect()
 
 void UI_Rect::update()
 {
-	this->sprite =
-	{
-		get_pos().x,
-		get_pos().y,
-		this->size.x,
-		this->size.y
-	};
+	this->sprite = { get_pos().x, get_pos().y, this->size.x, this->size.y };
 }
 
 void UI_Rect::render()
@@ -31,14 +26,17 @@ void UI_Rect::render()
 		case FILL:
 		{
 			SDL_RenderFillRect(renderer, &sprite);
-		} break;
+		}
+		break;
 		case NORMAL:
 		{
 			SDL_RenderDrawRect(renderer, &sprite);
-		} break;
+		}
+		break;
 		case WRAPPED:
 		{
-		} break;
+		}
+		break;
 	}
 	clear_render_settings(renderer);
 }

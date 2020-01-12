@@ -4,18 +4,19 @@
 #include <vector>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_system.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_system.h>
 #include <SDL2/SDL_timer.h>
 
-#include "renderable.hpp"
+#include "debug-window.hpp"
 #include "game-state.hpp"
 #include "pause-menu.hpp"
-#include "debug-window.hpp"
+#include "renderable.hpp"
 
 #define STATE_COUNT 2
 
-class Game {
+class Game
+{
 	public:
 	Game();
 	~Game();

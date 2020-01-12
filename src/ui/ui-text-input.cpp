@@ -2,7 +2,9 @@
 
 #include "ui-text-input.hpp"
 
-UI_Text_Input::UI_Text_Input(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string font_path, SDL_Color font_color, Fill_Type type):
+UI_Text_Input::UI_Text_Input(SDL_Renderer* renderer, Ivec pos, Ivec size,
+							 Fvec scale, std::string font_path,
+							 SDL_Color font_color, Fill_Type type) :
 UI_Base(renderer, pos, size, scale, font_color),
 ui_text(renderer, pos, size, scale, "", font_path, font_color, type)
 {
@@ -38,7 +40,8 @@ void UI_Text_Input::handle_event(const SDL_Event& event)
 		case SDL_TEXTINPUT:
 		{
 			this->text.append(event.text.text);
-		} break;
+		}
+		break;
 		case SDL_KEYDOWN:
 		{
 			switch(event.key.keysym.sym)
@@ -49,9 +52,11 @@ void UI_Text_Input::handle_event(const SDL_Event& event)
 					{
 						this->text.pop_back();
 					}
-				} break;
+				}
+				break;
 			}
-		} break;
+		}
+		break;
 	}
 }
 

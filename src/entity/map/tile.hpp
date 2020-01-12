@@ -1,9 +1,9 @@
 #ifndef TILE_HPP
 #define TILE_HPP
 
-#include "vectors.hpp"
 #include "renderable.hpp"
 #include "sized.hpp"
+#include "vectors.hpp"
 
 class Tile : public Renderable, public Sized<float>
 {

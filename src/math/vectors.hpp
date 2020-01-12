@@ -1,35 +1,27 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include <stdlib.h>
-#include <ostream>
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <ostream>
+#include <stdlib.h>
 
 template <class T>
 class Vector
 {
 	public:
-	Vector(T x, T y):
-	x(x),
-	y(y)
+	Vector(T x, T y) : x(x), y(y)
 	{
 	}
-	Vector():
-	x(0),
-	y(0)
+	Vector() : x(0), y(0)
 	{
 	}
 	template <class X>
-	Vector(Vector<X>&& old):
-	x(old.x),
-	y(old.y)
+	Vector(Vector<X>&& old) : x(old.x), y(old.y)
 	{
 	}
 	template <class X>
-	Vector(Vector<X>& old):
-	x(old.x),
-	y(old.y)
+	Vector(Vector<X>& old) : x(old.x), y(old.y)
 	{
 	}
 	~Vector()
@@ -120,11 +112,11 @@ class Vector
 	T x;
 	T y;
 };
-typedef Vector<float>  Fvec;
-typedef Vector<short>  Svec;
-typedef Vector<int>    Ivec;
+typedef Vector<float> Fvec;
+typedef Vector<short> Svec;
+typedef Vector<int> Ivec;
 typedef Vector<double> Dvec;
-typedef Vector<long>   Lvec;
+typedef Vector<long> Lvec;
 typedef Vector<size_t> STvec;
 typedef Vector<unsigned short> USvec;
 #endif

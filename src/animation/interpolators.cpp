@@ -14,11 +14,13 @@ void update_interpolators()
 			case OSCILLATOR:
 			{
 				oscillate(i);
-			} break;
+			}
+			break;
 			case REPEATER:
 			{
 				repeat(i);
-			} break;
+			}
+			break;
 		}
 	}
 
@@ -29,11 +31,13 @@ void update_interpolators()
 			case OSCILLATOR:
 			{
 				oscillate(i);
-			} break;
+			}
+			break;
 			case REPEATER:
 			{
 				repeat(i);
-			} break;
+			}
+			break;
 		}
 	}
 
@@ -44,11 +48,13 @@ void update_interpolators()
 			case OSCILLATOR:
 			{
 				oscillate(i);
-			} break;
+			}
+			break;
 			case REPEATER:
 			{
 				repeat(i);
-			} break;
+			}
+			break;
 		}
 	}
 
@@ -59,20 +65,24 @@ void update_interpolators()
 			case OSCILLATOR:
 			{
 				oscillate(i);
-			} break;
+			}
+			break;
 			case REPEATER:
 			{
 				repeat(i);
-			} break;
+			}
+			break;
 		}
 	}
 }
 
 void clear_interpolators()
 {
-	float_interpolaters.erase(float_interpolaters.begin(), float_interpolaters.end());
-	uchar_interpolaters.erase(uchar_interpolaters.begin(), uchar_interpolaters.end());
+	float_interpolaters.erase(float_interpolaters.begin(),
+							  float_interpolaters.end());
+	uchar_interpolaters.erase(uchar_interpolaters.begin(),
+							  uchar_interpolaters.end());
 	int_interpolaters.erase(int_interpolaters.begin(), int_interpolaters.end());
-	ivec_interpolaters.erase(ivec_interpolaters.begin(), ivec_interpolaters.end());
+	ivec_interpolaters.erase(ivec_interpolaters.begin(),
+							 ivec_interpolaters.end());
 }
-

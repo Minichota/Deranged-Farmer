@@ -1,6 +1,8 @@
 #include "ui-health_bar.hpp"
 
-UI_Health_Bar::UI_Health_Bar(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color border_color, SDL_Color bar_color, int* health, int max_health):
+UI_Health_Bar::UI_Health_Bar(SDL_Renderer* renderer, Ivec pos, Ivec size,
+							 Fvec scale, SDL_Color border_color,
+							 SDL_Color bar_color, int* health, int max_health) :
 UI_Base(renderer, pos, size, scale, border_color),
 border(renderer, pos, size, scale, border_color, NORMAL),
 bar(renderer, pos, size, scale, bar_color, FILL)
@@ -16,7 +18,7 @@ UI_Health_Bar::~UI_Health_Bar()
 
 void UI_Health_Bar::update()
 {
-	this->bar.set_size(Ivec(size.x*(*health)/max_health, size.y));
+	this->bar.set_size(Ivec(size.x * (*health) / max_health, size.y));
 	bar.update();
 	border.update();
 }

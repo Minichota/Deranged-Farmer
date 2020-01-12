@@ -3,10 +3,10 @@
 
 namespace audio
 {
-	void update();
-	void init();
-	void clear();
-	void toggle_pause();
-	void pause();
-	void unpause();
+void update();
+void init();
+void clear();
+void toggle_pause();
+void pause();
+void unpause();
 };

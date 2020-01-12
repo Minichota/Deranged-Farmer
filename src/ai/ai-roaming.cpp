@@ -3,7 +3,7 @@
 #include "ai-roaming.hpp"
 #include "game.hpp"
 
-AI_Roaming::AI_Roaming(Map& map, Entity* parent, long long delay):
+AI_Roaming::AI_Roaming(Map& map, Entity* parent, long long delay) :
 AI(map, parent)
 {
 	this->delay = delay;
@@ -15,11 +15,15 @@ void AI_Roaming::update()
 	long long curr_time = SDL_GetTicks();
 	if(curr_time - last_time > delay && done)
 	{
-		//this->goal_position = normalize(Fvec(rand()%800,rand()%608), map.get_tile_size());
+		// this->goal_position = normalize(Fvec(rand()%800,rand()%608),
+		// map.get_tile_size());
 		float r = 300 * sqrt((rand() % 300) / 300.0f);
 		float theta = rand() * 2 * 3.1415926f;
-		this->goal_position.x = parent->get_collision_pos().x + parent->get_collision_size().x / 2 + r * cosf(theta);
-		this->goal_position.y = parent->get_collision_pos().y + parent->get_size().y / 2 + r * sinf(theta);
+		this->goal_position.x = parent->get_collision_pos().x +
+								parent->get_collision_size().x / 2 +
+								r * cosf(theta);
+		this->goal_position.y = parent->get_collision_pos().y +
+								parent->get_size().y / 2 + r * sinf(theta);
 		this->goal_position = normalize(goal_position, map.get_tile_size());
 		done = false;
 		if((done = !generate_path()))
@@ -29,7 +33,7 @@ void AI_Roaming::update()
 		prev_location = curr_time;
 	}
 
-	if(pos->pos != Fvec(-1.0f,-1.0f) && !done)
+	if(pos->pos != Fvec(-1.0f, -1.0f) && !done)
 	{
 		Fvec delta_pos = pos->pos - parent->get_collision_pos();
 		if(abs(delta_pos.x) > 5)
@@ -78,7 +82,8 @@ bool AI_Roaming::generate_path()
 		tile_positions.emplace_back();
 		for(size_t x = 0; x < tiles[y].size(); x++)
 		{
-			if(tiles[y][x]->get_pos() == normalize(parent->get_collision_pos(), map.get_tile_size()))
+			if(tiles[y][x]->get_pos() ==
+			   normalize(parent->get_collision_pos(), map.get_tile_size()))
 			{
 				parent_index = Ivec(x, y);
 			}
@@ -87,19 +92,26 @@ bool AI_Roaming::generate_path()
 			{
 				for(Map_Entity* map_entity : map_entities)
 				{
-					Fvec top_left  = normalize(map_entity->get_collision_pos(), map.get_tile_size());
-					Fvec bot_right = normalize(map_entity->get_collision_pos() + map_entity->get_collision_size(), map.get_tile_size());
-					if(top_left == tiles[y][x]->get_pos() || bot_right == tiles[y][x]->get_pos())
+					Fvec top_left = normalize(map_entity->get_collision_pos(),
+											  map.get_tile_size());
+					Fvec bot_right =
+						normalize(map_entity->get_collision_pos() +
+									  map_entity->get_collision_size(),
+								  map.get_tile_size());
+					if(top_left == tiles[y][x]->get_pos() ||
+					   bot_right == tiles[y][x]->get_pos())
 					{
 						flag = false;
 						break;
 					}
 				}
-				tile_positions[y].push_back(Position{Ivec(x, y), tiles[y][x]->get_pos(), flag});
+				tile_positions[y].push_back(
+					Position{ Ivec(x, y), tiles[y][x]->get_pos(), flag });
 			}
 			else
 			{
-				tile_positions[y].push_back(Position{Ivec(x, y), tiles[y][x]->get_pos(), false});
+				tile_positions[y].push_back(
+					Position{ Ivec(x, y), tiles[y][x]->get_pos(), false });
 			}
 		}
 	}
@@ -107,7 +119,10 @@ bool AI_Roaming::generate_path()
 	// pathfinding
 	std::queue<Position> q;
 	std::vector<Position*> cleanups;
-	q.push(Position{parent_index, normalize(this->parent->get_collision_pos(), map.get_tile_size()), true, false});
+	q.push(Position{
+		parent_index,
+		normalize(this->parent->get_collision_pos(), map.get_tile_size()), true,
+		false });
 	while(!q.empty())
 	{
 		Position* v = new Position(q.front());
@@ -122,7 +137,8 @@ bool AI_Roaming::generate_path()
 			   -> (3->2->1)
 			*/
 			Position* current = x;
-			Position* next = nullptr; Position* prev = nullptr;
+			Position* next = nullptr;
+			Position* prev = nullptr;
 			while(current->parent != nullptr)
 			{
 				next = current->parent;
@@ -153,7 +169,8 @@ bool AI_Roaming::generate_path()
 			if(tile_positions[v->index.y][v->index.x - 1].null)
 			{
 				// left tile is null and will be checked
-				adjacents.push_back(&tile_positions[v->index.y][v->index.x - 1]);
+				adjacents.push_back(
+					&tile_positions[v->index.y][v->index.x - 1]);
 			}
 		}
 		if(v->index.x + 1 < (int)tile_positions[parent_index.y].size())
@@ -161,7 +178,8 @@ bool AI_Roaming::generate_path()
 			if(tile_positions[v->index.y][v->index.x + 1].null)
 			{
 				// right tile is null and will be checked
-				adjacents.push_back(&tile_positions[v->index.y][v->index.x + 1]);
+				adjacents.push_back(
+					&tile_positions[v->index.y][v->index.x + 1]);
 			}
 		}
 		if(v->index.y > 0)
@@ -169,7 +187,8 @@ bool AI_Roaming::generate_path()
 			if(tile_positions[v->index.y - 1][v->index.x].null)
 			{
 				// top tile is null and will be checked
-				adjacents.push_back(&tile_positions[v->index.y - 1][v->index.x]);
+				adjacents.push_back(
+					&tile_positions[v->index.y - 1][v->index.x]);
 			}
 		}
 		if(v->index.y + 1 < (int)tile_positions.size())
@@ -177,12 +196,14 @@ bool AI_Roaming::generate_path()
 			if(tile_positions[v->index.y + 1][v->index.x].null)
 			{
 				// bottom tile is null and will be checked
-				adjacents.push_back(&tile_positions[v->index.y + 1][v->index.x]);
+				adjacents.push_back(
+					&tile_positions[v->index.y + 1][v->index.x]);
 			}
 		}
 		for(Position* p : adjacents)
 		{
-			if(p->index.x <= (int)tiles[0].size() && p->index.y <= (int)tiles.size())
+			if(p->index.x <= (int)tiles[0].size() &&
+			   p->index.y <= (int)tiles.size())
 			{
 				if(!p->checked)
 				{

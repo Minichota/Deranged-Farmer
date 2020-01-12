@@ -4,8 +4,8 @@
 #include <SDL2/SDL.h>
 
 #include "renderable.hpp"
-#include "ui-text-input.hpp"
 #include "tile.hpp"
+#include "ui-text-input.hpp"
 
 class Map;
 

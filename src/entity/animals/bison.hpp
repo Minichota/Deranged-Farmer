@@ -1,8 +1,8 @@
 #ifndef BISON_HPP
 #define BISON_HPP
 
-#include "entity.hpp"
 #include "animation.hpp"
+#include "entity.hpp"
 
 class Bison : public Entity
 {

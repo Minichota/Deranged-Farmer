@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "renderable.hpp"
 #include "event-handler.hpp"
+#include "renderable.hpp"
 #include "ui-base.hpp"
 
 class Game_State : public Renderable, public Event_Handler
@@ -16,7 +16,7 @@ class Game_State : public Renderable, public Event_Handler
 	virtual void update();
 	virtual void render();
 
-	virtual void init()   = 0;
+	virtual void init() = 0;
 	virtual void clear();
 
 	virtual void handle_event(const SDL_Event& event);

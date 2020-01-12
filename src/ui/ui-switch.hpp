@@ -7,7 +7,8 @@
 class UI_Switch : public UI_Base, public Event_Handler
 {
 	public:
-	UI_Switch(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color color = {});
+	UI_Switch(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
+			  SDL_Color color = {});
 	~UI_Switch();
 
 	void update();

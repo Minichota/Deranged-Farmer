@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
 #include "error.hpp"
 #include "game.hpp"

@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "entity.hpp"
-#include "renderable.hpp"
 #include "item.hpp"
+#include "renderable.hpp"
 
 class Inventory : public Renderable
 {
@@ -15,6 +15,8 @@ class Inventory : public Renderable
 
 	void update();
 	void render();
+
+	Item* get_current();
 
 	void pick_item(Item* item);
 	Item* drop_item(int pos);

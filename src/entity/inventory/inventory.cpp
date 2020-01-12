@@ -1,6 +1,6 @@
 #include "inventory.hpp"
 
-Inventory::Inventory(Entity* parent, SDL_Renderer* renderer):
+Inventory::Inventory(Entity* parent, SDL_Renderer* renderer) :
 Renderable(renderer)
 {
 	this->parent = parent;
@@ -31,10 +31,7 @@ void Inventory::render()
 	{
 		for(int j = 0; j < 2; j++)
 		{
-			SDL_Rect rect =
-			{
-				pos.x + (i % 5) * 38, pos.y + j * 38, 36, 36
-			};
+			SDL_Rect rect = { pos.x + (i % 5) * 38, pos.y + j * 38, 36, 36 };
 			if(i + j * 5 == selection)
 			{
 				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -48,11 +45,16 @@ void Inventory::render()
 	}
 }
 
+Item* Inventory::get_current()
+{
+	return items[selection];
+}
+
 void Inventory::pick_item(Item* item)
 {
 	this->items.push_back(item);
 	// TODO make dependent on slots available
-	item->set_pos(Ivec(pos.x + 2, pos.y + 2));
+	item->set_e_pos(Ivec(pos.x + 2, pos.y + 2));
 }
 
 Item* Inventory::drop_item(int pos)
@@ -85,7 +87,7 @@ void Inventory::left()
 }
 void Inventory::down()
 {
-	this->selection+=5;
+	this->selection += 5;
 	if(this->selection > 9)
 	{
 		this->selection -= 10;
@@ -93,7 +95,7 @@ void Inventory::down()
 }
 void Inventory::up()
 {
-	this->selection-=5;
+	this->selection -= 5;
 	if(this->selection < 0)
 	{
 		this->selection += 10;
