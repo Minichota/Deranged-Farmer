@@ -1,7 +1,8 @@
 #include "ui-switch.hpp"
 #include "util.hpp"
 
-UI_Switch::UI_Switch(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color color):
+UI_Switch::UI_Switch(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
+					 SDL_Color color) :
 UI_Base(renderer, pos, size, scale, color)
 {
 	this->toggle = false;
@@ -17,21 +18,20 @@ void UI_Switch::update()
 
 void UI_Switch::render()
 {
-	SDL_Rect border = {get_pos().x,
-					   get_pos().y,
-					   (int)std::round(size.x * scale.x),
-					   (int)std::round(size.y * scale.y)};
+	SDL_Rect border = { get_pos().x, get_pos().y,
+						(int)std::round(size.x * scale.x),
+						(int)std::round(size.y * scale.y) };
 	SDL_Rect fill;
 	if(toggle)
 	{
-		fill = {get_pos().x + (int)(2 * scale.x),
-				get_pos().y + (int)(2 * scale.y),
-				(int)std::round((size.x * scale.x) - (4 * scale.x)),
-				(int)std::round((size.y * scale.y) - (4 * scale.y))};
+		fill = { get_pos().x + (int)(2 * scale.x),
+				 get_pos().y + (int)(2 * scale.y),
+				 (int)std::round((size.x * scale.x) - (4 * scale.x)),
+				 (int)std::round((size.y * scale.y) - (4 * scale.y)) };
 	}
 	else
 	{
-		fill = {0,0,0,0};
+		fill = { 0, 0, 0, 0 };
 	}
 
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
@@ -51,7 +51,8 @@ void UI_Switch::handle_event(SDL_Event event)
 			{
 				toggle = !toggle;
 			}
-		} break;
+		}
+		break;
 	}
 }
 

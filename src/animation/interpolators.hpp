@@ -1,9 +1,9 @@
 #ifndef INTERPOLATORS_HPP
 #define INTERPOLATORS_HPP
 
-#include <vector>
-#include <iostream>
 #include <cassert>
+#include <iostream>
+#include <vector>
 
 #include "renderable.hpp"
 #include "vectors.hpp"
@@ -66,7 +66,8 @@ void repeat(Interpolator<T>& i)
 
 	long pos = curr_time % i.delay_1;
 
-	*i.actual_value = (i.min_value + (i.difference + 1) * (pos / (double)i.delay_1));
+	*i.actual_value =
+		(i.min_value + (i.difference + 1) * (pos / (double)i.delay_1));
 }
 
 template <class T>

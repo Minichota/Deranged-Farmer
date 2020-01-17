@@ -1,17 +1,19 @@
 #ifndef IO_HPP
 #define IO_HPP
 
-#include <fstream>
 #include <cctype>
+#include <fstream>
 #include <iostream>
 
-#include "settings.hpp"
 #include "error.hpp"
+#include "settings.hpp"
 
 std::string read(const char* file_path);
 
 template <class T>
-void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>*>& values, int start_pos = 0, int count = 1000)
+void parse(std::string data, const char delimiter,
+		   std::vector<Settings::Data<T>*>& values, int start_pos = 0,
+		   int count = 1000)
 {
 	std::string curr_name;
 	std::string curr_data;
@@ -42,14 +44,16 @@ void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>
 					}
 					if(iter_count >= start_pos)
 					{
-						values.push_back(new Settings::Data<T>{curr_name, std::stoi(curr_data)});
+						values.push_back(new Settings::Data<T>{
+							curr_name, std::stoi(curr_data) });
 					}
 					start_parsing = false;
 					iter_count++;
 				}
 				curr_data.clear();
 				curr_name.clear();
-			} break;
+			}
+			break;
 			default:
 			{
 				if(start_parsing && data[i] != ' ')
@@ -60,13 +64,15 @@ void parse(std::string data, const char delimiter, std::vector<Settings::Data<T>
 				{
 					curr_name.push_back(data[i]);
 				}
-			} break;
+			}
+			break;
 		}
 	}
 }
 
 template <class T>
-void parse_csv(std::string data, std::vector<std::vector<T>>& values, int start_pos = 0, int count = 1000)
+void parse_csv(std::string data, std::vector<std::vector<T>>& values,
+			   int start_pos = 0, int count = 1000)
 {
 	std::string curr_data;
 	int value_pos = 0;
@@ -86,19 +92,23 @@ void parse_csv(std::string data, std::vector<std::vector<T>>& values, int start_
 				}
 				if(value_pos >= start_pos)
 				{
-					values[value_pos - start_pos].push_back(std::stoi(curr_data));
+					values[value_pos - start_pos].push_back(
+						std::stoi(curr_data));
 				}
 				curr_data.clear();
-			} break;
+			}
+			break;
 			case '\n':
 			{
 				if(value_pos >= start_pos)
 				{
-					values[value_pos - start_pos].push_back(std::stoi(curr_data));
+					values[value_pos - start_pos].push_back(
+						std::stoi(curr_data));
 				}
 				value_pos++;
 				curr_data.clear();
-			} break;
+			}
+			break;
 			default:
 			{
 				if(!std::isdigit(data[i]))
@@ -117,7 +127,8 @@ void parse_csv(std::string data, std::vector<std::vector<T>>& values, int start_
 				{
 					curr_data.push_back(data[i]);
 				}
-			} break;
+			}
+			break;
 		}
 	}
 }
@@ -126,7 +137,7 @@ template <class T>
 void write_settings(const char* file_path, std::vector<Settings::Data<T>*> data)
 {
 	std::ofstream write(file_path);
-	Error(!write, {"failed to write to file:", file_path});
+	Error(!write, { "failed to write to file:", file_path });
 	for(size_t i = 0; i < data.size(); i++)
 	{
 		write << data[i]->name << " = " << data[i]->data << '\n';

@@ -3,18 +3,20 @@
 
 #include <vector>
 
-#include "game-state.hpp"
-#include "ui-base.hpp"
-#include "entity.hpp"
-#include "map.hpp"
-#include "tile-editor.hpp"
 #include "ai-roaming.hpp"
 #include "ai.hpp"
+#include "entity.hpp"
+#include "game-state.hpp"
+#include "item.hpp"
+#include "map.hpp"
+#include "tile-editor.hpp"
+#include "ui-base.hpp"
 
 class Level : public Game_State
 {
 	public:
-	Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path);
+	Level(SDL_Renderer* renderer, const char* entity_file_path,
+		  const char* map_data_file_path, const char* map_image_file_path);
 	~Level();
 
 	void update();
@@ -39,6 +41,7 @@ class Level : public Game_State
 	SDL_Texture* background;
 	std::vector<Entity*> entities;
 	std::vector<AI*> ais;
+	std::vector<Item*> items;
 	const std::string entity_file_path;
 	Map map;
 	Tile_Editor tile_editor;

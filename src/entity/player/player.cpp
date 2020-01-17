@@ -1,32 +1,34 @@
-#include <iostream>
 #include <cmath>
+#include <iostream>
 #include <math.h>
 
-#include "player.hpp"
-#include "vectors.hpp"
-#include "util.hpp"
 #include "game.hpp"
+#include "player.hpp"
+#include "util.hpp"
+#include "vectors.hpp"
 
 #define MAX_VEL 3.2f
 
-Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size):
+Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size) :
 Entity(renderer, pos, size),
 idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
-moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500)
+moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500),
+inventory(this, renderer)
 {
-	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
+	this->max_vel = Fvec(MAX_VEL, MAX_VEL);
 	this->max_health = 100;
 	set_health(max_health);
 	idle_animation.init();
 	moving_animation.init();
 }
 
-Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale):
+Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale) :
 Entity(renderer, pos, size, scale),
 idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
-moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500)
+moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500),
+inventory(this, renderer)
 {
-	this->max_vel = Fvec(MAX_VEL,MAX_VEL);
+	this->max_vel = Fvec(MAX_VEL, MAX_VEL);
 	this->max_health = 100;
 	set_health(max_health);
 	idle_animation.init();
@@ -47,11 +49,10 @@ void Player::update()
 
 void Player::render()
 {
-	Ivec mouse_pos;
-	SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
-	this->rotation  = 180/M_PI * atan2(mouse_pos.y - (this->pos.y + this->size.y * scale.y / 2), mouse_pos.x - (this->pos.x + this->size.x * scale.x / 2)) + 90;
-	if(abs(this->vel.x) > 0.5f ||
-	   abs(this->vel.y) > 0.5f)
+	inventory.render();
+	// fix rendering
+	this->rotation -= 90;
+	if(abs(this->vel.x) > 0.5f || abs(this->vel.y) > 0.5f)
 	{
 		moving_animation.render();
 	}
@@ -61,12 +62,13 @@ void Player::render()
 	}
 	if(Game::debug->active)
 	{
-		Game::debug->push_render(this, "Player", {&this->pos.x, &this->pos.y,
-												  &this->size.x, &this->size.y,
-												  &this->scale.x, &this->scale.y,
-												  &this->max_vel.x, &this->max_vel.y,
-												  &this->vel.x, &this->vel.y});
+		Game::debug->push_render(
+			this, "Player",
+			{ &this->pos.x, &this->pos.y, &this->size.x, &this->size.y,
+			  &this->scale.x, &this->scale.y, &this->max_vel.x,
+			  &this->max_vel.y, &this->vel.x, &this->vel.y });
 	}
+	this->rotation += 90;
 	clear_render_settings(renderer);
 }
 
@@ -88,4 +90,75 @@ void Player::handle_input()
 	{
 		accelerate(Fvec(1.0f, 0.0f));
 	}
+	Item* item = inventory.get_current();
+	if(item != nullptr && !keys[SDL_SCANCODE_LCTRL])
+	{
+		if(keys[SDL_SCANCODE_H])
+		{
+			item->use(H);
+		}
+		else if(keys[SDL_SCANCODE_J])
+		{
+			item->use(J);
+		}
+		else if(keys[SDL_SCANCODE_K])
+		{
+			item->use(K);
+		}
+		else if(keys[SDL_SCANCODE_L])
+		{
+			item->use(L);
+		}
+	}
+}
+
+void Player::handle_event(const SDL_Event& event)
+{
+	switch(event.type)
+	{
+		case SDL_KEYDOWN:
+		{
+			switch(event.key.keysym.sym)
+			{
+				case SDLK_h:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.left();
+					}
+				}
+				break;
+				case SDLK_j:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.down();
+					}
+				}
+				break;
+				case SDLK_k:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.up();
+					}
+				}
+				break;
+				case SDLK_l:
+				{
+					if(keys[SDL_SCANCODE_LCTRL])
+					{
+						inventory.right();
+					}
+				}
+				break;
+			}
+		}
+		break;
+	}
+}
+
+Inventory& Player::get_inventory()
+{
+	return this->inventory;
 }

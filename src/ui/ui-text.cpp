@@ -1,11 +1,13 @@
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 
-#include "ui-text.hpp"
 #include "error.hpp"
+#include "ui-text.hpp"
 #include "util.hpp"
 
-UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color, Fill_Type type):
+UI_Text::UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
+				 std::string text, std::string font_path, SDL_Color font_color,
+				 Fill_Type type) :
 UI_Base(renderer, pos, size, scale, font_color)
 {
 	this->type = type;
@@ -15,7 +17,7 @@ UI_Base(renderer, pos, size, scale, font_color)
 
 	{
 		this->font = TTF_OpenFont(font_path.c_str(), 24);
-		Error font_ld(!font, {"failed to create font face"});
+		Error font_ld(!font, { "failed to create font face" });
 	}
 
 	this->font_color = font_color;
@@ -51,17 +53,23 @@ void UI_Text::render()
 		case NORMAL:
 		{
 			SDL_RenderSetScale(renderer, scale.x, scale.y);
-			SDL_Rect position = {get_pos().x, get_pos().y, tex_size.x, tex_size.y};
+			SDL_Rect position = { get_pos().x, get_pos().y, tex_size.x,
+								  tex_size.y };
 			SDL_RenderCopy(renderer, output, NULL, &position);
-		} break;
+		}
+		break;
 		case FILL:
 		{
-			SDL_Rect position = {(int)std::round(pos.x - origin.x * (size.x / (float)tex_size.x)),
-								 (int)std::round(pos.y - origin.y * (size.y / (float)tex_size.y)),
-								 size.x,
-								 size.y};
+			SDL_Rect position = {
+				(int)std::round(pos.x -
+								origin.x * (size.x / (float)tex_size.x)),
+				(int)std::round(pos.y -
+								origin.y * (size.y / (float)tex_size.y)),
+				size.x, size.y
+			};
 			SDL_RenderCopy(renderer, output, NULL, &position);
-		} break;
+		}
+		break;
 	}
 	clear_render_settings(renderer);
 }
@@ -75,15 +83,20 @@ void UI_Text::reload_texture()
 		case FILL:
 		{
 			new_surface = TTF_RenderText_Solid(font, text.c_str(), font_color);
-		} break;
+		}
+		break;
 		case WRAPPED:
 		{
-			new_surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), font_color, size.x);
-		} break;
+			new_surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(),
+														 font_color, size.x);
+		}
+		break;
 		default:
 		{
-			Error(true, {"You somehow set the surface to a non-existant type?"});
-		} break;
+			Error(true,
+				  { "You somehow set the surface to a non-existant type?" });
+		}
+		break;
 	}
 	if(output != nullptr)
 	{

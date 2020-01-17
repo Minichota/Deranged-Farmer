@@ -6,7 +6,8 @@
 class Error
 {
 	public:
-	Error(bool condition, std::vector<const char*> message, bool game_ending = false);
+	Error(bool condition, std::vector<const char*> message,
+		  bool game_ending = false);
 	~Error();
 
 	private:

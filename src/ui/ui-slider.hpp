@@ -7,7 +7,9 @@
 class UI_Slider : public UI_Base, public Event_Handler
 {
 	public:
-	UI_Slider(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, int min_value, int max_value, int pos_count = 2, SDL_Color bar_color = {}, SDL_Color slider_color = {});
+	UI_Slider(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
+			  int min_value, int max_value, int pos_count = 2,
+			  SDL_Color bar_color = {}, SDL_Color slider_color = {});
 	~UI_Slider();
 
 	void update();

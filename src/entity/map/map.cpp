@@ -1,13 +1,14 @@
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
-#include "game.hpp"
-#include "map.hpp"
-#include "io.hpp"
-#include "settings.hpp"
 #include "collisions.hpp"
+#include "game.hpp"
+#include "io.hpp"
+#include "map.hpp"
+#include "settings.hpp"
 
-Map::Map(SDL_Renderer* renderer, const char* data_path, const char* image_path, Ivec tile_size):
+Map::Map(SDL_Renderer* renderer, const char* data_path, const char* image_path,
+		 Ivec tile_size) :
 Renderable(renderer)
 {
 	this->data_path = data_path;
@@ -77,7 +78,8 @@ void Map::init()
 			if(map_data[y][x] == 0)
 			{
 				// null tile
-				Tile* tile = new Tile(nullptr, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
+				Tile* tile = new Tile(
+					nullptr, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
 				if((int)tiles.size() <= y)
 				{
 					tiles.push_back(std::vector<Tile*>());
@@ -86,8 +88,11 @@ void Map::init()
 				continue;
 			}
 			int tile_type = map_data[y][x] - 1;
-			Tile* tile = new Tile(renderer, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
-			tile->set_relative_pos(Ivec(tile_size.x * (tile_type % tile_size.x), tile_size.y * (int)(tile_type / tile_size.y)));
+			Tile* tile = new Tile(
+				renderer, Fvec(x * tile_size.x, y * tile_size.y), tile_size);
+			tile->set_relative_pos(
+				Ivec(tile_size.x * (tile_type % tile_size.x),
+					 tile_size.y * (int)(tile_type / tile_size.y)));
 			if((int)tiles.size() <= y)
 			{
 				tiles.push_back(std::vector<Tile*>());
@@ -109,7 +114,9 @@ void Map::init()
 			{
 				case 0:
 				{
-					Map_Entity* fence = new Map_Entity(renderer, 0, Fvec(map_data[y][0], map_data[y][1]), Fvec(map_data[y][2], map_data[y][3]), map_data[y][4]);
+					Map_Entity* fence = new Map_Entity(
+						renderer, 0, Fvec(map_data[y][0], map_data[y][1]),
+						Fvec(map_data[y][2], map_data[y][3]), map_data[y][4]);
 					fence->load_texture("res/graphics/fence.png");
 					map_entities.push_back(fence);
 					delete variables[y];
@@ -146,22 +153,33 @@ void Map::handle_collision(Entity* entity)
 		{
 			if(!x_tile->is_null())
 			{
-				if(test_collision(entity->get_collision_pos(), entity->get_collision_size() * entity->get_scale(),
-								  x_tile->get_collision_pos(), x_tile->get_collision_size()))
+				if(test_collision(entity->get_collision_pos(),
+								  entity->get_collision_size() *
+									  entity->get_scale(),
+								  x_tile->get_collision_pos(),
+								  x_tile->get_collision_size()))
 				{
-					handle_collision_movingAA(entity->get_pos(), entity->get_collision_size() * entity->get_scale(), entity->get_vel(),
-											  x_tile->get_collision_pos(), x_tile->get_collision_size());
+					handle_collision_movingAA(
+						entity->get_pos(),
+						entity->get_collision_size() * entity->get_scale(),
+						entity->get_vel(), x_tile->get_collision_pos(),
+						x_tile->get_collision_size());
 				}
 			}
 		}
 	}
 	for(Map_Entity* map_e : map_entities)
 	{
-		if(test_collision(entity->get_collision_pos(), entity->get_collision_size() * entity->get_scale(),
-						  map_e->get_collision_pos(), map_e->get_collision_size()))
+		if(test_collision(entity->get_collision_pos(),
+						  entity->get_collision_size() * entity->get_scale(),
+						  map_e->get_collision_pos(),
+						  map_e->get_collision_size()))
 		{
-			handle_collision_movingAA(entity->get_pos(), entity->get_collision_size() * entity->get_scale(), entity->get_vel(),
-									  map_e->get_collision_pos(), map_e->get_collision_size());
+			handle_collision_movingAA(
+				entity->get_pos(),
+				entity->get_collision_size() * entity->get_scale(),
+				entity->get_vel(), map_e->get_collision_pos(),
+				map_e->get_collision_size());
 		}
 	}
 }

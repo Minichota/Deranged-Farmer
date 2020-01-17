@@ -6,7 +6,8 @@
 class UI_Rect : public UI_Base
 {
 	public:
-	UI_Rect(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, SDL_Color color, Fill_Type type);
+	UI_Rect(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
+			SDL_Color color, Fill_Type type);
 	~UI_Rect();
 
 	void update();

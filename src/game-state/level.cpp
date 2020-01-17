@@ -1,24 +1,24 @@
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
-#include "level.hpp"
-#include "game.hpp"
-#include "ui-text.hpp"
-#include "ui-health_bar.hpp"
-#include "player.hpp"
-#include "error.hpp"
+#include "bison.hpp"
 #include "collisions.hpp"
+#include "error.hpp"
+#include "game.hpp"
 #include "interpolators.hpp"
 #include "io.hpp"
-#include "bison.hpp"
+#include "level.hpp"
+#include "player.hpp"
 #include "snake.hpp"
+#include "ui-health_bar.hpp"
+#include "ui-text.hpp"
 
-Level::Level(SDL_Renderer* renderer, const char* entity_file_path, const char* map_data_file_path, const char* map_image_file_path):
+Level::Level(SDL_Renderer* renderer, const char* entity_file_path,
+			 const char* map_data_file_path, const char* map_image_file_path) :
 Game_State(renderer),
 entity_file_path(entity_file_path),
-map(renderer, map_data_file_path, map_image_file_path, Ivec(32,32)),
-tile_editor(renderer),
-map_data_file_path(map_data_file_path),
+map(renderer, map_data_file_path, map_image_file_path, Ivec(32, 32)),
+tile_editor(renderer), map_data_file_path(map_data_file_path),
 map_image_file_path(map_image_file_path)
 {
 	tile_editor.active = false;
@@ -58,6 +58,10 @@ void Level::render()
 	{
 		entity->render();
 	}
+	for(Item* item : items)
+	{
+		item->render();
+	}
 	Game_State::render();
 	if(tile_editor.active)
 	{
@@ -67,24 +71,28 @@ void Level::render()
 
 void Level::init()
 {
-	entities =
-	{
-		new Player(renderer, Ivec(50,50), Ivec(27,27))
+	Player* player = new Player(renderer, Ivec(50, 50), Ivec(27, 27));
+	entities = { player };
+	this->items = {
+		new Item(renderer, this, player, Ivec(100, 100), "res/graphics/hoe.png",
+				 "res/graphics/hoe-a.png"),
 	};
-	UI_Health_Bar* health_Bar = new UI_Health_Bar(renderer, Ivec(400,0), Ivec(350/3.0f,50/3.0f), Fvec(3.0f,3.0f), SDL_Color{255, 0, 0, 255}, SDL_Color{255,100,0,255}, &entities[0]->get_health(), entities[0]->get_max_health());
-	health_Bar->set_origin(Ivec(health_Bar->get_size().x/2,0));
-	elements =
-	{
-		health_Bar
-	};
+	UI_Health_Bar* health_Bar = new UI_Health_Bar(
+		renderer, Ivec(400, 0), Ivec(350 / 3.0f, 50 / 3.0f), Fvec(3.0f, 3.0f),
+		SDL_Color{ 255, 0, 0, 255 }, SDL_Color{ 255, 100, 0, 255 },
+		&entities[0]->get_health(), entities[0]->get_max_health());
+	health_Bar->set_origin(Ivec(health_Bar->get_size().x / 2, 0));
+	elements = { health_Bar };
 	SDL_Texture* player_texture;
 	{
-		player_texture = IMG_LoadTexture(renderer, "res/graphics/player_test.png");
-		Error(player_texture == nullptr, {"Failed to load player texture", SDL_GetError()});
+		player_texture =
+			IMG_LoadTexture(renderer, "res/graphics/player_test.png");
+		Error(player_texture == nullptr,
+			  { "Failed to load player texture", SDL_GetError() });
 	}
 	{
 		background = IMG_LoadTexture(renderer, "res/graphics/background.png");
-		Error(!background, {"Failed to load background", SDL_GetError()});
+		Error(!background, { "Failed to load background", SDL_GetError() });
 	}
 	entities[0]->set_texture(player_texture);
 	load_entities();
@@ -118,21 +126,52 @@ void Level::handle_event(const SDL_Event& event)
 		{
 			switch(event.key.keysym.sym)
 			{
+				case SDLK_p:
+				{
+					Player* player = dynamic_cast<Player*>(entities[0]);
+					for(size_t i = 0; i < items.size(); i++)
+					{
+						if(test_collision(player->get_pos(), player->get_size(),
+										  items[i]->get_pos(),
+										  items[i]->get_size()))
+						{
+							if(player->get_inventory().pick_item(items[i]))
+							{
+								items.erase(items.begin() + i);
+							}
+							break;
+						}
+					}
+				}
+				break;
+				case SDLK_b:
+				{
+					Player* player = dynamic_cast<Player*>(entities[0]);
+					Item* item = player->get_inventory().drop_item();
+					if(item != nullptr)
+					{
+						items.push_back(item);
+					}
+				}
+				break;
 				case SDLK_ESCAPE:
 				{
 					if(!tile_editor.active)
 					{
 						Game::toggle_pause();
 					}
-				} break;
+				}
+				break;
 				case SDLK_e:
 				{
 					tile_editor.active = true;
-				} break;
+				}
+				break;
 				case SDLK_F4:
 				{
 					save_level();
-				} break;
+				}
+				break;
 			}
 		}
 	}
@@ -163,22 +202,28 @@ void Level::load_entities()
 		{
 			case 0:
 			{
-				Bison* bison = new Bison(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
+				Bison* bison = new Bison(
+					renderer, Fvec(properties[i][0], properties[i][1]),
+					Fvec(properties[i][2], properties[i][3]));
 				bison->load_texture("res/graphics/bison.png");
 				AI_Roaming* bison_ai = new AI_Roaming(this->map, bison, 3000);
 				ais.push_back(bison_ai);
 				entities.push_back(bison);
 				delete types[i];
-			} break;
+			}
+			break;
 			case 1:
 			{
-				Snake* snake = new Snake(renderer, Fvec(properties[i][0], properties[i][1]), Fvec(properties[i][2], properties[i][3]));
+				Snake* snake = new Snake(
+					renderer, Fvec(properties[i][0], properties[i][1]),
+					Fvec(properties[i][2], properties[i][3]));
 				snake->load_texture("res/graphics/snake.png");
 				AI_Roaming* snake_ai = new AI_Roaming(this->map, snake, 3000);
 				ais.push_back(snake_ai);
 				entities.push_back(snake);
 				delete types[i];
-			} break;
+			}
+			break;
 		}
 	}
 	types.clear();
@@ -215,10 +260,12 @@ void Level::save_level()
 			{
 				// find tile_pos
 				Ivec full_size;
-				Ivec tile_pos = tiles[i][j]->get_relative_pos()/32;
-				SDL_QueryTexture(full_texture, NULL, NULL, &full_size.x, &full_size.y);
+				Ivec tile_pos = tiles[i][j]->get_relative_pos() / 32;
+				SDL_QueryTexture(full_texture, NULL, NULL, &full_size.x,
+								 &full_size.y);
 				full_size = full_size / 32;
-				data.append(std::to_string(tile_pos.y * full_size.y + tile_pos.x + 1));
+				data.append(
+					std::to_string(tile_pos.y * full_size.y + tile_pos.x + 1));
 			}
 		}
 		data.push_back('\n');
@@ -230,7 +277,9 @@ void Level::save_level()
 	{
 		if((int)e->get_rotation() % 90 != 0)
 		{
-			Game::debug->push_log({"failed to save, an entity has the rotation of: ",  std::to_string((int)e->get_rotation()).c_str()});
+			Game::debug->push_log(
+				{ "failed to save, an entity has the rotation of: ",
+				  std::to_string((int)e->get_rotation()).c_str() });
 			return;
 		}
 		data.append("type=");

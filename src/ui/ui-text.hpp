@@ -8,7 +8,9 @@
 class UI_Text : public UI_Base
 {
 	public:
-	UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale, std::string text, std::string font_path, SDL_Color font_color, Fill_Type type);
+	UI_Text(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
+			std::string text, std::string font_path, SDL_Color font_color,
+			Fill_Type type);
 	~UI_Text();
 
 	void update();

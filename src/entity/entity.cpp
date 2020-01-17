@@ -4,13 +4,13 @@
 #include "entity.hpp"
 #include "error.hpp"
 
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation):
-Renderable(renderer),
-Sized(pos, size, Fvec(1.0f, 1.0f), rotation)
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation) :
+Renderable(renderer), Sized(pos, size, Fvec(1.0f, 1.0f), rotation)
 {
 }
 
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, int rotation):
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale,
+			   int rotation) :
 Renderable(renderer),
 Sized(pos, size, scale, rotation)
 {
@@ -39,11 +39,11 @@ void Entity::accelerate(Fvec vel)
 	{
 		this->vel.x = -max_vel.x;
 	}
-   	if(this->vel.y > max_vel.y)
+	if(this->vel.y > max_vel.y)
 	{
 		this->vel.y = max_vel.y;
 	}
-   	else if(this->vel.y < -max_vel.y)
+	else if(this->vel.y < -max_vel.y)
 	{
 		this->vel.y = -max_vel.y;
 	}
@@ -150,12 +150,12 @@ int& Entity::get_max_health()
 void Entity::load_texture(std::string texture_path)
 {
 	this->texture = IMG_LoadTexture(renderer, texture_path.c_str());
-	Error(!texture, {"failed to load texture from: ", texture_path.c_str()});
+	Error(!texture, { "failed to load texture from: ", texture_path.c_str() });
 }
 
 void Entity::set_texture(SDL_Texture* texture)
 {
-	Error(!texture, {"failed to copy texture, it is null: "});
+	Error(!texture, { "failed to copy texture, it is null: " });
 	this->texture = texture;
 }
 

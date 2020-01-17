@@ -2,16 +2,16 @@
 #include <fstream>
 #include <iostream>
 
-#include "game.hpp"
 #include "audio.hpp"
-#include "main-menu.hpp"
-#include "level.hpp"
-#include "pause-menu.hpp"
-#include "settings.hpp"
+#include "debug-window.hpp"
+#include "game.hpp"
 #include "interpolators.hpp"
 #include "io.hpp"
+#include "level.hpp"
+#include "main-menu.hpp"
+#include "pause-menu.hpp"
+#include "settings.hpp"
 #include "util.hpp"
-#include "debug-window.hpp"
 
 // static variables
 int Game::state;
@@ -23,12 +23,9 @@ Debug_Window* Game::debug;
 
 Game::Game()
 {
-	window = SDL_CreateWindow("Deranged Farmer",
-		   					   SDL_WINDOWPOS_CENTERED,
-		   					   SDL_WINDOWPOS_CENTERED,
-		   					   800,
-		   					   608,
-		   					   SDL_WINDOW_RESIZABLE);
+	window = SDL_CreateWindow("Deranged Farmer", SDL_WINDOWPOS_CENTERED,
+							  SDL_WINDOWPOS_CENTERED, 800, 608,
+							  SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetWindowResizable(window, SDL_FALSE);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -44,9 +41,11 @@ void Game::run()
 {
 	std::string settings_data = read("res/save/settings.txt");
 	parse(settings_data, '=', Settings::all);
- 	Game::debug = new Debug_Window(renderer);
+	Game::debug = new Debug_Window(renderer);
 	game_states[0] = new Main_Menu(renderer);
-	Level* level = new Level(renderer, "res/map/entities.dat", "res/map/test_map.dat", "res/graphics/tile_map.png");
+	Level* level =
+		new Level(renderer, "res/map/entities.dat", "res/map/test_map.dat",
+				  "res/graphics/tile_map.png");
 	game_states[1] = level;
 	debug->set_level(level);
 
@@ -74,7 +73,7 @@ void Game::run()
 		render();
 
 		SDL_RenderPresent(renderer);
-		SDL_Delay(1000.0f/144.0f);
+		SDL_Delay(1000.0f / 144.0f);
 	}
 	write_settings("res/save/settings.txt", Settings::all);
 }
@@ -160,7 +159,8 @@ void Game::handle_event(SDL_Event event)
 		{
 			// user closes window
 			closed = true;
-		} break;
+		}
+		break;
 		case SDL_KEYDOWN:
 		{
 			switch(event.key.keysym.sym)
@@ -171,12 +171,14 @@ void Game::handle_event(SDL_Event event)
 					{
 						debug->toggle();
 					}
-				} break;
+				}
+				break;
 				case SDLK_F4:
 				{
 					// bypass so save can be done in debug mode
 					game_states[this->state]->handle_event(event);
-				} break;
+				}
+				break;
 			}
 		}
 		default:
@@ -193,6 +195,7 @@ void Game::handle_event(SDL_Event event)
 			{
 				game_states[this->state]->handle_event(event);
 			}
-		} break;
+		}
+		break;
 	}
 }

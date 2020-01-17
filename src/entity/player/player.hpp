@@ -1,8 +1,10 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "entity.hpp"
 #include "animation.hpp"
+#include "entity.hpp"
+#include "event-handler.hpp"
+#include "inventory.hpp"
 
 class Player : public Entity
 {
@@ -16,8 +18,15 @@ class Player : public Entity
 
 	void handle_input();
 
+	void handle_event(const SDL_Event& event);
+
+	Inventory& get_inventory();
+
 	private:
 	Animation idle_animation;
 	Animation moving_animation;
+
+	Inventory inventory;
 };
+
 #endif

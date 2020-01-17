@@ -1,13 +1,13 @@
 #ifndef AI_HPP
 #define AI_HPP
 
-#include "map.hpp"
 #include "entity.hpp"
+#include "map.hpp"
 
 struct Position
 {
-	Ivec index = Ivec(-1.0f,-1.0f);
-	Fvec pos = Fvec(-1.0f,-1.0f);
+	Ivec index = Ivec(-1.0f, -1.0f);
+	Fvec pos = Fvec(-1.0f, -1.0f);
 	bool null = false;
 	bool checked = false;
 	Position* parent = nullptr;

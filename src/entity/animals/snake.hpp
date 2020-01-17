@@ -1,5 +1,5 @@
-#include "entity.hpp"
 #include "animation.hpp"
+#include "entity.hpp"
 
 class Snake : public Entity
 {

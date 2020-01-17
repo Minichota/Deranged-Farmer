@@ -1,19 +1,19 @@
 #ifndef DEBUG_WINDOW_HPP
 #define DEBUG_WINDOW_HPP
 
-#include <vector>
 #include <SDL2/SDL_ttf.h>
+#include <vector>
 
-#include "renderable.hpp"
-#include "vectors.hpp"
-#include "event-handler.hpp"
-#include "ui-text.hpp"
-#include "ui-text-input.hpp"
-#include "sized.hpp"
-#include "level.hpp"
-#include "entity-creator.hpp"
-#include "tile-editor.hpp"
 #include "console-log.hpp"
+#include "entity-creator.hpp"
+#include "event-handler.hpp"
+#include "level.hpp"
+#include "renderable.hpp"
+#include "sized.hpp"
+#include "tile-editor.hpp"
+#include "ui-text-input.hpp"
+#include "ui-text.hpp"
+#include "vectors.hpp"
 
 typedef struct
 {
@@ -36,7 +36,8 @@ class Debug_Window : public Renderable, public Event_Handler
 
 	void handle_event(const SDL_Event& event);
 
-	void push_render(Sized<float>* address, std::string name_repr, std::vector<float*> values);
+	void push_render(Sized<float>* address, std::string name_repr,
+					 std::vector<float*> values);
 	void push_console(std::string text);
 	void push_console(float text);
 	void push_rect(Fvec pos, Fvec size);
