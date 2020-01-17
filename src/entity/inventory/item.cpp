@@ -1,13 +1,11 @@
 #include "item.hpp"
-#include "level.hpp"
 
 #define delay 200
-Item::Item(SDL_Renderer* renderer, Level* level, Sized<float>* parent, Ivec pos,
-		   std::string icon_path, std::string animation_path) :
+Item::Item(SDL_Renderer* renderer, Sized<float>* parent, Ivec pos,
+		   std::string icon_path, std::string animation_path, int type) :
 Renderable(renderer),
 Sized(pos, Fvec(32, 32), Fvec(1.0f, 1.0f))
 {
-	this->level = level;
 	this->pos_2 = pos;
 	{
 		this->texture = IMG_LoadTexture(renderer, icon_path.c_str());
@@ -19,6 +17,7 @@ Sized(pos, Fvec(32, 32), Fvec(1.0f, 1.0f))
 	this->animation->init();
 	this->start_time = 0;
 	this->parent = parent;
+	this->type = type;
 }
 
 Item::~Item()
@@ -107,4 +106,9 @@ void Item::use(const Vim_Key key)
 void Item::set_e_pos(Ivec pos)
 {
 	this->pos_2 = pos;
+}
+
+int Item::get_type()
+{
+	return this->type;
 }

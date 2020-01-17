@@ -58,10 +58,6 @@ void Level::render()
 	{
 		entity->render();
 	}
-	for(Item* item : items)
-	{
-		item->render();
-	}
 	Game_State::render();
 	if(tile_editor.active)
 	{
@@ -72,11 +68,8 @@ void Level::render()
 void Level::init()
 {
 	Player* player = new Player(renderer, Ivec(50, 50), Ivec(27, 27));
+	map.set_player(player);
 	entities = { player };
-	this->items = {
-		new Item(renderer, this, player, Ivec(100, 100), "res/graphics/hoe.png",
-				 "res/graphics/hoe-a.png"),
-	};
 	UI_Health_Bar* health_Bar = new UI_Health_Bar(
 		renderer, Ivec(400, 0), Ivec(350 / 3.0f, 50 / 3.0f), Fvec(3.0f, 3.0f),
 		SDL_Color{ 255, 0, 0, 255 }, SDL_Color{ 255, 100, 0, 255 },
@@ -129,6 +122,7 @@ void Level::handle_event(const SDL_Event& event)
 				case SDLK_p:
 				{
 					Player* player = dynamic_cast<Player*>(entities[0]);
+					std::vector<Item*>& items = map.get_items();
 					for(size_t i = 0; i < items.size(); i++)
 					{
 						if(test_collision(player->get_pos(), player->get_size(),
@@ -150,7 +144,7 @@ void Level::handle_event(const SDL_Event& event)
 					Item* item = player->get_inventory().drop_item();
 					if(item != nullptr)
 					{
-						items.push_back(item);
+						map.get_items().push_back(item);
 					}
 				}
 				break;
@@ -297,6 +291,18 @@ void Level::save_level()
 		e_data.append(std::to_string((int)e->get_rotation()));
 		e_data.push_back('\n');
 		data.append(e_data);
+	}
+
+	std::vector<Item*>& items = map.get_items();
+	for(Item* item : items)
+	{
+		data.append("type=");
+		data.append(std::to_string(item->get_type()));
+		data.push_back('\n');
+		data.append(std::to_string((int)item->get_pos().x));
+		data.push_back(',');
+		data.append(std::to_string((int)item->get_pos().y));
+		data.push_back('\n');
 	}
 
 	// write data

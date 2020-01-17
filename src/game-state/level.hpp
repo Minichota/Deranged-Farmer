@@ -41,7 +41,6 @@ class Level : public Game_State
 	SDL_Texture* background;
 	std::vector<Entity*> entities;
 	std::vector<AI*> ais;
-	std::vector<Item*> items;
 	const std::string entity_file_path;
 	Map map;
 	Tile_Editor tile_editor;
