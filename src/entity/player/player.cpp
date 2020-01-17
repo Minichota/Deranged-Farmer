@@ -90,21 +90,25 @@ void Player::handle_input()
 	{
 		accelerate(Fvec(1.0f, 0.0f));
 	}
-	if(keys[SDL_SCANCODE_H] && !keys[SDL_SCANCODE_LCTRL])
+	Item* item = inventory.get_current();
+	if(item != nullptr && !keys[SDL_SCANCODE_LCTRL])
 	{
-		inventory.get_current()->use(H);
-	}
-	else if(keys[SDL_SCANCODE_J] && !keys[SDL_SCANCODE_LCTRL])
-	{
-		inventory.get_current()->use(J);
-	}
-	else if(keys[SDL_SCANCODE_K] && !keys[SDL_SCANCODE_LCTRL])
-	{
-		inventory.get_current()->use(K);
-	}
-	else if(keys[SDL_SCANCODE_L] && !keys[SDL_SCANCODE_LCTRL])
-	{
-		inventory.get_current()->use(L);
+		if(keys[SDL_SCANCODE_H])
+		{
+			item->use(H);
+		}
+		else if(keys[SDL_SCANCODE_J])
+		{
+			item->use(J);
+		}
+		else if(keys[SDL_SCANCODE_K])
+		{
+			item->use(K);
+		}
+		else if(keys[SDL_SCANCODE_L])
+		{
+			item->use(L);
+		}
 	}
 }
 

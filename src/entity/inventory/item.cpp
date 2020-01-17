@@ -104,11 +104,6 @@ void Item::use(const Vim_Key key)
 	}
 }
 
-void Item::pick()
-{
-	dropped = false;
-}
-
 void Item::set_e_pos(Ivec pos)
 {
 	this->pos_2 = pos;

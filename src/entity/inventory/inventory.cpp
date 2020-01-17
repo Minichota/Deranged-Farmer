@@ -7,6 +7,11 @@ Renderable(renderer)
 	this->selection = 0;
 
 	this->pos = Ivec(600, 524);
+	items.reserve(10);
+	for(size_t i = 0; i < 10; i++)
+	{
+		items.push_back(nullptr);
+	}
 }
 
 Inventory::~Inventory()
@@ -25,7 +30,10 @@ void Inventory::render()
 {
 	for(Item* item : items)
 	{
-		item->render();
+		if(item != nullptr)
+		{
+			item->render();
+		}
 	}
 	for(int i = 0; i < 5; i++)
 	{
@@ -47,21 +55,52 @@ void Inventory::render()
 
 Item* Inventory::get_current()
 {
+	if(selection >= (int)items.size())
+	{
+		return nullptr;
+	}
 	return items[selection];
 }
 
-void Inventory::pick_item(Item* item)
+bool Inventory::pick_item(Item* item)
 {
-	this->items.push_back(item);
-	// TODO make dependent on slots available
-	item->set_e_pos(Ivec(pos.x + 2, pos.y + 2));
+	size_t slot = 0;
+	if(items[selection] != nullptr)
+	{
+		for(;; slot++)
+		{
+			if(slot >= items.size())
+			{
+				return false;
+			}
+			if(items[slot] == nullptr)
+			{
+				this->items[slot] = item;
+				break;
+			}
+		}
+	}
+	else
+	{
+		slot = selection;
+		this->items[selection] = item;
+	}
+	item->set_e_pos(
+		Ivec(pos.x + 2 + (slot % 5) * 38, pos.y + 2 + (int)(slot / 5) * 38));
+	return true;
 }
 
-Item* Inventory::drop_item(int pos)
+Item* Inventory::drop_item()
 {
-	Item* item = items[pos];
-	this->items.erase(this->items.begin() + pos);
-	return item;
+	if(items[selection] != nullptr)
+	{
+		Item* item = items[selection];
+		this->items[selection] = nullptr;
+		item->set_e_pos(parent->get_pos());
+		item->set_pos(parent->get_pos());
+		return item;
+	}
+	return nullptr;
 }
 
 void Inventory::left()

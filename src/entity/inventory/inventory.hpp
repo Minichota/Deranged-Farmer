@@ -18,8 +18,8 @@ class Inventory : public Renderable
 
 	Item* get_current();
 
-	void pick_item(Item* item);
-	Item* drop_item(int pos);
+	bool pick_item(Item* item);
+	Item* drop_item();
 
 	void left();
 	void down();

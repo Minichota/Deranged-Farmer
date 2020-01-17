@@ -73,9 +73,10 @@ void Level::init()
 {
 	Player* player = new Player(renderer, Ivec(50, 50), Ivec(27, 27));
 	entities = { player };
-	this->items = { new Item(renderer, this, player, Ivec(50, 50),
-							 "res/graphics/hoe.png",
-							 "res/graphics/hoe-a.png") };
+	this->items = {
+		new Item(renderer, this, player, Ivec(100, 100), "res/graphics/hoe.png",
+				 "res/graphics/hoe-a.png"),
+	};
 	UI_Health_Bar* health_Bar = new UI_Health_Bar(
 		renderer, Ivec(400, 0), Ivec(350 / 3.0f, 50 / 3.0f), Fvec(3.0f, 3.0f),
 		SDL_Color{ 255, 0, 0, 255 }, SDL_Color{ 255, 100, 0, 255 },
@@ -134,9 +135,22 @@ void Level::handle_event(const SDL_Event& event)
 										  items[i]->get_pos(),
 										  items[i]->get_size()))
 						{
-							player->get_inventory().pick_item(items[i]);
-							items.erase(items.begin() + i);
+							if(player->get_inventory().pick_item(items[i]))
+							{
+								items.erase(items.begin() + i);
+							}
+							break;
 						}
+					}
+				}
+				break;
+				case SDLK_b:
+				{
+					Player* player = dynamic_cast<Player*>(entities[0]);
+					Item* item = player->get_inventory().drop_item();
+					if(item != nullptr)
+					{
+						items.push_back(item);
 					}
 				}
 				break;

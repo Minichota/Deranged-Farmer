@@ -29,7 +29,6 @@ class Item : public Renderable, public Sized<float>
 	void render();
 
 	void use(const Vim_Key key);
-	void pick();
 
 	void set_e_pos(Ivec pos);
 
@@ -42,7 +41,6 @@ class Item : public Renderable, public Sized<float>
 
 	Ivec pos_2;
 
-	bool dropped;
 	bool swinging;
 
 	long long start_time;
