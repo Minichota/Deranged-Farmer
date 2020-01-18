@@ -21,8 +21,8 @@ enum Vim_Key
 class Item : public Renderable, public Sized<float>
 {
 	public:
-	Item(SDL_Renderer* renderer, Level* level, Sized<float>* parent, Ivec pos,
-		 std::string icon_path, std::string animation_path);
+	Item(SDL_Renderer* renderer, Sized<float>* parent, Ivec pos,
+		 std::string icon_path, std::string animation_path, int type);
 	~Item();
 
 	void update();
@@ -32,8 +32,9 @@ class Item : public Renderable, public Sized<float>
 
 	void set_e_pos(Ivec pos);
 
+	int get_type();
+
 	private:
-	Level* level;
 	Animation* animation;
 	SDL_Texture* texture;
 	Sized<float>* parent;
@@ -44,6 +45,8 @@ class Item : public Renderable, public Sized<float>
 	bool swinging;
 
 	long long start_time;
+
+	int type;
 };
 
 #endif

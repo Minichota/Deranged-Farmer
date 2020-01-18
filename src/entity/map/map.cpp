@@ -11,6 +11,7 @@ Map::Map(SDL_Renderer* renderer, const char* data_path, const char* image_path,
 		 Ivec tile_size) :
 Renderable(renderer)
 {
+	this->player = player;
 	this->data_path = data_path;
 	this->image_path = image_path;
 	this->tile_size = tile_size;
@@ -37,6 +38,10 @@ void Map::update()
 	{
 		e->update();
 	}
+	for(Item* item : items)
+	{
+		item->update();
+	}
 }
 
 void Map::render()
@@ -51,6 +56,10 @@ void Map::render()
 	for(Map_Entity* e : map_entities)
 	{
 		e->render();
+	}
+	for(Item* item : items)
+	{
+		item->render();
 	}
 }
 
@@ -121,6 +130,16 @@ void Map::init()
 					map_entities.push_back(fence);
 					delete variables[y];
 				}
+				break;
+				case 101:
+				{
+					Item* hoe = new Item(
+						renderer, player, Fvec(map_data[y][0], map_data[y][1]),
+						"res/graphics/hoe.png", "res/graphics/hoe-a.png", 101);
+					items.push_back(hoe);
+					delete variables[y];
+				}
+				break;
 			}
 		}
 	}
@@ -210,6 +229,11 @@ std::vector<Map_Entity*>& Map::get_map_entities()
 	return this->map_entities;
 }
 
+std::vector<Item*>& Map::get_items()
+{
+	return this->items;
+}
+
 Ivec& Map::get_tile_count()
 {
 	return tile_count;
@@ -228,4 +252,9 @@ Ivec& Map::get_tile_size()
 const char* Map::get_data_path()
 {
 	return this->data_path;
+}
+
+void Map::set_player(Player* player)
+{
+	this->player = player;
 }
