@@ -5,7 +5,7 @@
 
 Map_Entity::Map_Entity(SDL_Renderer* renderer, int type, Fvec pos, Fvec size,
 					   int rotation) :
-Entity(renderer, pos, size, rotation)
+Entity(renderer, pos, size, 0, rotation)
 {
 	this->type = type;
 }

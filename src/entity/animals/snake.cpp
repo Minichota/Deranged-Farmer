@@ -2,7 +2,7 @@
 #include "game.hpp"
 
 Snake::Snake(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale) :
-Entity(renderer, pos, size, scale),
+Entity(renderer, pos, size, scale, 1),
 animation(renderer, this, "res/graphics/snake.png", size, 2000)
 {
 	animation.init();
@@ -11,7 +11,7 @@ animation(renderer, this, "res/graphics/snake.png", size, 2000)
 }
 
 Snake::Snake(SDL_Renderer* renderer, Fvec pos, Fvec size) :
-Entity(renderer, pos, size, Fvec(1.0f, 1.0f)),
+Entity(renderer, pos, size, Fvec(1.0f, 1.0f), 1),
 animation(renderer, this, "res/graphics/snake.png", size, 2000)
 {
 	animation.init();
