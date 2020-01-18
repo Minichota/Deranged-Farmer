@@ -2,7 +2,7 @@
 #include "game.hpp"
 
 Bison::Bison(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale) :
-Entity(renderer, pos, size, scale),
+Entity(renderer, pos, size, scale, 0),
 animation(renderer, this, "res/graphics/bison.png", size, 1500)
 {
 	animation.init();
@@ -11,7 +11,7 @@ animation(renderer, this, "res/graphics/bison.png", size, 1500)
 }
 
 Bison::Bison(SDL_Renderer* renderer, Fvec pos, Fvec size) :
-Entity(renderer, pos, size, Fvec(1.0f, 1.0f)),
+Entity(renderer, pos, size, Fvec(1.0f, 1.0f), 0),
 animation(renderer, this, "res/graphics/bison.png", size, 1500)
 {
 	animation.init();

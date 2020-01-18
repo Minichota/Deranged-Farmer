@@ -32,6 +32,8 @@ class Level : public Game_State
 
 	std::vector<Entity*>& get_entities();
 
+	void save_status();
+
 	private:
 	void load_entities();
 	void save_level();

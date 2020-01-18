@@ -10,7 +10,7 @@
 #define MAX_VEL 3.2f
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size) :
-Entity(renderer, pos, size),
+Entity(renderer, pos, size, 3),
 idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
 moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500),
 inventory(this, renderer)
@@ -23,7 +23,7 @@ inventory(this, renderer)
 }
 
 Player::Player(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale) :
-Entity(renderer, pos, size, scale),
+Entity(renderer, pos, size, scale, 3),
 idle_animation(renderer, this, "res/graphics/player.png", size, 1500),
 moving_animation(renderer, this, "res/graphics/player_moving.png", size, 1500),
 inventory(this, renderer)

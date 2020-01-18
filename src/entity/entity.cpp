@@ -4,16 +4,20 @@
 #include "entity.hpp"
 #include "error.hpp"
 
-Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation) :
-Renderable(renderer), Sized(pos, size, Fvec(1.0f, 1.0f), rotation)
+Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int type,
+			   int rotation) :
+Renderable(renderer),
+Sized(pos, size, Fvec(1.0f, 1.0f), rotation)
 {
+	this->type = type;
 }
 
 Entity::Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale,
-			   int rotation) :
+			   int type, int rotation) :
 Renderable(renderer),
 Sized(pos, size, scale, rotation)
 {
+	this->type = type;
 }
 
 Entity::~Entity()
@@ -172,4 +176,9 @@ void Entity::set_vel(Fvec vel)
 Fvec& Entity::get_vel()
 {
 	return this->vel;
+}
+
+int Entity::get_type()
+{
+	return this->type;
 }

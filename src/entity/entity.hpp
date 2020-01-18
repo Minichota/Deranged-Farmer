@@ -9,8 +9,9 @@
 class Entity : public Renderable, public Event_Handler, public Sized<float>
 {
 	public:
-	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int rotation = 0);
-	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale,
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, int type,
+		   int rotation = 0);
+	Entity(SDL_Renderer* renderer, Fvec pos, Fvec size, Fvec scale, int type,
 		   int rotation = 0);
 	virtual ~Entity();
 
@@ -38,12 +39,16 @@ class Entity : public Renderable, public Event_Handler, public Sized<float>
 	void set_vel(Fvec vel);
 	Fvec& get_vel();
 
+	int get_type();
+
 	protected:
 	Fvec vel;
 	Fvec max_vel;
 
 	int health;
 	int max_health;
+
+	int type;
 
 	SDL_Texture* texture = nullptr;
 };

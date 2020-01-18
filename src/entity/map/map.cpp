@@ -131,15 +131,6 @@ void Map::init()
 					delete variables[y];
 				}
 				break;
-				case 101:
-				{
-					Item* hoe = new Item(
-						renderer, player, Fvec(map_data[y][0], map_data[y][1]),
-						"res/graphics/hoe.png", "res/graphics/hoe-a.png", 101);
-					items.push_back(hoe);
-					delete variables[y];
-				}
-				break;
 			}
 		}
 	}

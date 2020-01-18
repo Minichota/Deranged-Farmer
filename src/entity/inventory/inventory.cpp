@@ -103,6 +103,23 @@ Item* Inventory::drop_item()
 	return nullptr;
 }
 
+std::vector<Item*> Inventory::drop_all()
+{
+	std::vector<Item*> ret;
+	for(int i = 0; i < 10; i++)
+	{
+		if(items[i] != nullptr)
+		{
+			Item* item = items[i];
+			this->items[i] = nullptr;
+			item->set_e_pos(parent->get_pos());
+			item->set_pos(parent->get_pos());
+			ret.push_back(item);
+		}
+	}
+	return ret;
+}
+
 void Inventory::left()
 {
 	if(selection > 4)

@@ -20,6 +20,7 @@ class Inventory : public Renderable
 
 	bool pick_item(Item* item);
 	Item* drop_item();
+	std::vector<Item*> drop_all();
 
 	void left();
 	void down();

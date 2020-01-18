@@ -67,28 +67,19 @@ void Level::render()
 
 void Level::init()
 {
-	Player* player = new Player(renderer, Ivec(50, 50), Ivec(27, 27));
+	{
+		background = IMG_LoadTexture(renderer, "res/graphics/background.png");
+		Error(!background, { "Failed to load background", SDL_GetError() });
+	}
+	load_entities();
+	Player* player = dynamic_cast<Player*>(entities[0]);
 	map.set_player(player);
-	entities = { player };
 	UI_Health_Bar* health_Bar = new UI_Health_Bar(
 		renderer, Ivec(400, 0), Ivec(350 / 3.0f, 50 / 3.0f), Fvec(3.0f, 3.0f),
 		SDL_Color{ 255, 0, 0, 255 }, SDL_Color{ 255, 100, 0, 255 },
 		&entities[0]->get_health(), entities[0]->get_max_health());
 	health_Bar->set_origin(Ivec(health_Bar->get_size().x / 2, 0));
 	elements = { health_Bar };
-	SDL_Texture* player_texture;
-	{
-		player_texture =
-			IMG_LoadTexture(renderer, "res/graphics/player_test.png");
-		Error(player_texture == nullptr,
-			  { "Failed to load player texture", SDL_GetError() });
-	}
-	{
-		background = IMG_LoadTexture(renderer, "res/graphics/background.png");
-		Error(!background, { "Failed to load background", SDL_GetError() });
-	}
-	entities[0]->set_texture(player_texture);
-	load_entities();
 	map.init();
 	tile_editor.set_map(&map);
 }
@@ -179,6 +170,57 @@ void Level::handle_event(const SDL_Event& event)
 	}
 }
 
+void Level::save_status()
+{
+	// make player drop their shit
+	Player* player = dynamic_cast<Player*>(entities[0]);
+	std::vector<Item*> player_items = player->get_inventory().drop_all();
+	for(Item* item : player_items)
+	{
+		map.get_items().push_back(item);
+	}
+
+	std::string data;
+	data.reserve(4000);
+	for(Entity* e : entities)
+	{
+		if((int)e->get_rotation() % 90 != 0)
+		{
+			Game::debug->push_log(
+				{ "failed to save, an entity has the rotation of: ",
+				  std::to_string((int)e->get_rotation()).c_str() });
+			return;
+		}
+		data.append("type=");
+		data.append(std::to_string(e->get_type()));
+		data.push_back('\n');
+		std::string e_data;
+		e_data.append(std::to_string((int)e->get_pos().x));
+		e_data.push_back(',');
+		e_data.append(std::to_string((int)e->get_pos().y));
+		e_data.push_back(',');
+		e_data.append(std::to_string((int)e->get_size().x));
+		e_data.push_back(',');
+		e_data.append(std::to_string((int)e->get_size().y));
+		e_data.push_back('\n');
+		data.append(e_data);
+	}
+
+	std::vector<Item*>& items = map.get_items();
+	for(Item* item : items)
+	{
+		data.append("type=");
+		data.append(std::to_string(item->get_type()));
+		data.push_back('\n');
+		data.append(std::to_string((int)item->get_pos().x));
+		data.push_back(',');
+		data.append(std::to_string((int)item->get_pos().y));
+		data.push_back('\n');
+	}
+
+	write(entity_file_path.c_str(), data);
+}
+
 void Level::load_entities()
 {
 	std::string data = read(entity_file_path.c_str());
@@ -215,6 +257,26 @@ void Level::load_entities()
 				AI_Roaming* snake_ai = new AI_Roaming(this->map, snake, 3000);
 				ais.push_back(snake_ai);
 				entities.push_back(snake);
+				delete types[i];
+			}
+			break;
+			case 3:
+			{
+				Player* player = new Player(
+					renderer, Fvec(properties[i][0], properties[i][1]),
+					Fvec(properties[i][2], properties[i][3]));
+				assert(entities.size() == 0);
+				entities.push_back(player);
+				delete types[i];
+			}
+			break;
+			case 101:
+			{
+				Player* player = dynamic_cast<Player*>(entities[0]);
+				Item* hoe = new Item(
+					renderer, player, Fvec(properties[i][0], properties[i][1]),
+					"res/graphics/hoe.png", "res/graphics/hoe-a.png", 101);
+				map.get_items().push_back(hoe);
 				delete types[i];
 			}
 			break;
@@ -291,18 +353,6 @@ void Level::save_level()
 		e_data.append(std::to_string((int)e->get_rotation()));
 		e_data.push_back('\n');
 		data.append(e_data);
-	}
-
-	std::vector<Item*>& items = map.get_items();
-	for(Item* item : items)
-	{
-		data.append("type=");
-		data.append(std::to_string(item->get_type()));
-		data.push_back('\n');
-		data.append(std::to_string((int)item->get_pos().x));
-		data.push_back(',');
-		data.append(std::to_string((int)item->get_pos().y));
-		data.push_back('\n');
 	}
 
 	// write data
