@@ -75,7 +75,7 @@ void Game::run()
 		SDL_RenderPresent(renderer);
 		SDL_Delay(1000.0f / 144.0f);
 	}
-	write_settings("res/save/settings.txt", Settings::all);
+	close();
 }
 
 void Game::update()
@@ -148,7 +148,11 @@ void Game::toggle_pause()
 void Game::close()
 {
 	write_settings("res/save/settings.txt", Settings::all);
-	exit(-1);
+	if(Level* level = dynamic_cast<Level*>(game_states[state]))
+	{
+		level->save_status();
+	}
+	exit(0);
 }
 
 void Game::handle_event(SDL_Event event)
