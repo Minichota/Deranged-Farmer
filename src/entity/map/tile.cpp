@@ -1,6 +1,7 @@
 #include "tile.hpp"
 #include "error.hpp"
 #include "game.hpp"
+#include "util.hpp"
 
 SDL_Texture* full_texture = nullptr;
 
@@ -45,7 +46,6 @@ void Tile::render()
 
 void load_tileset(SDL_Renderer* renderer, const char* file_path)
 {
-	std::cout << "loaded tileset" << std::endl;
 	if(full_texture != nullptr)
 	{
 		SDL_DestroyTexture(full_texture);

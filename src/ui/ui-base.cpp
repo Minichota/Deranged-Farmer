@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ui-base.hpp"
+#include "util.hpp"
 
 UI_Base::UI_Base(SDL_Renderer* renderer, Ivec pos, Ivec size, Fvec scale,
 				 SDL_Color color) :

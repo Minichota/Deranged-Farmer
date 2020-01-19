@@ -14,13 +14,16 @@ UI_Rect::~UI_Rect()
 
 void UI_Rect::update()
 {
-	this->sprite = { get_pos().x, get_pos().y, this->size.x, this->size.y };
 }
 
 void UI_Rect::render()
 {
+	this->sprite = { (int)std::round(pos.x - origin.x + camera.x - 400),
+					 (int)std::round(pos.y - origin.y + camera.y - 304),
+					 (int)std::round(this->size.x * scale.x),
+					 (int)std::round(this->size.y * scale.y) };
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderSetScale(renderer, this->scale.x, this->scale.y);
+	// SDL_RenderSetScale(renderer, this->scale.x, this->scale.y);
 	switch(type)
 	{
 		case FILL:

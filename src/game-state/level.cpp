@@ -12,6 +12,7 @@
 #include "snake.hpp"
 #include "ui-health_bar.hpp"
 #include "ui-text.hpp"
+#include "util.hpp"
 
 Level::Level(SDL_Renderer* renderer, const char* entity_file_path,
 			 const char* map_data_file_path, const char* map_image_file_path) :
@@ -35,7 +36,6 @@ void Level::update()
 	{
 		tile_editor.update();
 	}
-	Game_State::update();
 	map.update();
 	for(Entity* entity : entities)
 	{
@@ -48,34 +48,30 @@ void Level::update()
 		ai->update();
 	}
 	handle_entity_collision(entities[0], entities[1]);
+	Game_State::update();
 }
 
 void Level::render()
 {
-	SDL_RenderCopy(renderer, background, NULL, NULL);
 	map.render();
 	for(Entity* entity : entities)
 	{
 		entity->render();
 	}
-	Game_State::render();
 	if(tile_editor.active)
 	{
 		tile_editor.render();
 	}
+	Game_State::render();
 }
 
 void Level::init()
 {
-	{
-		background = IMG_LoadTexture(renderer, "res/graphics/background.png");
-		Error(!background, { "Failed to load background", SDL_GetError() });
-	}
 	load_entities();
 	Player* player = dynamic_cast<Player*>(entities[0]);
 	map.set_player(player);
 	UI_Health_Bar* health_Bar = new UI_Health_Bar(
-		renderer, Ivec(400, 0), Ivec(350 / 3.0f, 50 / 3.0f), Fvec(3.0f, 3.0f),
+		renderer, Ivec(400, 0), Ivec(350, 50), Fvec(1.0f, 1.0f),
 		SDL_Color{ 255, 0, 0, 255 }, SDL_Color{ 255, 100, 0, 255 },
 		&entities[0]->get_health(), entities[0]->get_max_health());
 	health_Bar->set_origin(Ivec(health_Bar->get_size().x / 2, 0));

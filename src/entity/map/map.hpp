@@ -48,7 +48,9 @@ class Map : public Renderable
 	const char* image_path;
 	std::vector<std::vector<Tile*>> tiles;
 	std::vector<Item*> items;
+
 	std::vector<Map_Entity*> map_entities;
 	Player* player;
+	SDL_Texture* background;
 };
 #endif

@@ -53,7 +53,8 @@ void UI_Text::render()
 		case NORMAL:
 		{
 			SDL_RenderSetScale(renderer, scale.x, scale.y);
-			SDL_Rect position = { get_pos().x, get_pos().y, tex_size.x,
+			SDL_Rect position = { get_pos().x + camera.x - 400,
+								  get_pos().y + camera.y - 304, tex_size.x,
 								  tex_size.y };
 			SDL_RenderCopy(renderer, output, NULL, &position);
 		}
@@ -62,9 +63,11 @@ void UI_Text::render()
 		{
 			SDL_Rect position = {
 				(int)std::round(pos.x -
-								origin.x * (size.x / (float)tex_size.x)),
+								origin.x * (size.x / (float)tex_size.x) +
+								camera.x - 400),
 				(int)std::round(pos.y -
-								origin.y * (size.y / (float)tex_size.y)),
+								origin.y * (size.y / (float)tex_size.y) +
+								camera.y - 304),
 				size.x, size.y
 			};
 			SDL_RenderCopy(renderer, output, NULL, &position);

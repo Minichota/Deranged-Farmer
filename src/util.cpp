@@ -7,3 +7,4 @@ void clear_render_settings(SDL_Renderer* const renderer)
 	SDL_SetRenderTarget(renderer, NULL);
 }
 unsigned char* keys;
+Ivec camera;
