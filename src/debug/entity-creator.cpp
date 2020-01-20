@@ -46,8 +46,8 @@ void Entity_Creator::render()
 {
 	if(curr_state == 0)
 	{
-		const SDL_Rect shadow = { 350, 150, 100,
-								  (int)entity_names.size() * 18 };
+		const SDL_Rect shadow = { 350 + camera.x - 400, 150 + camera.y - 304,
+								  100, (int)entity_names.size() * 18 };
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
 		SDL_RenderFillRect(renderer, &shadow);
 

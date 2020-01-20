@@ -67,9 +67,9 @@ void Debug_Window::render()
 	}
 	// background blending
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 127);
-	SDL_Rect x = { pos.x, pos.y, 210, 608 };
+	SDL_Rect x = { pos.x + camera.x - 400, pos.y + camera.y - 304, 210, 608 };
 	SDL_RenderFillRect(renderer, &x);
-	x = { 0, 400, 800, 208 };
+	x = { camera.x - 400, 400 + camera.y - 304, 800, 208 };
 	SDL_RenderFillRect(renderer, &x);
 
 	Ivec draw_pos = { this->pos.x, this->pos.y - scroll_pos };
@@ -89,14 +89,17 @@ void Debug_Window::render()
 		Ivec tex_size;
 		SDL_QueryTexture(to_render[i].texture, NULL, NULL, &tex_size.x,
 						 &tex_size.y);
-		SDL_Rect size_rect = { draw_pos.x, draw_pos.y, tex_size.x, tex_size.y };
+		SDL_Rect size_rect = { draw_pos.x + camera.x - 400,
+							   draw_pos.y + camera.y - 304, tex_size.x,
+							   tex_size.y };
 		// render blue if selected text
 		if((int)i == outer_selection)
 		{
 			surface = TTF_RenderText_Solid(font, to_render[i].name.c_str(),
 										   SDL_Color{ 0, 127, 255, 255 });
 			SDL_Texture* temp = SDL_CreateTextureFromSurface(renderer, surface);
-			size_rect = { draw_pos.x + 5, draw_pos.y, tex_size.x, tex_size.y };
+			size_rect = { draw_pos.x + 5 + camera.x - 400,
+						  draw_pos.y + camera.y - 304, tex_size.x, tex_size.y };
 			SDL_FreeSurface(surface);
 			SDL_RenderCopy(renderer, temp, NULL, &size_rect);
 			SDL_DestroyTexture(temp);
