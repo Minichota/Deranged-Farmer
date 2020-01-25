@@ -18,8 +18,9 @@ void UI_Rect::update()
 
 void UI_Rect::render()
 {
-	this->sprite = { (int)std::round(pos.x - origin.x + camera.x - 400),
-					 (int)std::round(pos.y - origin.y + camera.y - 304),
+	Ivec sprite_pos = map_world(Ivec((int)std::round(pos.x - origin.x),
+									 (int)std::round(pos.y - origin.y)));
+	this->sprite = { sprite_pos.x, sprite_pos.y,
 					 (int)std::round(this->size.x * scale.x),
 					 (int)std::round(this->size.y * scale.y) };
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);

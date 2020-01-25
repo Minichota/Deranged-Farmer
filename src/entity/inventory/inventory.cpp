@@ -34,9 +34,8 @@ void Inventory::render()
 		Item* item = items[i];
 		if(item != nullptr)
 		{
-			item->set_e_pos(
-				Ivec(pos.x + 2 + (i % 5) * 38 + camera.x - 400,
-					 pos.y + 2 + (int)(i / 5) * 38 + camera.y - 304));
+			item->set_e_pos(map_world(
+				Ivec(pos.x + 2 + (i % 5) * 38, pos.y + 2 + (int)(i / 5) * 38)));
 			item->render();
 		}
 	}
@@ -44,8 +43,9 @@ void Inventory::render()
 	{
 		for(int j = 0; j < 2; j++)
 		{
-			SDL_Rect rect = { pos.x + (i % 5) * 38 + camera.x - 400,
-							  pos.y + j * 38 + camera.y - 304, 36, 36 };
+			Ivec item_pos =
+				map_world(Ivec(pos.x + (i % 5) * 38, pos.y + j * 38));
+			SDL_Rect rect = { item_pos.x, item_pos.y, 36, 36 };
 			if(i + j * 5 == selection)
 			{
 				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
