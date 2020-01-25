@@ -67,6 +67,12 @@ void Game::run()
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
+		if(!paused)
+		{
+			SDL_Rect base_view{ 0, 0, 800, 608 };
+			camera = Ivec(400, 304);
+			SDL_RenderSetViewport(renderer, &base_view);
+		}
 
 		update_interpolators();
 		update();

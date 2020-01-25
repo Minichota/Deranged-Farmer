@@ -22,8 +22,7 @@ void Tile_Editor::update()
 	if(keys[SDL_SCANCODE_R])
 	{
 		Ivec tile_count = map->get_tile_count();
-		if(cursor_pos.x < 0 || cursor_pos.y < 0 ||
-		   (cursor_pos.x > 768 || cursor_pos.y > 576))
+		if(cursor_pos.x < 0 || cursor_pos.y < 0)
 		{
 			Game::debug->push_log({ "Tile must be within map", "\n" });
 			return;
@@ -135,10 +134,6 @@ void Tile_Editor::handle_event(const SDL_Event& event)
 					else if(!keys[SDL_SCANCODE_LCTRL])
 					{
 						cursor_pos.y += 32;
-						if(cursor_pos.y > 576)
-						{
-							cursor_pos.y = 576;
-						}
 					}
 				}
 				break;
@@ -181,10 +176,6 @@ void Tile_Editor::handle_event(const SDL_Event& event)
 					else if(!keys[SDL_SCANCODE_LCTRL])
 					{
 						cursor_pos.x += 32;
-						if(cursor_pos.x > 768)
-						{
-							cursor_pos.x = 768;
-						}
 					}
 				}
 				break;

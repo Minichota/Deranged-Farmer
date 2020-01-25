@@ -42,9 +42,10 @@ void UI_Image::update()
 
 void UI_Image::render()
 {
-	SDL_Rect output_rect = { (int)std::round(get_pos().x / scale.x),
-							 (int)std::round(get_pos().y / scale.y),
-							 (int)std::round(get_size().x),
+	Ivec pos = map_world(Ivec((int)std::round(get_pos().x / scale.x),
+							  (int)std::round(get_pos().y / scale.y)));
+
+	SDL_Rect output_rect = { pos.x, pos.y, (int)std::round(get_size().x),
 							 (int)std::round(get_size().y) };
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_RenderCopy(renderer, texture, NULL, &output_rect);

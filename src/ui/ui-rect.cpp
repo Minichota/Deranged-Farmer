@@ -14,13 +14,17 @@ UI_Rect::~UI_Rect()
 
 void UI_Rect::update()
 {
-	this->sprite = { get_pos().x, get_pos().y, this->size.x, this->size.y };
 }
 
 void UI_Rect::render()
 {
+	Ivec sprite_pos = map_world(Ivec((int)std::round(pos.x - origin.x),
+									 (int)std::round(pos.y - origin.y)));
+	this->sprite = { sprite_pos.x, sprite_pos.y,
+					 (int)std::round(this->size.x * scale.x),
+					 (int)std::round(this->size.y * scale.y) };
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderSetScale(renderer, this->scale.x, this->scale.y);
+	// SDL_RenderSetScale(renderer, this->scale.x, this->scale.y);
 	switch(type)
 	{
 		case FILL:

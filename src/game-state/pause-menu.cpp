@@ -19,7 +19,7 @@ Pause_Menu::Pause_Menu(SDL_Renderer* renderer) : Game_State(renderer)
 								   "res/graphics/font.ttf",
 								   SDL_Color{ 255, 255, 255, 255 }, NORMAL));
 	elements.push_back(new UI_Button(renderer, Ivec(0, 0), Ivec(0, 0),
-									 Fvec(2.0f, 2.0f), &quit,
+									 Fvec(1.0f, 1.0f), &quit,
 									 SDL_Color{ 255, 255, 255, 255 }));
 	elements.push_back(new UI_Text(
 		renderer, Ivec(0, 0), Ivec(0, 0), Fvec(1.0f, 1.0f), "Main Menu",
@@ -33,7 +33,7 @@ Pause_Menu::Pause_Menu(SDL_Renderer* renderer) : Game_State(renderer)
 
 	elements[0]->set_origin(elements[0]->get_size() / 2);
 	elements[1]->set_origin(elements[1]->get_size() / 2);
-	elements[2]->set_size(elements[3]->get_size() / 2);
+	elements[2]->set_size(elements[3]->get_size());
 	elements[4]->set_origin(elements[4]->get_size() / 2);
 	elements[5]->set_origin(elements[5]->get_size() / 2);
 

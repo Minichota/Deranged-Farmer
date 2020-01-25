@@ -1,4 +1,5 @@
 #include "inventory.hpp"
+#include "util.hpp"
 
 Inventory::Inventory(Entity* parent, SDL_Renderer* renderer) :
 Renderable(renderer)
@@ -28,10 +29,13 @@ void Inventory::update()
 
 void Inventory::render()
 {
-	for(Item* item : items)
+	for(int i = 0; i < 10; i++)
 	{
+		Item* item = items[i];
 		if(item != nullptr)
 		{
+			item->set_e_pos(map_world(
+				Ivec(pos.x + 2 + (i % 5) * 38, pos.y + 2 + (int)(i / 5) * 38)));
 			item->render();
 		}
 	}
@@ -39,7 +43,9 @@ void Inventory::render()
 	{
 		for(int j = 0; j < 2; j++)
 		{
-			SDL_Rect rect = { pos.x + (i % 5) * 38, pos.y + j * 38, 36, 36 };
+			Ivec item_pos =
+				map_world(Ivec(pos.x + (i % 5) * 38, pos.y + j * 38));
+			SDL_Rect rect = { item_pos.x, item_pos.y, 36, 36 };
 			if(i + j * 5 == selection)
 			{
 				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -85,8 +91,6 @@ bool Inventory::pick_item(Item* item)
 		slot = selection;
 		this->items[selection] = item;
 	}
-	item->set_e_pos(
-		Ivec(pos.x + 2 + (slot % 5) * 38, pos.y + 2 + (int)(slot / 5) * 38));
 	return true;
 }
 

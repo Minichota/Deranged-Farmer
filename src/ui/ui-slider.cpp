@@ -31,11 +31,12 @@ void UI_Slider::update()
 
 void UI_Slider::render()
 {
-	SDL_Rect full_bar = { get_pos().x, get_pos().y, size.x, size.y };
-	SDL_Rect pos_bar = {
-		(int)std::round(get_pos().x + (size.x - 10) * state / pos_count),
-		(int)std::round(get_pos().y - (30 - size.y) / 2.0f), 10, 30
-	};
+	Ivec pos = map_world(Ivec(get_pos().x, get_pos().y));
+	SDL_Rect full_bar = { pos.x, pos.y, size.x, size.y };
+	pos = map_world(
+		Ivec((int)std::round(get_pos().x + (size.x - 10) * state / pos_count),
+			 (int)std::round(get_pos().y - (30 - size.y) / 2.0f)));
+	SDL_Rect pos_bar = { pos.x, pos.y, 10, 30 };
 	SDL_RenderSetScale(renderer, scale.x, scale.y);
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderFillRect(renderer, &full_bar);

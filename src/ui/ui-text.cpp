@@ -53,20 +53,20 @@ void UI_Text::render()
 		case NORMAL:
 		{
 			SDL_RenderSetScale(renderer, scale.x, scale.y);
-			SDL_Rect position = { get_pos().x, get_pos().y, tex_size.x,
-								  tex_size.y };
+			Ivec pos = map_world(get_pos());
+			SDL_Rect position = { pos.x, pos.y, tex_size.x, tex_size.y };
 			SDL_RenderCopy(renderer, output, NULL, &position);
 		}
 		break;
 		case FILL:
 		{
-			SDL_Rect position = {
-				(int)std::round(pos.x -
-								origin.x * (size.x / (float)tex_size.x)),
-				(int)std::round(pos.y -
-								origin.y * (size.y / (float)tex_size.y)),
-				size.x, size.y
-			};
+			Ivec text_pos = map_world(
+				Ivec((int)std::round(pos.x -
+									 origin.x * (size.x / (float)tex_size.x)),
+					 (int)std::round(pos.y -
+									 origin.y * (size.y / (float)tex_size.y))));
+
+			SDL_Rect position = { text_pos.x, text_pos.y, size.x, size.y };
 			SDL_RenderCopy(renderer, output, NULL, &position);
 		}
 		break;

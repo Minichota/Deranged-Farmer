@@ -6,6 +6,7 @@
 #include "io.hpp"
 #include "map.hpp"
 #include "settings.hpp"
+#include "util.hpp"
 
 Map::Map(SDL_Renderer* renderer, const char* data_path, const char* image_path,
 		 Ivec tile_size) :
@@ -42,17 +43,46 @@ void Map::update()
 	{
 		item->update();
 	}
+	camera = player->get_pos();
+	if(camera.x - 400 < 0)
+	{
+		camera.x = 400;
+	}
+	if(camera.y - 304 < 0)
+	{
+		camera.y = 304;
+	}
+	if(camera.x > tile_count.x * tile_size.x - 400)
+	{
+		camera.x = tile_count.x * tile_size.x - 400;
+	}
+	if(camera.y > tile_count.y * tile_size.y - 304)
+	{
+		camera.y = tile_count.y * tile_size.y - 304;
+	}
 }
 
 void Map::render()
 {
+	SDL_Rect view_port = { 400 - camera.x, 304 - camera.y,
+						   tile_size.x * tile_count.x,
+						   tile_size.y * tile_count.y };
+	SDL_RenderSetViewport(renderer, &view_port);
+	SDL_RenderCopy(renderer, background, NULL, NULL);
 	for(std::vector<Tile*>& y_tiles : tiles)
 	{
 		for(Tile* x_tile : y_tiles)
 		{
-			x_tile->render();
+			if(!(x_tile->get_pos().x + tile_size.x < camera.x - 400 ||
+				 x_tile->get_pos().x > camera.x + 400 ||
+				 x_tile->get_pos().y + tile_size.y < camera.y - 304 ||
+				 x_tile->get_pos().y > camera.y + 304))
+			{
+				x_tile->render();
+			}
 		}
 	}
+
 	for(Map_Entity* e : map_entities)
 	{
 		e->render();
@@ -65,6 +95,10 @@ void Map::render()
 
 void Map::init()
 {
+	{
+		background = IMG_LoadTexture(renderer, "res/graphics/background.png");
+		Error(!background, { "Failed to load background", SDL_GetError() });
+	}
 	// load file
 	std::string data = read(data_path);
 	std::vector<Settings::Data<int>*> variables;
